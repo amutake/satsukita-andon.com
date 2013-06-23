@@ -1,5 +1,12 @@
+@a(href: String)(content: Html) = {
+  <a href="@href">@content</a>
+}
+
 @main("") {
   <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/index.css")">
 } {
   <h1>Index</h1>
+  @a("/info") {Information}
+  @a("/gallery") {Gallery}
+  @a("/howto") {How to}
 }
