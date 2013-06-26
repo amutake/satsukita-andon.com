@@ -6,7 +6,7 @@ import play.api.Play.current
 import anorm._
 import anorm.SqlParser._
 
-case class ClassData(times: Int, grade: Int, classn: Int, title: String, prize: String)
+case class ClassData(times: Int, grade: Int, classn: Int, title: String, prize: Option[String])
 
 object ClassData {
 
@@ -15,7 +15,7 @@ object ClassData {
     get[Int]("ClassData.grade") ~
     get[Int]("ClassData.classn") ~
     get[String]("ClassData.title") ~
-    get[String]("ClassData.prize") map {
+    get[Option[String]]("ClassData.prize") map {
       case times~grade~classn~title~prize => ClassData(
         times, grade, classn, title, prize
       )
