@@ -5,7 +5,7 @@ create table ClassData (
   grade                         int not null,
   classn                        int not null,
   title                         varchar(255) not null,
-  prize                         varchar(255) not null
+  prize                         varchar(255)
 );
 
 # --- !Downs
