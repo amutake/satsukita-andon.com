@@ -32,6 +32,12 @@ object ClassData {
     }
   }
 
+  def findAll: Seq[ClassData] = {
+    DB.withConnection { implicit connection =>
+      SQL("select * from ClassData").as(ClassData.simple *)
+    }
+  }
+
   def findByTimes(t: Int): Seq[ClassData] = {
     DB.withConnection { implicit connection =>
       SQL("select * from ClassData where times = {t}").on(

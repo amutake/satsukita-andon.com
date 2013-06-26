@@ -12,8 +12,10 @@ object Global extends GlobalSettings {
 object InitialData {
 
   def insert() = {
-    Seq(
-      ClassData(60, 3, 9, "魄焰", "grand")
-    ).foreach(ClassData.create)
+    if (ClassData.findAll.isEmpty) {
+      Seq(
+        ClassData(60, 3, 9, "魄焰", "grand")
+      ).foreach(ClassData.create)
+    }
   }
 }
