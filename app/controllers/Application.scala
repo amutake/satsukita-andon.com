@@ -27,8 +27,13 @@ object Application extends Controller {
   }
 
   def classGallery(t: OrdInt, g: Int, c: Int) = Action {
-    val ps = Images.getClassImages(t, g, c)
-    Ok(views.html.classGallery(t.toString, g.toString, c.toString, ps))
+    val data = ClassData.findById(t, g, c)
+    if (data.isDefined) {
+      val ps = Images.getClassImages(t, g, c)
+      Ok(views.html.classGallery(data.get, ps))
+    } else {
+      NotFound
+    }
   }
 
   def howto = Action {

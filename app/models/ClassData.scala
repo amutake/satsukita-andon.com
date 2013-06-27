@@ -26,7 +26,7 @@ object ClassData {
 
   def findById(t: OrdInt, g: Int, c: Int): Option[ClassData] = {
     DB.withConnection { implicit connection =>
-      SQL("select * from ClassData where times = {t}, grade = {g}, classn = {c}").on(
+      SQL("select * from ClassData where times = {t} and grade = {g} and classn = {c}").on(
         't -> t.n,
         'g -> g,
         'c -> c

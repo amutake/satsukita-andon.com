@@ -1,13 +1,15 @@
-@(t: String, g: String, c: String, ps: Seq[String])
+@(data: ClassData, ps: Seq[String])
 
-@li(url: String) = {
-  <li style="float: left;"><img src="@routes.Assets.at(url)" width="300" height="200"></li>
+@li(path: String) = {
+  <li style="float: left;">
+    <img src="@routes.Assets.at(path)" width="300" height="200">
+  </li>
 }
 
-@common("Gallery " + t + " " + g + "-" + c) {
+@common("Gallery " + data.times + " " + data.grade + "-" + data.classn) {
 
-  <h2>Gallery @t @g-@c</h2>
+  <h2>Gallery @data.times @data.grade-@data.classn</h2>
   <ul>
-    @ps.map { c => @li(c) }
+    @ps.map { p => @li(p) }
   </ul>
 }
