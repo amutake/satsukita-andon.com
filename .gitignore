@@ -15,3 +15,5 @@ dist
 /.settings
 
 public/img/products
+public/img/material
+public/img/howto
