@@ -332,7 +332,27 @@ object InitialData {
         ClassData(OrdInt(54), 3, 7, "大百足退治", Some("silver")),
         ClassData(OrdInt(54), 3, 8, "孫悟空", None),
         ClassData(OrdInt(54), 3, 9, "華炎", Some("gold")),
-        ClassData(OrdInt(54), 3, 10, "降魔", Some("grand"))
+        ClassData(OrdInt(54), 3, 10, "降魔", Some("grand")),
+
+        ClassData(OrdInt(53), 3, 7, "", Some("grand")),
+
+        ClassData(OrdInt(52), 3, -1, "", Some("grand")),
+
+        ClassData(OrdInt(51), 3, 1, "", Some("grand")),
+
+        ClassData(OrdInt(50), 3, 9, "", Some("grand")),
+
+        ClassData(OrdInt(48), 3, 10, "", Some("grand")),
+
+        ClassData(OrdInt(47), 3, 1, "", Some("grand")),
+
+        ClassData(OrdInt(46), 3, 8, "", Some("grand")),
+
+        ClassData(OrdInt(45), 3, -1, "", Some("grand")),
+
+        ClassData(OrdInt(44), 3, 10, "", Some("grand")),
+
+        ClassData(OrdInt(43), 3, 2, "", Some("grand"))
       ).foreach(ClassData.create)
     }
   }

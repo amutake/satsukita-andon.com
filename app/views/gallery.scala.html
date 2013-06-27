@@ -1,4 +1,4 @@
-@(ts: Seq[TimesData])
+@(ts: Seq[(TimesData, String)])
 
 @common("Gallery") {
 
@@ -6,7 +6,12 @@
 
   <ul>
     @ts.map { t =>
-      <li><a href="@routes.Application.timesGallery(t.times.get)">@t.times @t.title</a></li>
+      <li>
+        <a href="@routes.Application.timesGallery(t._1.times.get)">
+          <img src="@routes.Assets.at(t._2)" width="300" height="200">
+          @t._1.times @t._1.title
+        </a>
+      </li>
     }
   </ul>
 }

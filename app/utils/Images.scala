@@ -6,17 +6,17 @@ import models._
 
 object Images {
 
-  def dirName(t: OrdInt, g: Int, c: Int) =
+  def dirPath(t: OrdInt, g: Int, c: Int) =
     "./public/img/products/" + t + "/" + g + "/" + c
 
-  def fileName(t: OrdInt, g: Int, c: Int, n: Int) =
-    dirName(t, g, c) + "/" + t + g + "-" + c + "_" + pictNumber(n) + ".jpg"
+  def filePath(t: OrdInt, g: Int, c: Int, n: Int) =
+    dirPath(t, g, c) + "/" + t + g + "-" + c + "_" + pictNumber(n) + ".jpg"
 
   def pictNumber(n: Int) = if (n < 10) ("0" + n) else (n.toString)
 
   def getClassImages(t: OrdInt, g: Int, c: Int): Seq[String] = {
-    val uri = dirName(t, g, c)
-    val dir = new File(uri)
+    val path = dirPath(t, g, c)
+    val dir = new File(path)
     if (dir.isDirectory) {
       dir.listFiles.map(_.getPath.substring("./public/".length))
     } else {
@@ -27,13 +27,20 @@ object Images {
   def getTimesImages(t: OrdInt): Seq[(ClassData, String)] = {
     val cs = ClassData.findByTimes(t)
     cs.map { c =>
-      val uri = fileName(c.times, c.grade, c.classn, 1)
-      val file = new File(uri)
+      val path = filePath(c.times, c.grade, c.classn, 1)
+      val file = new File(path)
       if (file.exists) {
         (c, file.getPath.substring("./public/".length))
       } else {
         (c, "img/logo.png")
       }
+    }
+  }
+
+  def getGrandImages: Seq[(TimesData, String)] = {
+    val ts = TimesData.findAll
+    ts.map { t =>
+      (t, "img/grands/" + t.times + ".jpg")
     }
   }
 }

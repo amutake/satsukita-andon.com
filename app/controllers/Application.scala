@@ -17,7 +17,7 @@ object Application extends Controller {
   }
 
   def gallery = Action {
-    val ts = TimesData.findAll
+    val ts = Images.getGrandImages
     Ok(views.html.gallery(ts))
   }
 
