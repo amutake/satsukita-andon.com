@@ -18,25 +18,33 @@ object Application extends Controller {
 
   def gallery = Action {
     val ts = Images.getGrandImages
-    Ok(views.html.gallery(ts))
+    Ok(views.html.gallery.top(ts))
   }
 
   def timesGallery(t: OrdInt) = Action {
     val ps = Images.getTimesImages(t)
-    Ok(views.html.timesGallery(t.toString(), ps))
+    Ok(views.html.gallery.times(t.toString(), ps))
   }
 
   def classGallery(t: OrdInt, g: Int, c: Int) = Action {
     val data = ClassData.findById(t, g, c)
+    // TODO
     if (data.isDefined) {
       val ps = Images.getClassImages(t, g, c)
-      Ok(views.html.classGallery(data.get, ps))
+      Ok(views.html.gallery.classg(data.get, ps))
     } else {
       NotFound
     }
   }
 
   def howto = Action {
-    Ok(views.html.howto())
+    Ok(views.html.howto.top())
+  }
+
+  def eachHowto(page: String) = Action {
+    page match {
+      case "intro" => Ok(views.html.howto.intro())
+      case _ => NotFound
+    }
   }
 }

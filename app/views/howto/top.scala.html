@@ -1,0 +1,12 @@
+@page(url: String, title: String) = {
+  <li><a href="@routes.Application.eachHowto(url)">@title</a></li>
+}
+
+@views.html.common("How to") {
+
+  <h1>How to</h1>
+
+  <ul>
+    @page("intro", "How toについて")
+  </ul>
+}
