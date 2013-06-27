@@ -1,0 +1,13 @@
+@(t: String, g: String, c: String, ps: Seq[String])
+
+@li(url: String) = {
+  <li style="float: left;"><img src="@routes.Assets.at(url)" width="300" height="200"></li>
+}
+
+@common("Gallery " + t + " " + g + "-" + c) {
+
+  <h2>Gallery @t @g-@c</h2>
+  <ul>
+    @ps.map { c => @li(c) }
+  </ul>
+}

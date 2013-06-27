@@ -21,9 +21,14 @@ object Application extends Controller {
     Ok(views.html.gallery(ts))
   }
 
-  def timesGallery(times: OrdInt) = Action {
-    val ps = Images.getTimesImages(times)
-    Ok(views.html.timesGallery(times.toString(), ps))
+  def timesGallery(t: OrdInt) = Action {
+    val ps = Images.getTimesImages(t)
+    Ok(views.html.timesGallery(t.toString(), ps))
+  }
+
+  def classGallery(t: OrdInt, g: Int, c: Int) = Action {
+    val ps = Images.getClassImages(t, g, c)
+    Ok(views.html.classGallery(t.toString, g.toString, c.toString, ps))
   }
 
   def howto = Action {
