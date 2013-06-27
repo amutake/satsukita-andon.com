@@ -8,7 +8,7 @@ import anorm.SqlParser._
 
 import andon.utils._
 
-case class ClassData(times: OrdInt, grade: Int, classn: Int, title: String, prize: Option[String])
+case class ClassData(times: OrdInt, grade: Int, classn: Int, title: String, prize: Option[Prize])
 
 object ClassData {
 
@@ -19,7 +19,7 @@ object ClassData {
     get[String]("ClassData.title") ~
     get[Option[String]]("ClassData.prize") map {
       case times~grade~classn~title~prize => ClassData(
-        OrdInt(times), grade, classn, title, prize
+        OrdInt(times), grade, classn, title, prize.flatMap(Prize.fromString)
       )
     }
   }
@@ -55,7 +55,7 @@ object ClassData {
         'g -> data.grade,
         'c -> data.classn,
         'title -> data.title,
-        'prize -> data.prize
+        'prize -> data.prize.toString
       ).executeUpdate()
 
       data.copy()
