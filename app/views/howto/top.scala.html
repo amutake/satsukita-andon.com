@@ -1,13 +1,13 @@
-@page(url: String, title: String, isHtml: Boolean) = {
-  @if(isHtml) {
-    <li><a href="@routes.Application.eachHowto(url)">
-      <i class="icon-file icon-white"></i>@title
-    </a></li>
-  } else {
-    <li><a href="@routes.Assets.at(url)">
-      <i class="icon-download icon-white"></i>@title
-    </a></li>
-  }
+@page(url: String, title: String) = {
+  <li><a href="@routes.Application.eachHowto(url)">
+    <i class="icon-file icon-white"></i>@title
+  </a></li>
+}
+
+@file(url: String, title: String) = {
+  <li><a href="@routes.Assets.at(url)">
+    <i class="icon-download icon-white"></i>@title
+  </a></li>
 }
 
 @views.html.common("How to") {
@@ -15,6 +15,7 @@
   <h1>How to</h1>
 
   <ul>
-    @page("intro", "How toについて", true)
+    @page("intro", "How toについて")
+    @file("file/official_62nd.pdf", "実行委員会公式行灯マニュアル(62nd)")
   </ul>
 }
