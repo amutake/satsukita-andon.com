@@ -1,5 +1,12 @@
+@(ts: Seq[TimesData])
+
 @common("Gallery") {
 
   <h1>gallery</h1>
 
+  <ul>
+    @ts.map { t =>
+      <li><a href="@routes.Application.timesGallery(t.times.get)">@t.times @t.title</a></li>
+    }
+  </ul>
 }
