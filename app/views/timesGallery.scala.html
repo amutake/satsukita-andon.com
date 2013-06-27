@@ -1,7 +1,7 @@
 @(times: String, ps: Seq[String])
 
 @li(url: String) = {
-  <li><img src="@routes.Assets.at(url)"></li>
+  <li style="float: left;"><img src="@routes.Assets.at(url)" width="300" height="200"></li>
 }
 
 @common("Gallery " + times) {
