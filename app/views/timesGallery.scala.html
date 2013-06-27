@@ -1,13 +1,17 @@
-@(times: String, ps: Seq[String])
+@(times: String, ps: Seq[(ClassData, String)])
 
-@li(url: String) = {
-  <li style="float: left;"><img src="@routes.Assets.at(url)" width="300" height="200"></li>
+@li(data: ClassData, path: String) = {
+  <li style="float: left;">
+    <a href="@routes.Application.classGallery(data.times, data.grade, data.classn)">
+      <img src="@routes.Assets.at(path)" width="300" height="200">
+    </a>
+  </li>
 }
 
 @common("Gallery " + times) {
 
   <h2>Gallery @times</h2>
   <ul>
-    @ps.map { c => @li(c) }
+    @ps.map { c => @li(c._1, c._2) }
   </ul>
 }

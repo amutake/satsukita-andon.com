@@ -24,16 +24,16 @@ object Images {
     }
   }
 
-  def getTimesImages(t: OrdInt): Seq[String] = {
+  def getTimesImages(t: OrdInt): Seq[(ClassData, String)] = {
     val cs = ClassData.findByTimes(t)
     cs.map { c =>
       val uri = fileName(c.times, c.grade, c.classn, 1)
       val file = new File(uri)
       if (file.exists) {
-        file.getPath.substring("./public/".length)
+        (c, file.getPath.substring("./public/".length))
       } else {
-        ""
+        (c, "img/logo.png")
       }
-    }.filter { c => c != "" }
+    }
   }
 }
