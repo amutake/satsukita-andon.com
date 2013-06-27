@@ -22,13 +22,9 @@ object Application extends Controller {
   }
 
   def timesGallery(times: OrdInt) = Action {
-    val cs = ClassData.findByTimes(times)
-    val ps = cs.map { c =>
-      Images.getClassImages(c.times, c.grade, c.classn).head
-    }
+    val ps = Images.getTimesImages(times)
     Ok(views.html.timesGallery(times.toString(), ps))
   }
-
 
   def howto = Action {
     Ok(views.html.howto())
