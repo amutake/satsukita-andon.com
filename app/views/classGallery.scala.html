@@ -8,7 +8,7 @@
 
 @common("Gallery " + data.times + " " + data.grade + "-" + data.classn) {
 
-  <h2>Gallery @data.times @data.grade-@data.classn</h2>
+  <h2>Gallery @data.times @data.grade-@data.classn @data.prize.map(_.toJapanese)</h2>
   <ul>
     @ps.map { p => @li(p) }
   </ul>
