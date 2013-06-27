@@ -4,6 +4,7 @@ import play.api._
 import play.api.mvc._
 
 import models._
+import andon.utils._
 
 object Application extends Controller {
 
@@ -20,12 +21,12 @@ object Application extends Controller {
     Ok(views.html.gallery(ts))
   }
 
-  def timesGallery(times: Int) = Action {
+  def timesGallery(times: OrdInt) = Action {
     val cs = ClassData.findByTimes(times)
     val ps = cs.map { c =>
       Images.getClassImages(c.times, c.grade, c.classn).head
     }
-    Ok(views.html.timesGallery(Util.toTimesStr(times), ps))
+    Ok(views.html.timesGallery(times.toString(), ps))
   }
 
 

@@ -6,7 +6,9 @@ import play.api.Play.current
 import anorm._
 import anorm.SqlParser._
 
-case class TimesData(times: Pk[Int], title: String)
+import andon.utils._
+
+case class TimesData(times: Pk[OrdInt], title: String)
 
 object TimesData {
 
@@ -14,15 +16,15 @@ object TimesData {
     get[Pk[Int]]("TimesData.times") ~
     get[String]("TimesData.title") map {
       case times~title => TimesData(
-        times, title
+        Id(OrdInt(times.get)), title
       )
     }
   }
 
-  def findById(t: Int): Option[TimesData] = {
+  def findById(t: OrdInt): Option[TimesData] = {
     DB.withConnection { implicit connection =>
       SQL("select * from TimesData where times = {t}").on(
-        't -> t
+        't -> t.n
       ).as(TimesData.simple.singleOpt)
     }
   }
@@ -36,7 +38,7 @@ object TimesData {
   def create(data: TimesData): TimesData = {
     DB.withConnection { implicit connection =>
       SQL("insert into TimesData values ({times}, {title})").on(
-        'times -> data.times,
+        'times -> data.times.get.n,
         'title -> data.title
       ).executeUpdate()
 

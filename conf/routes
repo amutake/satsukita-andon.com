@@ -6,7 +6,7 @@
 GET     /                           controllers.Application.index
 GET     /info                       controllers.Application.info
 GET     /gallery                    controllers.Application.gallery
-GET     /gallery/:times             controllers.Application.timesGallery(times: Int)
+GET     /gallery/:times             controllers.Application.timesGallery(times: andon.utils.OrdInt)
 GET     /howto                      controllers.Application.howto
 
 

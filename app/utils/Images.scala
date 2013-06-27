@@ -1,13 +1,13 @@
-package controllers
+package andon.utils
 
 import java.io._
 
 object Images {
 
-  def dirName(t: Int, g: Int, c: Int) =
-    "./public/img/products/" + Util.toTimesStr(t) + "/" + g + "/" + c
+  def dirName(t: OrdInt, g: Int, c: Int) =
+    "./public/img/products/" + t + "/" + g + "/" + c
 
-  def getClassImages(t: Int, g: Int, c: Int): Seq[String] = {
+  def getClassImages(t: OrdInt, g: Int, c: Int): Seq[String] = {
     val uri = dirName(t, g, c)
     val dir = new File(uri)
     if (dir.isDirectory) {
