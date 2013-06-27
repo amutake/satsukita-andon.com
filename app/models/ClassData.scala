@@ -55,7 +55,7 @@ object ClassData {
         'g -> data.grade,
         'c -> data.classn,
         'title -> data.title,
-        'prize -> data.prize.toString
+        'prize -> data.prize.map(_.toString)
       ).executeUpdate()
 
       data.copy()
