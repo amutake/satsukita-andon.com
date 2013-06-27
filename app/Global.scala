@@ -1,5 +1,7 @@
 import play.api._
 
+import anorm._
+
 import models._
 
 object Global extends GlobalSettings {
@@ -12,6 +14,32 @@ object Global extends GlobalSettings {
 object InitialData {
 
   def insert() = {
+    if (TimesData.findAll.isEmpty) {
+      Seq(
+        TimesData(Id(63), "雅"),
+        TimesData(Id(62), "蘭"),
+        TimesData(Id(61), "暒"),
+        TimesData(Id(60), "瞬"),
+        TimesData(Id(59), "煌"),
+        TimesData(Id(58), "爽"),
+        TimesData(Id(57), "奏"),
+        TimesData(Id(56), "咲"),
+        TimesData(Id(55), "美"),
+        TimesData(Id(54), "彩"),
+        TimesData(Id(53), "凛"),
+        TimesData(Id(52), "粋"),
+        TimesData(Id(51), "宴"),
+        TimesData(Id(50), "竹"),
+        TimesData(Id(49), "熱っ!"),
+        TimesData(Id(48), "煌"),
+        TimesData(Id(47), "華"),
+        TimesData(Id(46), "北高風味"),
+        TimesData(Id(45), "雅"),
+        TimesData(Id(44), "翔夢"),
+        TimesData(Id(43), "")
+      ).foreach(TimesData.create)
+    }
+
     if (ClassData.findAll.isEmpty) {
       Seq(
         ClassData(63, 1, 1, "南北朱武大図", Some("gold")),
