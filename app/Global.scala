@@ -342,6 +342,8 @@ object InitialData {
 
         ClassData(OrdInt(50), 3, 9, "", Some("grand")),
 
+        ClassData(OrdInt(49), 3, -1, "", Some("grand")),
+
         ClassData(OrdInt(48), 3, 10, "", Some("grand")),
 
         ClassData(OrdInt(47), 3, 1, "", Some("grand")),

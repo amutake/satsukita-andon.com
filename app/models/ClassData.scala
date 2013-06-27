@@ -51,7 +51,7 @@ object ClassData {
   def create(data: ClassData): ClassData = {
     DB.withConnection { implicit connection =>
       SQL("insert into ClassData values ({t}, {g}, {c}, {title}, {prize})").on(
-        't -> data.times,
+        't -> data.times.n,
         'g -> data.grade,
         'c -> data.classn,
         'title -> data.title,
