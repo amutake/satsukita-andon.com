@@ -12,10 +12,16 @@
 
 @views.html.common("How to") {
 
-  <h1>How to</h1>
+  <h2>How to</h2>
 
   <ul>
     @page("intro", "How toについて")
+  </ul>
+
+  <h3>作業の進め方</h3>
+
+  <ul>
     @file("file/official_62nd.pdf", "実行委員会公式行灯マニュアル(62nd)")
+    @page("offseason", "オフ期間にすべきこと")
   </ul>
 }

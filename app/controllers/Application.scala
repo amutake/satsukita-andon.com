@@ -44,6 +44,7 @@ object Application extends Controller {
   def eachHowto(page: String) = Action {
     page match {
       case "intro" => Ok(views.html.howto.intro())
+      case "offseason" => Ok(views.html.howto.offseason())
       case _ => NotFound
     }
   }
