@@ -16,7 +16,29 @@
     @head
   </head>
   <body>
-    @body
+
+    <div id="header">
+      <div id="header-wrapper">
+        <h1 id="logo">
+          <a href="@routes.Application.index">
+            <img src="@routes.Assets.at("img/logo.png")">
+          </a>
+        </h1>
+
+        <div id="menu">
+          <ul>
+            <li><a href="@routes.Application.info">Info</a></li>
+            <li><a href="@routes.Application.gallery">Gallery</a></li>
+            <li><a href="@routes.Application.howto">How to</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="container">
+      @body
+    </div>
+
     <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
     <script type="text/javascript" src="@routes.Assets.at("bootstrap/js/bootstrap.min.js")"></script>
   </body>

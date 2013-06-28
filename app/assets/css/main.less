@@ -1,3 +1,6 @@
+@mainWidth: 1000px;
+@headerHeight: 50px;
+
 body {
     background-image: url(/assets/img/background.jpg);
     background-repeat: not-repeat;
@@ -9,5 +12,50 @@ body {
 }
 
 li {
-   list-style-type: none;
+    list-style-type: none;
+}
+
+#header {
+    position: fixed;
+    left: 0; top: 14px;
+    margin: 0;
+    width: 100%; height: @headerHeight;
+    background-color: rgba(0, 0, 0, 0.3);
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+    #header-wrapper {
+        width: @mainWidth; height: 100%;
+        margin: 0 auto;
+        #logo {
+            float: left;
+            margin: 0; padding: 5px 0 5px;
+            line-height: 0;
+            img {
+                height: (@headerHeight - 10px);
+            }
+        }
+        #menu {
+            width: 75%; height: @headerHeight;
+            float: right;
+            ul {
+                margin: 0; padding: 0;
+                li {
+                    float: left;
+                    width: 30%; height: @headerHeight;
+                    text-align: center;
+                    line-height: @headerHeight;
+                    a {
+                        font-size: 0.8rem;
+                        color: white;
+                    }
+                }
+            }
+        }
+    }
+}
+
+#container {
+    width: @mainWidth;
+    margin: 70px auto;
 }
