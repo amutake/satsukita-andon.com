@@ -1,4 +1,4 @@
-@(title: String)(head: Html)(body: Html)
+@(title: String)(head: Html)(body: Html)(js: Html)
 
 <!DOCTYPE html>
 <html>
@@ -16,6 +16,7 @@
     @head
   </head>
   <body>
+    <dev id="browser"></div>
 
     <div id="header">
       <div id="header-wrapper">
@@ -41,5 +42,6 @@
 
     <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
     <script type="text/javascript" src="@routes.Assets.at("bootstrap/js/bootstrap.min.js")"></script>
+    @js
   </body>
 </html>
