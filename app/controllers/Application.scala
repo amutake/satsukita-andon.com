@@ -45,6 +45,7 @@ object Application extends Controller {
     page match {
       case "intro" => Ok(views.html.howto.intro())
       case "offseason" => Ok(views.html.howto.offseason())
+      case "organize" => Ok(views.html.howto.organize())
       case _ => NotFound
     }
   }
