@@ -26,3 +26,4 @@ resize.sh
 startup.sh
 deploy.sh
 shutdown.sh
+defreeze.sh
