@@ -1,8 +1,10 @@
-@(data: ClassData, ps: Seq[String])
+@(data: ClassData, ps: Seq[(String, String)])
 
-@li(path: String) = {
+@li(product: String, thumbnail: String) = {
   <li style="float: left;">
-    <img src="@routes.Assets.at(path)" width="300" height="200">
+    <a href="@routes.Assets.at(product)">
+      <img src="@routes.Assets.at(thumbnail)" width="300" height="200">
+    </a>
   </li>
 }
 
@@ -10,6 +12,6 @@
 
   <h2>Gallery @data.times @data.grade-@andon.utils.Util.showClassN(data.classn) @data.prize.map(_.toJapanese)</h2>
   <ul>
-    @ps.map { p => @li(p) }
+    @ps.map { p => @li(p._1, p._2) }
   </ul>
 }

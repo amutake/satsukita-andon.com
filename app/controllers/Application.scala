@@ -30,7 +30,9 @@ object Application extends Controller {
     val data = ClassData.findById(t, g, c)
     // TODO
     if (data.isDefined) {
-      val ps = Images.getClassImages(t, g, c)
+      val ps = Images.getClassImages(t, g, c).map { p =>
+        (p, Images.toThumbnail(p))
+      }
       Ok(views.html.gallery.classg(data.get, ps))
     } else {
       NotFound
