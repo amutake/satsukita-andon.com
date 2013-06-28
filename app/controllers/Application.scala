@@ -46,6 +46,7 @@ object Application extends Controller {
       case "intro" => Ok(views.html.howto.intro())
       case "offseason" => Ok(views.html.howto.offseason())
       case "organize" => Ok(views.html.howto.organize())
+      case "scheduling" => Ok(views.html.howto.scheduling())
       case _ => NotFound
     }
   }
