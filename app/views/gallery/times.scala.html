@@ -1,17 +1,19 @@
 @(times: String, ps: Seq[(ClassData, String)])
 
 @li(data: ClassData, path: String) = {
-  <li style="float: left;">
+  <li class="img-list">
     <a href="@routes.Application.classGallery(data.times, data.grade, data.classn)">
-      <img src="@routes.Assets.at(path)" width="300" height="200">
+      <img src="@routes.Assets.at(path)" width="280" height="210">
       @data.grade-@andon.utils.Util.showClassN(data.classn) @data.title @data.prize.map(_.toJapanese)
     </a>
   </li>
 }
 
 @common("Gallery " + times) {
+  <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/gallery.css")">
+} {
 
-  <h2>Gallery @times</h2>
+  <h2 class="gallery-title">Gallery @times</h2>
   <ul>
     @ps.map { c => @li(c._1, c._2) }
   </ul>

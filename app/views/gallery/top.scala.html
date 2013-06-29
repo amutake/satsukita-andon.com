@@ -1,15 +1,17 @@
 @(ts: Seq[(TimesData, String)])
 
 @common("Gallery") {
+  <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/gallery.css")">
+} {
 
-  <h1>gallery</h1>
+  <h2 class="gallery-title">Gallery</h2>
 
   <ul>
     @ts.map { t =>
-      <li>
+      <li class="img-list">
         <a href="@routes.Application.timesGallery(t._1.times.get)">
-          <img src="@routes.Assets.at(t._2)" width="300" height="200">
-          @t._1.times @t._1.title
+          <img src="@routes.Assets.at(t._2)" width="280" height="210">
+          <span>@t._1.times @t._1.title</span>
         </a>
       </li>
     }
