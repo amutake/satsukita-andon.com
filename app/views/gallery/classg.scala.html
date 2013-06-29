@@ -1,5 +1,7 @@
 @(data: ClassData, ps: Seq[(String, String)])
 
+@import andon.utils._
+
 @li(product: String, thumbnail: String) = {
   <li class="img-list">
     <a href="@routes.Assets.at(product)">
@@ -15,5 +17,5 @@
     @ps.map { p => @li(p._1, p._2) }
   </ul>
 } {
-  <h2 class="gallery-title">Gallery @data.times @data.grade-@andon.utils.Util.showClassN(data.classn) @data.prize.map(_.toJapanese)</h2>
+  <h2 class="gallery-title">@data.times @data.grade-@Util.showClassN(data.classn) @data.title @data.prize.map(_.span)</h2>
 }

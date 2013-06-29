@@ -4,7 +4,7 @@
   <li class="img-list">
     <a href="@routes.Application.classGallery(data.times, data.grade, data.classn)">
       <img src="@routes.Assets.at(path)" width="280" height="210">
-      @data.grade-@andon.utils.Util.showClassN(data.classn) @data.title @data.prize.map(_.toJapanese)
+      @data.grade-@andon.utils.Util.showClassN(data.classn) @data.title @data.prize.map(_.span)
     </a>
   </li>
 }

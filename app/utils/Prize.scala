@@ -1,14 +1,18 @@
 package andon.utils
 
+import play.api.templates._
+
 sealed trait Prize {
   def toEnglish: String
   def toJapanese: String
   override def toString = toEnglish
+  def span: Html =
+    Html("<span class=\"" + this.toEnglish + "\">" + this.toJapanese + "</span>")
 }
 
 case object Grand extends Prize {
   def toEnglish = "grand"
-  def toJapanese = "大賞"
+  def toJapanese = "行灯大賞"
 }
 case object Gold extends Prize {
   def toEnglish = "gold"
