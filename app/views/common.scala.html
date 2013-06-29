@@ -1,9 +1,11 @@
-@(title: String)(head: Html)(content: Html)
+@(title: String)(head: Html)(content: Html)(footer: Html)
 
 @main(title) {
   <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/common.css")">
   @head
 } {
   @content
+} {
+  @footer
 } {
 }

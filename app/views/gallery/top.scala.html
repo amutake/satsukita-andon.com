@@ -3,9 +3,6 @@
 @common("Gallery") {
   <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/gallery.css")">
 } {
-
-  <h2 class="gallery-title">Gallery</h2>
-
   <ul>
     @ts.map { t =>
       <li class="img-list">
@@ -16,4 +13,6 @@
       </li>
     }
   </ul>
+} {
+  <h2 class="gallery-title">Gallery</h2>
 }

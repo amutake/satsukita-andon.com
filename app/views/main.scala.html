@@ -1,4 +1,4 @@
-@(title: String)(head: Html)(body: Html)(js: Html)
+@(title: String)(head: Html)(body: Html)(footer: Html)(js: Html)
 
 <!DOCTYPE html>
 <html>
@@ -39,6 +39,12 @@
 
     <div id="container">
       @body
+    </div>
+
+    <div id="footer">
+      <div id="footer-wrapper">
+        @footer
+      </div>
     </div>
 
     <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
