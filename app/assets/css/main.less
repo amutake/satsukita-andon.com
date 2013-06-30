@@ -26,7 +26,7 @@ body {
     position: fixed;
     left: 0; top: 14px;
     width: 100%; height: @headerHeight;
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(0, 0, 0, 0.3);
     &:hover {
         background-color: rgba(0, 0, 0, 0.7);
     }
@@ -35,7 +35,7 @@ body {
         margin: 0 auto;
         #logo {
             float: left;
-            margin: 0 0 0 20px; padding: 5px 0 5px;
+            margin: 0 0 0 50px; padding: 5px 0 5px;
             img {
                 height: (@headerHeight - 10px);
             }
@@ -51,7 +51,7 @@ body {
                     text-align: right;
                     line-height: @headerHeight;
                     a {
-                        font-size: 0.8rem;
+                        font-size: 1rem;
                         color: @textColor;
                     }
                 }
@@ -74,8 +74,26 @@ body {
         width: @mainWidth; height: 100%;
         margin: 0 auto;
         h2 {
+            margin: 12px 0 12px 50px;
+            float: left;
             font-size: 25px;
+            line-height: 25px;
             font-weight: normal;
+        }
+
+        #footer-right {
+            float: right;
+            width: 200px;
+            padding: 10px 20px 10px 0;
+            font-size: 12px;
+            line-height: 8px;
+            color: #666666;
+            a {
+                color: #666699;
+            }
+            p {
+                text-align: center;
+            }
         }
     }
 }
