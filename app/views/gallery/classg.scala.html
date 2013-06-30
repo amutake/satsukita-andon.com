@@ -3,7 +3,7 @@
 @import andon.utils._
 
 @li(product: String, thumbnail: String) = {
-  <li class="img-list">
+  <li class="none-img">
     <a href="@routes.Assets.at(product)">
       <img src="@routes.Assets.at(thumbnail)" width="280" height="210">
     </a>
@@ -17,5 +17,5 @@
     @ps.map { p => @li(p._1, p._2) }
   </ul>
 } {
-  <h2 class="gallery-title">@data.times @data.grade-@Util.showClassN(data.classn) @data.title @data.prize.map(_.span)</h2>
+  <h2>@data.times @data.grade-@Util.showClassN(data.classn) @data.title @data.prize.map(_.span)</h2>
 }

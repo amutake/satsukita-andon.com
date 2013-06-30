@@ -5,14 +5,16 @@
 } {
   <ul>
     @ts.map { t =>
-      <li class="img-list">
+      <li class="none-img">
         <a href="@routes.Application.timesGallery(t._1.times.get)">
           <img src="@routes.Assets.at(t._2)" width="280" height="210">
-          <span>@t._1.times @t._1.title</span>
+          <div class="img-detail">
+            @t._1.times @t._1.title
+          </div>
         </a>
       </li>
     }
   </ul>
 } {
-  <h2 class="gallery-title">Gallery</h2>
+  <h2>Gallery</h2>
 }
