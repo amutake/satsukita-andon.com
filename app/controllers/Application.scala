@@ -50,6 +50,7 @@ object Application extends Controller {
       case "organize" => Ok(views.html.howto.organize())
       case "scheduling" => Ok(views.html.howto.scheduling())
       case "face" => Ok(views.html.howto.face())
+      case "harigane" => Ok(views.html.howto.harigane())
       case _ => NotFound
     }
   }
