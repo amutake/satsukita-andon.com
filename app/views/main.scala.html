@@ -18,7 +18,14 @@
     @head
   </head>
   <body>
-    <dev id="browser"></div>
+
+    <div id="background">
+      @Range(1, 17).map { n =>
+        <img id="background-@n" src="@routes.Assets.at("img/background/" + n + ".jpg")">
+      }
+    </div>
+
+    <div id="browser"></div>
 
     <div id="header">
       <div id="header-wrapper">
@@ -51,6 +58,7 @@
     <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
     <script type="text/javascript" src="@routes.Assets.at("bootstrap/js/bootstrap.min.js")"></script>
     <script type="text/javascript" src="@routes.Assets.at("fresco/js/fresco/fresco.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.at("js/background.js")"></script>
     @js
   </body>
 </html>
