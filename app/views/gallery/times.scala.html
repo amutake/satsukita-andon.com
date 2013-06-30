@@ -1,20 +1,71 @@
 @(times: String, ps: Seq[(ClassData, String)])
 
-@li(data: ClassData, path: String) = {
-  <li class="img-list">
-    <a href="@routes.Application.classGallery(data.times, data.grade, data.classn)">
-      <img src="@routes.Assets.at(path)" width="280" height="210">
-      @data.grade-@andon.utils.Util.showClassN(data.classn) @data.title @data.prize.map(_.span)
-    </a>
+@import andon.utils._
+
+@anchor(data: ClassData, path: String, width: Int, height: Int) = {
+  <a href="@routes.Application.classGallery(data.times, data.grade, data.classn)">
+    <img src="@routes.Assets.at(path)" width="@width" height="@height">
+    <div class="img-detail">
+      <div class="prize">
+        @data.prize.map(_.span)
+      </div>
+      <div class="grade-class">
+        @data.grade-@Util.showClassN(data.classn)
+      </div>
+      <div class="title">
+        @data.title
+      </div>
+    </div>
+  </a>
+}
+
+@prizes(prize: Prize, data: ClassData, path: String) = {
+  @prize match {
+    case Grand => {
+      <li class="grand-img">
+        @anchor(data, path, 600, 450)
+      </li>
+    }
+    case Gold => {
+      <li class="gold-img">
+        @anchor(data, path, 400, 300)
+      </li>
+    }
+    case Silver => {
+      <li class="silver-img">
+        @anchor(data, path, 320, 240)
+      </li>
+    }
+    case Bronze => {
+      <li class="bronze-img">
+        @anchor(data, path, 320, 240)
+      </li>
+    }
+  }
+}
+
+@none(data: ClassData, path: String) = {
+  <li class="none-img">
+    @anchor(data, path, 280, 210)
   </li>
+}
+
+@gradeImgs(grade: Int, data: Seq[(ClassData, String)]) = {
+  <h3>@grade年</h3>
+  <ul class="img-list">
+    @Seq(Grand, Gold, Silver, Bronze).map { p =>
+      @data.filter(d => d._1.prize == Some(p)).map(d => prizes(p, d._1, d._2))
+    }
+    @data.filter(d => d._1.prize == None).map(d => none(d._1, d._2))
+  </ul>
 }
 
 @common("Gallery " + times) {
   <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/gallery.css")">
 } {
-  <ul>
-    @ps.map { c => @li(c._1, c._2) }
-  </ul>
+  @Seq(3, 2, 1).map( n =>
+    gradeImgs(n, ps.filter(d => d._1.grade == n))
+  )
 } {
-  <h2 class="gallery-title">Gallery @times</h2>
+  <h2>Gallery @times</h2>
 }
