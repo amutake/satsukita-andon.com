@@ -16,6 +16,7 @@
 .detail-img(@width, @aWidth, @height, @fontSize) {
     float: left;
     width: @width; height: @height;
+    padding: 30px 0;
     a {
         display: block;
         width: @aWidth;
@@ -26,7 +27,7 @@
             margin: 0; padding: 0;
         }
         .img-detail {
-            padding: (@height / 3.5) 0;
+            padding: (@height / 2.9) 0;
             text-align: center;
 
             font-size: @fontSize;
@@ -37,27 +38,28 @@
 }
 
 .grand-img {
-    .detail-img(@mainWidth, @mainWidth, 600px, 2rem);
+    .detail-img(@mainWidth, @mainWidth, 450px, 2rem);
 }
 
 .gold-img {
-    .detail-img(@mainWidth, @mainWidth * 0.75, 400px, 1.5rem);
+    .detail-img(@mainWidth, @mainWidth * 0.75, 300px, 1.5rem);
 }
 
 .silver-img, .bronze-img {
-    .detail-img(@mainWidth / 2, @mainWidth / 2, 320px, 1.3rem);
+    .detail-img(@mainWidth / 2, @mainWidth / 2, 240px, 1.3rem);
 }
 
 .none-img {
     float: left;
-    width: @mainWidth / 3; height: @imgWidth;
+    width: @mainWidth / 3; height: @imgHeight;
+    padding: 26px 0;
     a {
         display: block;
         width: @mainWidth / 3;
         margin: 0 auto;
         color: @textColor;
         img {
-            margin: 0; padding: 0;
+            margin: 0 26px; padding: 0;
         }
         .img-detail {
             text-align: center;
