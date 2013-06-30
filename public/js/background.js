@@ -1,28 +1,3 @@
-var go = function($imgs) {
-	var next = function(top, speed) {
-		if (top < -300) {
-			if (Math.random() < 0.001) {
- 				return {
-					left: random(width - 200),
-					top: height
-				};
-			} else {
-				return {};
-			}
-		} else {
-			return {
-				top: "-=" + speed
-			};
-		}
-	};
-
-	setInterval(function() {
-		$imgs.map(function($img) {
-			$img.img.css(next($img.img.css("top"), $img.speed));
-		})
-	}, 100);
-};
-
 $(function() {
 	var imgNum = 17;
 	var mkImg = function($img, index, speed, opacity) {
@@ -56,13 +31,42 @@ $(function() {
 
 	$imgs.map(function($img) {
 		$img.img.css({
-			position: "absolute",
+			position: "fixed",
 			left: random(width - 200),
 			top: random(height * 2),
 			opacity: $img.opacity,
 			zIndex: $img.zIndex
 		});
 	});
+
+	var go = function($imgs) {
+		var next = function(top, speed) {
+			var n = parseInt(top);
+			if (n < -300) {
+				if (Math.random() < 0.01) {
+					return {
+						left: random(width - 200),
+						top: height
+					};
+				} else {
+					return {};
+				}
+			} else {
+				return {
+					top: "-=" + speed + "px"
+				};
+			}
+		};
+
+		setInterval(function() {
+			$imgs.map(function($img) {
+				if ($img.index === 1) {
+					console.log($img.img.css("top"));
+				}
+				$img.img.css(next($img.img.css("top"), $img.speed));
+			})
+		}, 100);
+	};
 
 	go($imgs);
 });
