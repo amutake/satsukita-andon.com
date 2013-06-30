@@ -52,4 +52,8 @@ object Application extends Controller {
       case _ => NotFound
     }
   }
+
+  def about = Action {
+    Ok(views.html.about())
+  }
 }
