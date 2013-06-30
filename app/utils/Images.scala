@@ -40,6 +40,8 @@ object Images {
       } else {
         (c, "img/logo.png")
       }
+    }.filter { p =>
+        p._2 != "img/logo.png"
     }
   }
 
