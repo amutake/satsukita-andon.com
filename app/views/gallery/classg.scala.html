@@ -4,7 +4,7 @@
 
 @li(product: String, thumbnail: String) = {
   <li class="none-img">
-    <a href="@routes.Assets.at(product)">
+    <a class="fresco" href="@routes.Assets.at(product)" data-fresco-group="gallery">
       <img src="@routes.Assets.at(thumbnail)" width="280" height="210">
     </a>
   </li>
