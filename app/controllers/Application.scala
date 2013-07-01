@@ -55,6 +55,7 @@ object Application extends Controller {
       case "kamihari" => Ok(views.html.howto.kamihari())
       case "daizai" => Ok(views.html.howto.daizai())
       case "susume" => Ok(views.html.howto.susume())
+      case "howtomake" => Ok(views.html.howto.howtomake())
       case _ => NotFound
     }
   }
