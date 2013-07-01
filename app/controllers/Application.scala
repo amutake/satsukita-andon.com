@@ -58,6 +58,7 @@ object Application extends Controller {
       case "howtomake" => Ok(views.html.howto.howtomake())
       case "tools" => Ok(views.html.howto.tools())
       case "lumber" => Ok(views.html.howto.lumber())
+      case "sketchup" => Ok(views.html.howto.sketchup())
       case _ => NotFound
     }
   }
