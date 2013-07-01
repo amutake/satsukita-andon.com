@@ -1,1 +1,1 @@
-[行灯職人への道](http://new.satsukita-andon.com)
+[行灯職人への道](http://satsukita-andon.com)
