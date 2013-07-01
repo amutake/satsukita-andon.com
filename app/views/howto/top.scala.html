@@ -1,37 +1,79 @@
-@page(url: String, title: String) = {
+@page(url: String, title: String, author: String, date: String) = {
   <li><a href="@routes.Application.eachHowto(url)">
     <i class="icon-file icon-white"></i>@title
-  </a></li>
+  </a>Author: @author, Date: @date</li>
 }
 
-@file(url: String, title: String) = {
+@file(url: String, title: String, author: String, date: String) = {
   <li><a href="@routes.Assets.at(url)">
     <i class="icon-download icon-white"></i>@title
-  </a></li>
+  </a>Author: @author, Date: @date</li>
 }
 
 @views.html.common("How to") {
 } {
   <ul>
-    @page("intro", "How toについて")
+    @page("intro", "How toについて", "甲乙人(60期)", "2013/6/28")
   </ul>
 
   <h3>作業の進め方</h3>
 
   <ul>
-    @file("file/official_62nd.pdf", "実行委員会公式行灯マニュアル(62nd)")
-    @page("offseason", "オフ期間にすべきこと")
-    @page("organize", "組織を作る")
-    @page("scheduling", "スケジュールを書く")
+    @file("file/official_62nd.pdf", "実行委員会公式行灯マニュアル(62nd)", "62nd実行委員会", "?")
+    @page("offseason", "オフ期間にすべきこと", "甲乙人(60期)", "2011/2/27")
+    @page("organize", "組織を作る", "甲乙人(60期)", "2011/4/2")
+    @page("scheduling", "スケジュールを書く", "甲乙人(60期)", "2011/4/4")
   </ul>
 
   <h3>行灯の作り方</h3>
 
+  <h4>道具</h4>
   <ul>
-    @page("face", "顔を作る")
-    @page("harigane", "針金")
+    @file("file/estimate_62nd.pdf", "学校祭物品見積書(62nd)", "62nd実行委員会", "?")
+    @file("file/materials_official_59th.pdf", "実行委員会公式材料マニュアル(59th)", "59th実行委員会", "?")
   </ul>
 
+  <h4>土台・支柱</h4>
+  <ul>
+    @file("file/dodai_61st.pdf", "土台講習会マニュアル[土台](61st)", "?(61期)", "?")
+    @file("file/sityu_61st.pdf", "土台講習会マニュアル[支柱](61st)", "?(61期)", "?")
+    @file("file/dodai_56th.pdf", "土台講習会マニュアル(56th)", "muro(55期)", "?")
+  </ul>
+
+  <h4>針金</h4>
+  <ul>
+    @page("harigane", "針金", "甲乙人(60期)", "2011/6/17")
+  </ul>
+
+  <h4>電飾</h4>
+  <ul>
+    @file("file/densyoku_62nd.pdf", "電飾講習会マニュアル(62nd)", "黒猫(62期)", "2011/6/4")
+    @file("file/densyoku_62nd-2.pdf", "電飾講習会マニュアル(62nd)補足", "黒猫(62期)", "2011/6/4")
+    @file("file/densyoku_61st.pdf", "電飾講習会マニュアル(61st)", "sao(61期)", "2010/5/14")
+    @file("file/densyoku_59th.pdf", "電飾講習会マニュアル(59th)", "あきら(59期)", "?")
+    @file("file/densyoku_official_59th.pdf", "実行委員会公式電飾マニュアル(59th)", "59th実行委員会", "2008/5/10")
+    @page("manual_d_choki", "電飾マニュアル", "ちょき", "2007/8/1")
+  </ul>
+
+  <h4>色塗り</h4>
+  <ul>
+    @file("file/ironuri_62nd.pdf", "色塗り・紙貼り講習会マニュアル(62nd)", "?", "?")
+  </ul>
+
+  <h4>パーツ</h4>
+  <ul>
+    @page("face", "顔を作る", "甲乙人(60期)", "2013/7/1")
+  </ul>
+
+  <h3>その他の資料</h3>
+
+  <h4>SketchUp Make(旧Google SketchUp)</h4>
+  <ul>
+    @file("file/about_gs.pdf", "Google SketchUpについて", "裏猫(62期)", "?")
+    @file("file/sketchup/61st2-5_gs.skp", "SketchUpファイル(61st2-5)", "裏猫(62期)", "?")
+    @file("file/sketchup/6th3-9_gs.skp", "SketchUpファイル(60th3-9)", "甲乙人(60期)", "?")
+    @file("file/sketchup/58th3-3_gs.skp", "SketchUpファイル(58th3-3)", "?(58期)", "?")
+  </ul>
 } {
   <h2>How to</h2>
 }
