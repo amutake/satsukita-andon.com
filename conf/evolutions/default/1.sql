@@ -1,16 +1,18 @@
+# ClassData and TimesData Schema
+
 # --- !Ups
 
-create table "CLASSDATA" (
-  "TIMES"                         int not null,
-  "GRADE"                         int not null,
-  "CLASSN"                        int not null,
-  "TITLE"                         varchar(255) not null,
-  "PRIZE"                         varchar(255)
+create table ClassData (
+  times                         int not null,
+  grade                         int not null,
+  classn                        int not null,
+  title                         varchar(255) not null,
+  prize                         varchar(255)
 );
 
-create table "TIMESDATA" (
-  "TIMES"                         int not null primary key,
-  "TITLE"                         varchar(255) not null
+create table TimesData (
+  times                         int not null primary key,
+  title                         varchar(255) not null
 );
 
 # --- !Downs
