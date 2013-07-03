@@ -27,7 +27,7 @@ object Application extends Controller {
       val ps = Images.getTimesImages(t)
       Ok(views.html.gallery.times(t.toString(), ps))
     } else {
-      NotFound(views.html.errors.notFound())
+      NotFound(views.html.errors.notFound("/gallery/" + t))
     }
   }
 
@@ -40,7 +40,7 @@ object Application extends Controller {
       }
       Ok(views.html.gallery.classg(data.get, ps))
     } else {
-      NotFound(views.html.errors.notFound())
+      NotFound(views.html.errors.notFound("/gallery/" + t + "/" + g + "/" + c))
     }
   }
 
@@ -64,7 +64,7 @@ object Application extends Controller {
       case "tools" => Ok(views.html.howto.tools())
       case "lumber" => Ok(views.html.howto.lumber())
       case "sketchup" => Ok(views.html.howto.sketchup())
-      case _ => NotFound(views.html.errors.notFound())
+      case _ => NotFound(views.html.errors.notFound("/howto/" + page))
     }
   }
 

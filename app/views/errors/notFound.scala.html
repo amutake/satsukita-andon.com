@@ -1,8 +1,11 @@
+@(path: String)
+
 @common("404: Not Found") {
 } {
 
   <h3>404: Not Found</h3>
   <p>ページが見つかりません。URLを確認してください。</p>
+  <p>リクエストされたページ : @path</p>
 
 } {
   <h2>404: Not Found</h2>

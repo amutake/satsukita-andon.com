@@ -18,7 +18,7 @@ object Global extends GlobalSettings {
   }
 
   override def onHandlerNotFound(request: RequestHeader): Result = {
-    NotFound(views.html.errors.notFound())
+    NotFound(views.html.errors.notFound(request.path))
   }
 
   override def onError(request: RequestHeader, throwable: Throwable) = {
