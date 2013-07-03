@@ -60,9 +60,6 @@ $(function() {
 
 		setInterval(function() {
 			$imgs.map(function($img) {
-				if ($img.index === 1) {
-					console.log($img.img.css("top"));
-				}
 				$img.img.css(next($img.img.css("top"), $img.speed));
 			})
 		}, 100);
