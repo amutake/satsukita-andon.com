@@ -13,6 +13,10 @@ object Global extends GlobalSettings {
     InitialData.insert()
   }
 
+  override def onBadRequest(request: RequestHeader, error: String) = {
+    BadRequest(views.html.errors.badRequest(error))
+  }
+
   override def onHandlerNotFound(request: RequestHeader): Result = {
     NotFound(views.html.errors.notFound())
   }
