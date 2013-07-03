@@ -22,8 +22,13 @@ object Application extends Controller {
   }
 
   def timesGallery(t: OrdInt) = Action {
-    val ps = Images.getTimesImages(t)
-    Ok(views.html.gallery.times(t.toString(), ps))
+    val times = TimesData.findById(t)
+    if (times.isDefined) {
+      val ps = Images.getTimesImages(t)
+      Ok(views.html.gallery.times(t.toString(), ps))
+    } else {
+      NotFound(views.html.errors.notFound())
+    }
   }
 
   def classGallery(t: OrdInt, g: Int, c: Int) = Action {
@@ -35,7 +40,7 @@ object Application extends Controller {
       }
       Ok(views.html.gallery.classg(data.get, ps))
     } else {
-      NotFound
+      NotFound(views.html.errors.notFound())
     }
   }
 
@@ -59,7 +64,7 @@ object Application extends Controller {
       case "tools" => Ok(views.html.howto.tools())
       case "lumber" => Ok(views.html.howto.lumber())
       case "sketchup" => Ok(views.html.howto.sketchup())
-      case _ => NotFound
+      case _ => NotFound(views.html.errors.notFound())
     }
   }
 
