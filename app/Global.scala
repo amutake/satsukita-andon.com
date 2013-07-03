@@ -17,6 +17,7 @@ object InitialData {
   def insert() = {
     if (TimesData.findAll.isEmpty) {
       Seq(
+        TimesData(Id(OrdInt(64)), ""),
         TimesData(Id(OrdInt(63)), "雅"),
         TimesData(Id(OrdInt(62)), "蘭"),
         TimesData(Id(OrdInt(61)), "暒"),
@@ -43,6 +44,33 @@ object InitialData {
 
     if (ClassData.findAll.isEmpty) {
       Seq(
+        ClassData(OrdInt(64), 1, 1, "", None),
+        ClassData(OrdInt(64), 1, 2, "", None),
+        ClassData(OrdInt(64), 1, 3, "", None),
+        ClassData(OrdInt(64), 1, 4, "", None),
+        ClassData(OrdInt(64), 1, 5, "", None),
+        ClassData(OrdInt(64), 1, 6, "", None),
+        ClassData(OrdInt(64), 1, 7, "", None),
+        ClassData(OrdInt(64), 1, 8, "", None),
+
+        ClassData(OrdInt(64), 2, 1, "", None),
+        ClassData(OrdInt(64), 2, 2, "", None),
+        ClassData(OrdInt(64), 2, 3, "", None),
+        ClassData(OrdInt(64), 2, 4, "", None),
+        ClassData(OrdInt(64), 2, 5, "", None),
+        ClassData(OrdInt(64), 2, 6, "", None),
+        ClassData(OrdInt(64), 2, 7, "", None),
+        ClassData(OrdInt(64), 2, 8, "", None),
+
+        ClassData(OrdInt(64), 3, 1, "", None),
+        ClassData(OrdInt(64), 3, 2, "", None),
+        ClassData(OrdInt(64), 3, 3, "", None),
+        ClassData(OrdInt(64), 3, 4, "", None),
+        ClassData(OrdInt(64), 3, 5, "", None),
+        ClassData(OrdInt(64), 3, 6, "", None),
+        ClassData(OrdInt(64), 3, 7, "", None),
+        ClassData(OrdInt(64), 3, 8, "", None),
+
         ClassData(OrdInt(63), 1, 1, "南北朱武大図", Some(Gold)),
         ClassData(OrdInt(63), 1, 2, "天孫降臨", Some(Bronze)),
         ClassData(OrdInt(63), 1, 3, "風神雷神", None),
