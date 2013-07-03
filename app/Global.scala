@@ -1,4 +1,6 @@
 import play.api._
+import play.api.mvc._
+import play.api.mvc.Results._
 
 import anorm._
 
@@ -9,6 +11,10 @@ object Global extends GlobalSettings {
 
   override def onStart(app: Application) {
     InitialData.insert()
+  }
+
+  override def onHandlerNotFound(request: RequestHeader): Result = {
+    NotFound(views.html.errors.notFound())
   }
 }
 
