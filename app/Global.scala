@@ -20,6 +20,10 @@ object Global extends GlobalSettings {
   override def onHandlerNotFound(request: RequestHeader): Result = {
     NotFound(views.html.errors.notFound())
   }
+
+  override def onError(request: RequestHeader, throwable: Throwable) = {
+    InternalServerError(views.html.errors.error(throwable))
+  }
 }
 
 object InitialData {
