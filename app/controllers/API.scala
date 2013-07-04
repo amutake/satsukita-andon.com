@@ -10,8 +10,21 @@ import andon.utils._
 object API extends Controller {
 
   // TODO
-  def search(times: String, prize: String, grade: String) = Action {
-    val cps = Images.getTopImages(ClassData.search(times, prize, grade))
+  def search(times: String, prize: String, grade: String, tag: String) = Action {
+
+    val sr = ClassData.search(times, prize, grade)
+    val cs = if (tag == "all") {
+      sr
+    } else {
+      sr.filter { data =>
+        Tags.findByTag(tag).exists { tag =>
+          tag.times == data.times &&
+          tag.grade == data.grade &&
+          tag.classn == data.classn
+        }
+      }
+    }
+    val cps = Images.getTopImages(cs)
     val json = Json.toJson(
       cps.map { cp =>
         Json.toJson(

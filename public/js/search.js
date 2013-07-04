@@ -35,11 +35,13 @@
 		var times = $("#search-times option:selected").val();
 		var prize = $("#search-prize option:selected").val();
 		var grade = $("#search-grade option:selected").val();
+		var tag = $("#search-tag option:selected").val();
 
 		var data = {
 			times: times,
 			prize: prize,
-			grade: grade
+			grade: grade,
+			tag: tag
 		};
 
 		$.ajax({

@@ -39,6 +39,14 @@ object Tags {
     }
   }
 
+  def findByTag(tag: String): Seq[Tag] = {
+    DB.withConnection { implicit connection =>
+      SQL("select * from Tags where tag = {t}").on(
+        't -> tag
+      ).as(Tags.simple *)
+    }
+  }
+
   def create(tag: Tag): Tag = {
     DB.withConnection { implicit connection =>
       SQL("insert into Tags values ({t}, {g}, {c}, {tag})").on(
