@@ -1,7 +1,7 @@
 @li(min: Int, max: Int, group: String) = {
   @Range(min, max).map { n =>
-    <a class="fresco" href="@routes.Assets.at("img/howto/face/full/" + group + "_" + n + ".JPG")" data-fresco-group="@group">
-      <img src="@routes.Assets.at("img/howto/face/thumbnails/" + group + "_" + n + ".JPG")" width="280" height="210" style="margin: 10px 20px;">
+    <a class="fresco" href="@routes.Assets.at("img/howto/face/full/" + group + "_" + n + ".jpg")" data-fresco-group="@group">
+      <img src="@routes.Assets.at("img/howto/face/thumbnails/" + group + "_" + n + ".jpg")" width="280" height="210" style="margin: 10px 20px;">
     </a>
   }
 }
