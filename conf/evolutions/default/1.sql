@@ -15,7 +15,15 @@ create table TimesData (
   title                         varchar(255) not null
 );
 
+create table Tags (
+  times                         int not null,
+  grade                         int not null,
+  classn                        int not null,
+  tag                           varchar(255) not null
+);
+
 # --- !Downs
 
 drop table if exists ClassData;
 drop table if exists TimesData;
+drop table if exists Tags;
