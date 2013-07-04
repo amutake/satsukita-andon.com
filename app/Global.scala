@@ -844,6 +844,32 @@ object InitialData {
         Tag(OrdInt(53), 3, 10, "龍"),
         Tag(OrdInt(51), 3, 1, "龍"),
         Tag(OrdInt(48), 3, -1, "龍"),
+
+        Tag(OrdInt(63), 2, 4, "虎"),
+        Tag(OrdInt(63), 3, 1, "虎"),
+        Tag(OrdInt(63), 3, 2, "虎"),
+        Tag(OrdInt(63), 3, 1, "虎"),
+        Tag(OrdInt(62), 3, 7, "虎"),
+        Tag(OrdInt(61), 1, 1, "虎"),
+        Tag(OrdInt(61), 2, 5, "虎"),
+        Tag(OrdInt(61), 2, 7, "虎"),
+        Tag(OrdInt(61), 3, 1, "虎"),
+        Tag(OrdInt(61), 3, 7, "虎"),
+        Tag(OrdInt(58), 2, 5, "虎"),
+        Tag(OrdInt(57), 2, 4, "虎"),
+        Tag(OrdInt(57), 2, 9, "虎"),
+        Tag(OrdInt(56), 2, 2, "虎"),
+        Tag(OrdInt(56), 2, 7, "虎"),
+        Tag(OrdInt(55), 1, 6, "虎"),
+        Tag(OrdInt(55), 3, 3, "虎"),
+        Tag(OrdInt(54), 1, 3, "虎"),
+        Tag(OrdInt(54), 2, 4, "虎"),
+        Tag(OrdInt(53), 2, 1, "虎"),
+        Tag(OrdInt(53), 2, 2, "虎"),
+        Tag(OrdInt(53), 3, 9, "虎"),
+        Tag(OrdInt(52), 3, 3, "虎"),
+        Tag(OrdInt(51), 3, 2, "虎"),
+        Tag(OrdInt(50), 3, 1, "虎")
       ).foreach(Tags.create)
     }
   }
