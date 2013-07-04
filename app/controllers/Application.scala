@@ -22,7 +22,8 @@ object Application extends Controller {
   }
 
   def search = Action {
-    Ok(views.html.gallery.search())
+    val ts = TimesData.findAll
+    Ok(views.html.gallery.search(ts))
   }
 
   def timesGallery(t: OrdInt) = Action {

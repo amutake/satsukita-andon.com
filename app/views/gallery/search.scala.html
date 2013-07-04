@@ -1,7 +1,40 @@
+@(ts: Seq[TimesData])
+
+@import andon.utils._
+
+@times = {
+  <select id="search-times" name="times">
+    <option value="all">すべて</option>
+    @ts.map{ t =>
+      <option value="@t.times.toString">@t.times.toString</option>
+    }
+  </select>
+}
+
+@prize = {
+  <select id="search-prize" name="prize">
+    <option value="all">すべて</option>
+    @Seq(Grand, Gold, Silver, Bronze).map{ p =>
+      <option value="@p.toString">@p.toJapanese</option>
+    }
+  </select>
+}
+
+@grade = {
+  <select id="search-grade" name="grade">
+    <option value="all">すべて</option>
+    @Seq(3, 2, 1).map{ g =>
+      <option value="@g">@g年</option>
+    }
+  </select>
+}
+
 @common("Class Search") {
 } {
-  @helper.form(action = routes.API.search) {
-  }
+  @times
+  @prize
+  @grade
+  <button id="search-submit">submit</button>
 } {
   <h2>Class Search</h2>
 }
