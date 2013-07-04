@@ -21,6 +21,10 @@ object Application extends Controller {
     Ok(views.html.gallery.top(ts))
   }
 
+  def search = Action {
+    Ok(views.html.gallery.search())
+  }
+
   def timesGallery(t: OrdInt) = Action {
     val times = TimesData.findById(t)
     if (times.isDefined) {

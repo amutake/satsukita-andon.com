@@ -6,12 +6,16 @@
 GET     /                           controllers.Application.index
 GET     /info                       controllers.Application.info
 GET     /gallery                    controllers.Application.gallery
+GET     /gallery/search             controllers.Application.search
 GET     /gallery/:t                 controllers.Application.timesGallery(t: andon.utils.OrdInt)
 GET     /gallery/:t/:g/:c           controllers.Application.classGallery(t: andon.utils.OrdInt, g: Int, c: Int)
 GET     /howto                      controllers.Application.howto
 GET     /howto/:page                controllers.Application.eachHowto(page: String)
 GET     /about                      controllers.Application.about
 GET     /contact                    controllers.Application.contact
+
+# API
+GET     /api/search                 controllers.API.search
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
