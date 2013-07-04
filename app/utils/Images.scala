@@ -32,6 +32,17 @@ object Images {
 
   def getTimesImages(t: OrdInt): Seq[(ClassData, String)] = {
     val cs = ClassData.findByTimes(t)
+    getTopImages(cs)
+  }
+
+  def getGrandImages: Seq[(TimesData, String)] = {
+    val ts = TimesData.findAll
+    ts.map { t =>
+      (t, "img/grands/" + t.times + ".jpg")
+    }
+  }
+
+  def getTopImages(cs: Seq[ClassData]): Seq[(ClassData, String)] = {
     cs.map { c =>
       val path = img(c.times, c.grade, c.classn, 1, thumbnailsDir)
       val file = new File(path)
@@ -42,13 +53,6 @@ object Images {
       }
     }.filter { p =>
         p._2 != "img/logo.png"
-    }
-  }
-
-  def getGrandImages: Seq[(TimesData, String)] = {
-    val ts = TimesData.findAll
-    ts.map { t =>
-      (t, "img/grands/" + t.times + ".jpg")
     }
   }
 }
