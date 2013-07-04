@@ -9,9 +9,10 @@ import andon.utils._
 
 object API extends Controller {
 
+  // TODO
   def search(times: String, prize: String, grade: String) = Action {
     val cs = Json.toJson(
-      ClassData.findAll.map { c =>
+      ClassData.search(times, prize, grade).map { c =>
         Json.toJson(
           Map(
             "times" -> Json.toJson(c.times.toString),

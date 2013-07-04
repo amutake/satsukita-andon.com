@@ -48,6 +48,17 @@ object ClassData {
     }
   }
 
+  // TODO
+  def search(t: String, p: String, g: String): Seq[ClassData] = {
+    val ts = if (t == "all") "1 = 1" else "times = '" + t + "'"
+    val ps = if (p == "all") "1 = 1" else "prize = '" + p + "'"
+    val gs = if (g == "all") "1 = 1" else "grade = '" + g + "'"
+    DB.withConnection { implicit connection =>
+      SQL("select * from ClassData where " + ts + " and " + ps + " and " + gs)
+        .as(ClassData.simple *)
+    }
+  }
+
   def create(data: ClassData): ClassData = {
     DB.withConnection { implicit connection =>
       SQL("insert into ClassData values ({t}, {g}, {c}, {title}, {prize})").on(

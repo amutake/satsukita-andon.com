@@ -6,7 +6,7 @@
   <select id="search-times" name="times">
     <option value="all">すべて</option>
     @ts.map{ t =>
-      <option value="@t.times.toString">@t.times.toString</option>
+      <option value="@t.times.get.n.toString">@t.times.toString</option>
     }
   </select>
 }
