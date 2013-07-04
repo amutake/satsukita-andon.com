@@ -2,9 +2,9 @@
 
 @import andon.utils._
 
-@anchor(data: ClassData, path: String, width: Int, height: Int) = {
+@anchor(data: ClassData, path: String) = {
   <a href="@routes.Application.classGallery(data.times, data.grade, data.classn)">
-    <img src="@routes.Assets.at(path)" width="@width" height="@height">
+    <img src="@routes.Assets.at(path)">
     <div class="img-detail">
       <div class="prize">
         @data.prize.map(_.span)
@@ -22,37 +22,37 @@
 @prizes(prize: Prize, data: ClassData, path: String) = {
   @prize match {
     case Grand => {
-      <li class="grand-img">
-        @anchor(data, path, 600, 450)
+      <li class="span12">
+        @anchor(data, path)
       </li>
     }
     case Gold => {
-      <li class="gold-img">
-        @anchor(data, path, 400, 300)
+      <li class="span8">
+        @anchor(data, path)
       </li>
     }
     case Silver => {
-      <li class="silver-img">
-        @anchor(data, path, 320, 240)
+      <li class="span6">
+        @anchor(data, path)
       </li>
     }
     case Bronze => {
-      <li class="bronze-img">
-        @anchor(data, path, 320, 240)
+      <li class="span6">
+        @anchor(data, path)
       </li>
     }
   }
 }
 
 @none(data: ClassData, path: String) = {
-  <li class="none-img">
-    @anchor(data, path, 280, 210)
+  <li class="span4">
+    @anchor(data, path)
   </li>
 }
 
 @gradeImgs(grade: Int, data: Seq[(ClassData, String)]) = {
   <h3>@grade年</h3>
-  <ul class="img-list">
+  <ul class="thumbnails">
     @Seq(Grand, Gold, Silver, Bronze).map { p =>
       @data.filter(d => d._1.prize == Some(p)).map(d => prizes(p, d._1, d._2))
     }

@@ -3,9 +3,9 @@
 @import andon.utils._
 
 @li(product: String, thumbnail: String) = {
-  <li class="none-img">
+  <li class="span4">
     <a class="fresco" href="@routes.Assets.at(product)" data-fresco-group="gallery">
-      <img src="@routes.Assets.at(thumbnail)" width="280" height="210">
+      <img src="@routes.Assets.at(thumbnail)">
     </a>
   </li>
 }
@@ -13,7 +13,7 @@
 @common("Gallery " + data.times + " " + data.grade + "-" + data.classn) {
   <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/gallery.css")">
 } {
-  <ul>
+  <ul class="thumbnails">
     @ps.map { p => @li(p._1, p._2) }
   </ul>
 } {

@@ -2,25 +2,23 @@
 
 	var insert = function(data) {
 
-		var $ul = $("<ul>");
+		var $ul = $("<ul>").addClass("thumbnails");
 
 		data.map(function(datum) {
 
 			var $img = $("<img>").attr({
-				src: "/assets/" + datum.thumbnail,
-				width: 280,
-				height: 210
+				src: "/assets/" + datum.thumbnail
 			});
 
-			var $detail = $("<div>").addClass("img-detail").text(
+			var $detail = $("<div>").text(
 				datum.times + " " + datum.grade + "-" + datum.classn + " " + datum.title
-			);
+			).addClass("img-detail");
 
 			var $a = $("<a>").attr({
 				href: "/gallery/" + datum.times + "/" + datum.grade + "/" + datum.classn
 			}).append($img).append($detail);
 
-			var $li = $("<li>").addClass("none-img").append($a);
+			var $li = $("<li>").append($a).addClass("span4");
 
 			$ul.append($li);
 		});

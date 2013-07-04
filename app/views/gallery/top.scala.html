@@ -6,11 +6,11 @@
 
   <p><a href="@routes.Application.search">条件に一致するクラスの検索</a></p>
 
-  <ul>
+  <ul class="thumbnails">
     @ts.map { t =>
-      <li class="none-img">
+      <li class="span4">
         <a href="@routes.Application.timesGallery(t._1.times.get)">
-          <img src="@routes.Assets.at(t._2)" width="280" height="210">
+          <img src="@routes.Assets.at(t._2)">
           <div class="img-detail">
             @t._1.times @t._1.title
           </div>
