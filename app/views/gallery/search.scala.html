@@ -1,4 +1,4 @@
-@(ts: Seq[TimesData])
+@(ts: Seq[TimesData], tags: Seq[String])
 
 @import andon.utils._
 
@@ -30,12 +30,22 @@
   </select>
 }
 
+@tag = {
+  <select id="search-tag" name="tag">
+    <option value="all">すべて</option>
+    @tags.map{ t =>
+      <option value="@t">@t</option>
+    }
+  </select>
+}
+
 @common("Class Search") {
   <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/gallery.css")">
 } {
   @times
   @prize
   @grade
+  @tag
   <button id="search-submit" type="button" class="btn">検索</button>
 
   <div id="search-result">

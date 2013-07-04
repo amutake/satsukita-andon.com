@@ -22,8 +22,11 @@ object Application extends Controller {
   }
 
   def search = Action {
-    val ts = TimesData.findAll
-    Ok(views.html.gallery.search(ts))
+    val times = TimesData.findAll
+    val tags = Tags.findAll.map { t =>
+      t.tag
+    }.distinct
+    Ok(views.html.gallery.search(times, tags))
   }
 
   def timesGallery(t: OrdInt) = Action {

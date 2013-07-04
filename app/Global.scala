@@ -782,5 +782,12 @@ object InitialData {
 
       ).foreach(ClassData.create)
     }
+
+    if (Tags.findAll.isEmpty) {
+      Seq(
+        Tag(OrdInt(60), 3, 9, "龍"),
+        Tag(OrdInt(60), 3, 9, "鎧")
+      ).foreach(Tags.create)
+    }
   }
 }
