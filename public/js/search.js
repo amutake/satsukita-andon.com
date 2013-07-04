@@ -25,12 +25,22 @@
 			$ul.append($li);
 		});
 
-		$("#search-result").append($ul);
+		$("#search-result").empty().append($ul);
 	};
 
 	$("#search-submit").click(function() {
 
-		$("#search-result").empty();
+		$loading = $("<img>").attr({
+			src: "/assets/img/loading.gif",
+			width: 64,
+			height: 64
+		}).css({
+			position: "fixed",
+			top: $("#browser").height() / 2 - 32,
+			left: $("#browser").width() / 2 - 32
+		});
+
+		$("#search-result").empty().append($loading);
 
 		var times = $("#search-times option:selected").val();
 		var prize = $("#search-prize option:selected").val();
