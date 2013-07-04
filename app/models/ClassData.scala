@@ -51,7 +51,9 @@ object ClassData {
   // TODO
   def search(t: String, p: String, g: String): Seq[ClassData] = {
     val ts = if (t == "all") "1 = 1" else "times = '" + t + "'"
-    val ps = if (p == "all") "1 = 1" else "prize = '" + p + "'"
+    val ps = if (p == "all") "1 = 1" else {
+      if (p == "null") "prize is null" else "prize = '" + p + "'"
+    }
     val gs = if (g == "all") "1 = 1" else "grade = '" + g + "'"
     DB.withConnection { implicit connection =>
       SQL("select * from ClassData where " + ts + " and " + ps + " and " + gs)
