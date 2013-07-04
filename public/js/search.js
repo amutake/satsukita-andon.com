@@ -26,7 +26,7 @@
 		$("#search-result").empty().append($ul);
 	};
 
-	$("#search-submit").click(function() {
+	var change = function() {
 
 		$loading = $("<img>").attr({
 			src: "/assets/img/loading.gif",
@@ -61,5 +61,11 @@
 				alert("Error");
 			},
 		});
-	});
+	};
+
+	$("#search-times").change(change);
+	$("#search-prize").change(change);
+	$("#search-grade").change(change);
+	$("#search-tag").change(change);
+	$("#search-submit").click(change);
 })()
