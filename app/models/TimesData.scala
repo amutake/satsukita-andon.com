@@ -1,48 +1,37 @@
 package models
 
-import play.api.db._
+import play.api.db.DB
 import play.api.Play.current
 
-import anorm._
-import anorm.SqlParser._
+import scala.slick.driver.H2Driver.simple._
 
 import andon.utils._
 
-case class TimesData(times: Pk[OrdInt], title: String)
+case class TimesData(times: OrdInt, title: String)
 
-object TimesData {
+object TimesData extends Table[TimesData]("TIMESDATA") {
 
-  val simple = {
-    get[Pk[Int]]("TimesData.times") ~
-    get[String]("TimesData.title") map {
-      case times~title => TimesData(
-        Id(OrdInt(times.get)), title
-      )
-    }
+  val db = Database.forDataSource(DB.getDataSource("default"))
+
+  def times = column[Int]("TIMES", O.NotNull, O.PrimaryKey)
+  def title = column[String]("TITLE", O.NotNull)
+
+  def * = times ~ title <> (
+    tt => TimesData(OrdInt(tt._1), tt._2),
+    data => Some(data.times.n, data.title)
+  )
+
+  def findByTimes(t: OrdInt) = db.withSession { implicit session: Session =>
+    (for {
+      data <- TimesData if data.times === t.n
+    } yield data).firstOption
   }
 
-  def findById(t: OrdInt): Option[TimesData] = {
-    DB.withConnection { implicit connection =>
-      SQL("select * from TimesData where times = {t}").on(
-        't -> t.n
-      ).as(TimesData.simple.singleOpt)
-    }
+  def all = db.withSession { implicit session: Session =>
+    Query(TimesData).list
   }
 
-  def findAll: Seq[TimesData] = {
-    DB.withConnection { implicit connection =>
-      SQL("select * from TimesData").as(TimesData.simple *)
-    }
-  }
-
-  def create(data: TimesData): TimesData = {
-    DB.withConnection { implicit connection =>
-      SQL("insert into TimesData values ({times}, {title})").on(
-        'times -> data.times.get.n,
-        'title -> data.title
-      ).executeUpdate()
-
-      data.copy()
-    }
+  def create(data: TimesData) = db.withSession { implicit session: Session =>
+    TimesData.insert(data)
   }
 }

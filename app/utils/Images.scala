@@ -36,7 +36,7 @@ object Images {
   }
 
   def getGrandImages: Seq[(TimesData, String)] = {
-    val ts = TimesData.findAll
+    val ts = TimesData.all
     ts.map { t =>
       (t, "img/grands/" + t.times + ".jpg")
     }

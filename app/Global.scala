@@ -41,30 +41,30 @@ object InitialData {
   }
 
   def insert() = {
-    if (TimesData.findAll.isEmpty) {
+    if (TimesData.all.isEmpty) {
       Seq(
-        TimesData(Id(OrdInt(64)), "絢"),
-        TimesData(Id(OrdInt(63)), "雅"),
-        TimesData(Id(OrdInt(62)), "蘭"),
-        TimesData(Id(OrdInt(61)), "暒"),
-        TimesData(Id(OrdInt(60)), "瞬"),
-        TimesData(Id(OrdInt(59)), "煌"),
-        TimesData(Id(OrdInt(58)), "爽"),
-        TimesData(Id(OrdInt(57)), "奏"),
-        TimesData(Id(OrdInt(56)), "咲"),
-        TimesData(Id(OrdInt(55)), "美"),
-        TimesData(Id(OrdInt(54)), "彩"),
-        TimesData(Id(OrdInt(53)), "凛"),
-        TimesData(Id(OrdInt(52)), "粋"),
-        TimesData(Id(OrdInt(51)), "宴"),
-        TimesData(Id(OrdInt(50)), "竹"),
-        TimesData(Id(OrdInt(49)), "熱っ!"),
-        TimesData(Id(OrdInt(48)), "煌"),
-        TimesData(Id(OrdInt(47)), "華"),
-        TimesData(Id(OrdInt(46)), "北高風味"),
-        TimesData(Id(OrdInt(45)), "雅"),
-        TimesData(Id(OrdInt(44)), "翔夢"),
-        TimesData(Id(OrdInt(43)), "")
+        TimesData(OrdInt(64), "絢"),
+        TimesData(OrdInt(63), "雅"),
+        TimesData(OrdInt(62), "蘭"),
+        TimesData(OrdInt(61), "暒"),
+        TimesData(OrdInt(60), "瞬"),
+        TimesData(OrdInt(59), "煌"),
+        TimesData(OrdInt(58), "爽"),
+        TimesData(OrdInt(57), "奏"),
+        TimesData(OrdInt(56), "咲"),
+        TimesData(OrdInt(55), "美"),
+        TimesData(OrdInt(54), "彩"),
+        TimesData(OrdInt(53), "凛"),
+        TimesData(OrdInt(52), "粋"),
+        TimesData(OrdInt(51), "宴"),
+        TimesData(OrdInt(50), "竹"),
+        TimesData(OrdInt(49), "熱っ!"),
+        TimesData(OrdInt(48), "煌"),
+        TimesData(OrdInt(47), "華"),
+        TimesData(OrdInt(46), "北高風味"),
+        TimesData(OrdInt(45), "雅"),
+        TimesData(OrdInt(44), "翔夢"),
+        TimesData(OrdInt(43), "")
       ).foreach(TimesData.create)
     }
 

@@ -22,7 +22,7 @@ object Application extends Controller {
   }
 
   def search = Action {
-    val times = TimesData.findAll
+    val times = TimesData.all
     val tags = Tags.all.map { t =>
       t.tag
     }.distinct
@@ -30,7 +30,7 @@ object Application extends Controller {
   }
 
   def timesGallery(t: OrdInt) = Action {
-    val times = TimesData.findById(t)
+    val times = TimesData.findByTimes(t)
     if (times.isDefined) {
       val ps = Images.getTimesImages(t)
       Ok(views.html.gallery.times(t.toString(), ps))

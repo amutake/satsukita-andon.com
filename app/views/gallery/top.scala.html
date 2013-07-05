@@ -9,7 +9,7 @@
   <ul class="thumbnails">
     @ts.map { t =>
       <li class="span4">
-        <a href="@routes.Application.timesGallery(t._1.times.get)">
+        <a href="@routes.Application.timesGallery(t._1.times)">
           <img src="@routes.Assets.at(t._2)">
           <div class="img-detail">
             @t._1.times @t._1.title
