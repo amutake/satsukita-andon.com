@@ -1,62 +1,36 @@
 package models
 
-import play.api.db._
+import play.api.db.DB
 import play.api.Play.current
 
-import anorm._
-import anorm.SqlParser._
+import scala.slick.driver.H2Driver.simple._
 
 import andon.utils._
 
-case class Tag(times: OrdInt, grade: Int, classn: Int, tag: String)
+case class Tag(classId: Int, tag: String)
 
-object Tags {
+object Tags extends Table[Tag]("TAGS") {
 
-  val simple = {
-    get[Int]("Tags.times") ~
-    get[Int]("Tags.grade") ~
-    get[Int]("Tags.classn") ~
-    get[String]("Tags.tag") map {
-      case times~grade~classn~tag => Tag(
-        OrdInt(times), grade, classn, tag
-      )
-    }
+  val db = Database.forDataSource(DB.getDataSource("default"))
+
+  def classId = column[Int]("CLASS_ID", O.NotNull)
+  def tag = column[String]("TAG", O.NotNull)
+
+  def * = classId ~ tag <> (Tag.apply _, Tag.unapply _)
+
+  def findByClassId(c: ClassId) = db.withSession { implicit session: Session =>
+    (for {
+      t <- Tags if t.classId === c.toId
+    } yield t).list
   }
 
-  def findById(t: OrdInt, g: Int, c: Int): Option[Tag] = {
-    DB.withConnection { implicit connection =>
-      SQL("select * from Tags where times = {t} and grade = {g} and classn = {c}").on(
-        't -> t.n,
-        'g -> g,
-        'c -> c
-      ).as(Tags.simple.singleOpt)
-    }
+  def all = db.withSession { implicit session: Session =>
+    Query(Tags).list
   }
 
-  def findAll: Seq[Tag] = {
-    DB.withConnection { implicit connection =>
-      SQL("select * from Tags").as(Tags.simple *)
-    }
-  }
-
-  def findByTag(tag: String): Seq[Tag] = {
-    DB.withConnection { implicit connection =>
-      SQL("select * from Tags where tag = {t}").on(
-        't -> tag
-      ).as(Tags.simple *)
-    }
-  }
-
-  def create(tag: Tag): Tag = {
-    DB.withConnection { implicit connection =>
-      SQL("insert into Tags values ({t}, {g}, {c}, {tag})").on(
-        't -> tag.times.n,
-        'g -> tag.grade,
-        'c -> tag.classn,
-        'tag -> tag.tag
-      ).executeUpdate()
-
-      tag.copy()
-    }
+  def findClassIdByTag(tag: String) = db.withSession { implicit session: Session =>
+    (for {
+      t <- Tags if t.tag === tag
+    } yield t.classId).list.map(ClassId.fromId)
   }
 }

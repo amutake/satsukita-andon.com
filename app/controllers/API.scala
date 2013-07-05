@@ -17,10 +17,10 @@ object API extends Controller {
       sr
     } else {
       sr.filter { data =>
-        Tags.findByTag(tag).exists { tag =>
-          tag.times == data.times &&
-          tag.grade == data.grade &&
-          tag.classn == data.classn
+        Tags.findClassIdByTag(tag).exists { cid =>
+          cid.times == data.times &&
+          cid.grade == data.grade &&
+          cid.classn == data.classn
         }
       }
     }

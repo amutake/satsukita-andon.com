@@ -23,7 +23,7 @@ object Application extends Controller {
 
   def search = Action {
     val times = TimesData.findAll
-    val tags = Tags.findAll.map { t =>
+    val tags = Tags.all.map { t =>
       t.tag
     }.distinct
     Ok(views.html.gallery.search(times, tags))

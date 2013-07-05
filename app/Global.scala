@@ -1,8 +1,13 @@
 import play.api._
-import play.api.mvc._
+import play.api.db._
+import play.api.Play.current
+import play.api.mvc.RequestHeader
+import play.api.mvc.Result
 import play.api.mvc.Results._
 
 import anorm._
+
+import scala.slick.driver.H2Driver.simple._
 
 import models._
 import andon.utils._
@@ -10,6 +15,7 @@ import andon.utils._
 object Global extends GlobalSettings {
 
   override def onStart(app: Application) {
+    InitialData.createTable
     InitialData.insert()
   }
 
@@ -27,6 +33,12 @@ object Global extends GlobalSettings {
 }
 
 object InitialData {
+
+  val db = Database.forDataSource(DB.getDataSource("default"))
+
+  def createTable = db.withSession { implicit session: Session =>
+    Tags.ddl.create
+  }
 
   def insert() = {
     if (TimesData.findAll.isEmpty) {
@@ -783,94 +795,98 @@ object InitialData {
       ).foreach(ClassData.create)
     }
 
-    if (Tags.findAll.isEmpty) {
+    if (Tags.all.isEmpty) {
       Seq(
-        Tag(OrdInt(63), 2, 7, "龍"),
-        Tag(OrdInt(63), 3, 1, "龍"),
-        Tag(OrdInt(63), 3, 6, "龍"),
-        Tag(OrdInt(63), 3, 7, "龍"),
-        Tag(OrdInt(63), 3, 8, "龍"),
-        Tag(OrdInt(62), 1, 5, "龍"),
-        Tag(OrdInt(62), 2, 1, "龍"),
-        Tag(OrdInt(62), 1, 5, "龍"),
-        Tag(OrdInt(62), 2, 2, "龍"),
-        Tag(OrdInt(62), 2, 3, "龍"),
-        Tag(OrdInt(62), 2, 5, "龍"),
-        Tag(OrdInt(62), 2, 7, "龍"),
-        Tag(OrdInt(62), 2, 8, "龍"),
-        Tag(OrdInt(62), 3, 7, "龍"),
-        Tag(OrdInt(62), 2, 3, "龍"),
-        Tag(OrdInt(61), 1, 1, "龍"),
-        Tag(OrdInt(61), 1, 3, "龍"),
-        Tag(OrdInt(61), 2, 3, "龍"),
-        Tag(OrdInt(61), 2, 4, "龍"),
-        Tag(OrdInt(61), 2, 6, "龍"),
-        Tag(OrdInt(61), 2, 4, "龍"),
-        Tag(OrdInt(61), 3, 3, "龍"),
-        Tag(OrdInt(61), 3, 7, "龍"),
-        Tag(OrdInt(61), 3, 3, "龍"),
-        Tag(OrdInt(60), 1, 5, "龍"),
-        Tag(OrdInt(60), 1, 6, "龍"),
-        Tag(OrdInt(60), 2, 4, "龍"),
-        Tag(OrdInt(60), 3, 3, "龍"),
-        Tag(OrdInt(60), 3, 5, "龍"),
-        Tag(OrdInt(60), 3, 6, "龍"),
-        Tag(OrdInt(60), 3, 7, "龍"),
-        Tag(OrdInt(60), 3, 9, "龍"),
-        Tag(OrdInt(59), 3, 6, "龍"),
-        Tag(OrdInt(59), 3, 6, "龍"),
-        Tag(OrdInt(58), 1, 7, "龍"),
-        Tag(OrdInt(58), 2, 7, "龍"),
-        Tag(OrdInt(58), 2, 8, "龍"),
-        Tag(OrdInt(58), 3, 5, "龍"),
-        Tag(OrdInt(58), 3, 7, "龍"),
-        Tag(OrdInt(58), 3, 9, "龍"),
-        Tag(OrdInt(57), 2, 2, "龍"),
-        Tag(OrdInt(57), 2, 6, "龍"),
-        Tag(OrdInt(57), 3, 8, "龍"),
-        Tag(OrdInt(57), 3, 9, "龍"),
-        Tag(OrdInt(57), 3, 9, "龍"),
-        Tag(OrdInt(56), 1, 3, "龍"),
-        Tag(OrdInt(56), 2, 5, "龍"),
-        Tag(OrdInt(56), 2, 6, "龍"),
-        Tag(OrdInt(56), 2, 6, "龍"),
-        Tag(OrdInt(55), 3, 1, "龍"),
-        Tag(OrdInt(55), 3, 7, "龍"),
-        Tag(OrdInt(55), 3, 7, "龍"),
-        Tag(OrdInt(54), 1, 3, "龍"),
-        Tag(OrdInt(54), 2, 7, "龍"),
-        Tag(OrdInt(53), 3, 1, "龍"),
-        Tag(OrdInt(53), 3, 6, "龍"),
-        Tag(OrdInt(53), 3, 10, "龍"),
-        Tag(OrdInt(51), 3, 1, "龍"),
-        Tag(OrdInt(48), 3, -1, "龍"),
+        Tag(ClassId(OrdInt(63), 2, 7).toId, "龍"),
+        Tag(ClassId(OrdInt(63), 3, 1).toId, "龍"),
+        Tag(ClassId(OrdInt(63), 3, 6).toId, "龍"),
+        Tag(ClassId(OrdInt(63), 3, 7).toId, "龍"),
+        Tag(ClassId(OrdInt(63), 3, 8).toId, "龍"),
+        Tag(ClassId(OrdInt(62), 1, 5).toId, "龍"),
+        Tag(ClassId(OrdInt(62), 2, 1).toId, "龍"),
+        Tag(ClassId(OrdInt(62), 1, 5).toId, "龍"),
+        Tag(ClassId(OrdInt(62), 2, 2).toId, "龍"),
+        Tag(ClassId(OrdInt(62), 2, 3).toId, "龍"),
+        Tag(ClassId(OrdInt(62), 2, 5).toId, "龍"),
+        Tag(ClassId(OrdInt(62), 2, 7).toId, "龍"),
+        Tag(ClassId(OrdInt(62), 2, 8).toId, "龍"),
+        Tag(ClassId(OrdInt(62), 3, 7).toId, "龍"),
+        Tag(ClassId(OrdInt(62), 2, 3).toId, "龍"),
+        Tag(ClassId(OrdInt(61), 1, 1).toId, "龍"),
+        Tag(ClassId(OrdInt(61), 1, 3).toId, "龍"),
+        Tag(ClassId(OrdInt(61), 2, 3).toId, "龍"),
+        Tag(ClassId(OrdInt(61), 2, 4).toId, "龍"),
+        Tag(ClassId(OrdInt(61), 2, 6).toId, "龍"),
+        Tag(ClassId(OrdInt(61), 2, 4).toId, "龍"),
+        Tag(ClassId(OrdInt(61), 3, 3).toId, "龍"),
+        Tag(ClassId(OrdInt(61), 3, 7).toId, "龍"),
+        Tag(ClassId(OrdInt(61), 3, 3).toId, "龍"),
+        Tag(ClassId(OrdInt(60), 1, 5).toId, "龍"),
+        Tag(ClassId(OrdInt(60), 1, 6).toId, "龍"),
+        Tag(ClassId(OrdInt(60), 2, 4).toId, "龍"),
+        Tag(ClassId(OrdInt(60), 3, 3).toId, "龍"),
+        Tag(ClassId(OrdInt(60), 3, 5).toId, "龍"),
+        Tag(ClassId(OrdInt(60), 3, 6).toId, "龍"),
+        Tag(ClassId(OrdInt(60), 3, 7).toId, "龍"),
+        Tag(ClassId(OrdInt(60), 3, 9).toId, "龍"),
+        Tag(ClassId(OrdInt(59), 3, 6).toId, "龍"),
+        Tag(ClassId(OrdInt(59), 3, 6).toId, "龍"),
+        Tag(ClassId(OrdInt(58), 1, 7).toId, "龍"),
+        Tag(ClassId(OrdInt(58), 2, 7).toId, "龍"),
+        Tag(ClassId(OrdInt(58), 2, 8).toId, "龍"),
+        Tag(ClassId(OrdInt(58), 3, 5).toId, "龍"),
+        Tag(ClassId(OrdInt(58), 3, 7).toId, "龍"),
+        Tag(ClassId(OrdInt(58), 3, 9).toId, "龍"),
+        Tag(ClassId(OrdInt(57), 2, 2).toId, "龍"),
+        Tag(ClassId(OrdInt(57), 2, 6).toId, "龍"),
+        Tag(ClassId(OrdInt(57), 3, 8).toId, "龍"),
+        Tag(ClassId(OrdInt(57), 3, 9).toId, "龍"),
+        Tag(ClassId(OrdInt(57), 3, 9).toId, "龍"),
+        Tag(ClassId(OrdInt(56), 1, 3).toId, "龍"),
+        Tag(ClassId(OrdInt(56), 2, 5).toId, "龍"),
+        Tag(ClassId(OrdInt(56), 2, 6).toId, "龍"),
+        Tag(ClassId(OrdInt(56), 2, 6).toId, "龍"),
+        Tag(ClassId(OrdInt(55), 3, 1).toId, "龍"),
+        Tag(ClassId(OrdInt(55), 3, 7).toId, "龍"),
+        Tag(ClassId(OrdInt(55), 3, 7).toId, "龍"),
+        Tag(ClassId(OrdInt(54), 1, 3).toId, "龍"),
+        Tag(ClassId(OrdInt(54), 2, 7).toId, "龍"),
+        Tag(ClassId(OrdInt(53), 3, 1).toId, "龍"),
+        Tag(ClassId(OrdInt(53), 3, 6).toId, "龍"),
+        Tag(ClassId(OrdInt(53), 3, 10).toId, "龍"),
+        Tag(ClassId(OrdInt(51), 3, 1).toId, "龍"),
+        Tag(ClassId(OrdInt(48), 3, -1).toId, "龍"),
 
-        Tag(OrdInt(63), 2, 4, "虎"),
-        Tag(OrdInt(63), 3, 1, "虎"),
-        Tag(OrdInt(63), 3, 2, "虎"),
-        Tag(OrdInt(63), 3, 1, "虎"),
-        Tag(OrdInt(62), 3, 7, "虎"),
-        Tag(OrdInt(61), 1, 1, "虎"),
-        Tag(OrdInt(61), 2, 5, "虎"),
-        Tag(OrdInt(61), 2, 7, "虎"),
-        Tag(OrdInt(61), 3, 1, "虎"),
-        Tag(OrdInt(61), 3, 7, "虎"),
-        Tag(OrdInt(58), 2, 5, "虎"),
-        Tag(OrdInt(57), 2, 4, "虎"),
-        Tag(OrdInt(57), 2, 9, "虎"),
-        Tag(OrdInt(56), 2, 2, "虎"),
-        Tag(OrdInt(56), 2, 7, "虎"),
-        Tag(OrdInt(55), 1, 6, "虎"),
-        Tag(OrdInt(55), 3, 3, "虎"),
-        Tag(OrdInt(54), 1, 3, "虎"),
-        Tag(OrdInt(54), 2, 4, "虎"),
-        Tag(OrdInt(53), 2, 1, "虎"),
-        Tag(OrdInt(53), 2, 2, "虎"),
-        Tag(OrdInt(53), 3, 9, "虎"),
-        Tag(OrdInt(52), 3, 3, "虎"),
-        Tag(OrdInt(51), 3, 2, "虎"),
-        Tag(OrdInt(50), 3, 1, "虎")
-      ).foreach(Tags.create)
+        Tag(ClassId(OrdInt(63), 2, 4).toId, "虎"),
+        Tag(ClassId(OrdInt(63), 3, 1).toId, "虎"),
+        Tag(ClassId(OrdInt(63), 3, 2).toId, "虎"),
+        Tag(ClassId(OrdInt(63), 3, 1).toId, "虎"),
+        Tag(ClassId(OrdInt(62), 3, 7).toId, "虎"),
+        Tag(ClassId(OrdInt(61), 1, 1).toId, "虎"),
+        Tag(ClassId(OrdInt(61), 2, 5).toId, "虎"),
+        Tag(ClassId(OrdInt(61), 2, 7).toId, "虎"),
+        Tag(ClassId(OrdInt(61), 3, 1).toId, "虎"),
+        Tag(ClassId(OrdInt(61), 3, 7).toId, "虎"),
+        Tag(ClassId(OrdInt(58), 2, 5).toId, "虎"),
+        Tag(ClassId(OrdInt(57), 2, 4).toId, "虎"),
+        Tag(ClassId(OrdInt(57), 2, 9).toId, "虎"),
+        Tag(ClassId(OrdInt(56), 2, 2).toId, "虎"),
+        Tag(ClassId(OrdInt(56), 2, 7).toId, "虎"),
+        Tag(ClassId(OrdInt(55), 1, 6).toId, "虎"),
+        Tag(ClassId(OrdInt(55), 3, 3).toId, "虎"),
+        Tag(ClassId(OrdInt(54), 1, 3).toId, "虎"),
+        Tag(ClassId(OrdInt(54), 2, 4).toId, "虎"),
+        Tag(ClassId(OrdInt(53), 2, 1).toId, "虎"),
+        Tag(ClassId(OrdInt(53), 2, 2).toId, "虎"),
+        Tag(ClassId(OrdInt(53), 3, 9).toId, "虎"),
+        Tag(ClassId(OrdInt(52), 3, 3).toId, "虎"),
+        Tag(ClassId(OrdInt(51), 3, 2).toId, "虎"),
+        Tag(ClassId(OrdInt(50), 3, 1).toId, "虎")
+      ).foreach { t =>
+        db.withSession { implicit session: Session =>
+          Tags.insert(t)
+        }
+      }
     }
   }
 }
