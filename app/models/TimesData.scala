@@ -22,9 +22,7 @@ object TimesData extends Table[TimesData]("TIMESDATA") {
   )
 
   def findByTimes(t: OrdInt) = db.withSession { implicit session: Session =>
-    (for {
-      data <- TimesData if data.times === t.n
-    } yield data).firstOption
+    Query(TimesData).filter(_.times === t.n).firstOption
   }
 
   def all = db.withSession { implicit session: Session =>

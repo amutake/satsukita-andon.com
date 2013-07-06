@@ -817,7 +817,7 @@ object InitialData {
 
     def tag(name: String, cs: Seq[(Int, Int, Int)]) = {
       cs.map { case (t, g, c) =>
-        Tag(ClassId(OrdInt(t), g, c).toId, name)
+        Tag(ClassId(OrdInt(t), g, c), name)
       }
     }
 
@@ -909,11 +909,7 @@ object InitialData {
         (52, 3, 3),
         (51, 3, 2),
         (50, 3, 1)
-      ))).foreach { t =>
-        db.withSession { implicit session: Session =>
-          Tags.insert(t)
-        }
-      }
+      ))).foreach(Tags.create)
     }
   }
 }
