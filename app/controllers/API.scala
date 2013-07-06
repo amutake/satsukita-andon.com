@@ -12,17 +12,8 @@ object API extends Controller {
   // TODO
   def search(times: String, prize: String, grade: String, tag: String) = Action {
 
-    val sr = ClassData.search(times, prize, grade)
-    val cs = if (tag == "all") {
-      sr
-    } else {
-      sr.filter { data =>
-        Tags.findClassIdByTag(tag).exists { cid =>
-          cid == data.id
-        }
-      }
-    }
-    val cps = Images.getTopImages(cs)
+    val sr = ClassData.search(times, prize, grade, tag)
+    val cps = Images.getTopImages(sr)
     val json = Json.toJson(
       cps.map { cp =>
         Json.toJson(

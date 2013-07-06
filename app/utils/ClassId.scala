@@ -1,5 +1,7 @@
 package andon.utils
 
+import scala.slick.lifted.MappedTypeMapper
+
 case class ClassId(times: OrdInt, grade: Int, classn: Int) {
 
   // ClassId(OrdInt(60), 3, 9).toId => 60000 + 300 + 19 = 60319
@@ -17,4 +19,9 @@ object ClassId {
 
     ClassId(OrdInt(times), grade, classn)
   }
+
+  implicit val classIdTypeMapper = MappedTypeMapper.base[ClassId, Int](
+    { c => c.toId },    // map ClassId to Int
+    { i => fromId(i) } // map Int to ClassId
+  )
 }

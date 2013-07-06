@@ -2,6 +2,8 @@ package andon.utils
 
 import play.api.templates._
 
+import scala.slick.lifted.MappedTypeMapper
+
 sealed trait Prize {
   def toEnglish: String
   def toJapanese: String
@@ -44,4 +46,9 @@ object Prize {
     case _ => None
   }
   def fromString(s: String) = fromEnglish(s)
+
+  implicit val prizeTypeMapper = MappedTypeMapper.base[Option[Prize], Option[String]](
+    { p => p.map(_.toString) },
+    { s => s.flatMap(fromString) }
+  )
 }
