@@ -2,8 +2,8 @@ package andon.utils
 
 case class ClassId(times: OrdInt, grade: Int, classn: Int) {
 
-  // ClassId.toId(ClassId(OrdInt(60), 3, 9)) => 60000 + 300 + 19 = 60319
-  // ClassId.toId(ClassId(OrdInt(48), 3, -9)) => 48000 + 300 + 1 = 48301
+  // ClassId(OrdInt(60), 3, 9).toId => 60000 + 300 + 19 = 60319
+  // ClassId(OrdInt(48), 3, -9).toId => 48000 + 300 + 1 = 48301
   def toId: Int = (times.n * 1000) + (grade * 100) + (classn + 10)
 }
 

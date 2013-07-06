@@ -3,14 +3,14 @@
 @import andon.utils._
 
 @anchor(data: ClassData, path: String) = {
-  <a href="@routes.Application.classGallery(data.times, data.grade, data.classn)">
+  <a href="@routes.Application.classGallery(data.id.times, data.id.grade, data.id.classn)">
     <img src="@routes.Assets.at(path)">
     <div class="img-detail">
       <div class="prize">
         @data.prize.map(_.span)
       </div>
       <div class="grade-class">
-        @data.grade-@Util.showClassN(data.classn)
+        @data.id.grade-@Util.showClassN(data.id.classn)
       </div>
       <div class="title">
         @data.title
@@ -64,7 +64,7 @@
   <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/gallery.css")">
 } {
   @Seq(3, 2, 1).map( n =>
-    gradeImgs(n, ps.filter(d => d._1.grade == n))
+    gradeImgs(n, ps.filter(d => d._1.id.grade == n))
   )
 } {
   <h2>Gallery @times</h2>

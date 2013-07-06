@@ -3,75 +3,46 @@ package models
 import play.api.db._
 import play.api.Play.current
 
-import anorm._
-import anorm.SqlParser._
+import scala.slick.driver.H2Driver.simple._
 
 import andon.utils._
 
-case class ClassData(times: OrdInt, grade: Int, classn: Int, title: String, prize: Option[Prize])
+case class ClassData(id: ClassId, title: String, prize: Option[Prize])
 
-object ClassData {
+object ClassData extends Table[ClassData]("CLASSDATA") {
 
-  val simple = {
-    get[Int]("ClassData.times") ~
-    get[Int]("ClassData.grade") ~
-    get[Int]("ClassData.classn") ~
-    get[String]("ClassData.title") ~
-    get[Option[String]]("ClassData.prize") map {
-      case times~grade~classn~title~prize => ClassData(
-        OrdInt(times), grade, classn, title, prize.flatMap(Prize.fromString)
-      )
+  val db = Database.forDataSource(DB.getDataSource("default"))
+
+  def id = column[Int]("ID", O.NotNull, O.PrimaryKey)
+  def title = column[String]("TITLE", O.NotNull)
+  def prize = column[Option[String]]("PRIZE")
+
+  def * = id ~ title ~ prize <> (
+    (id, title, prize) => ClassData(ClassId.fromId(id), title, prize.flatMap(Prize.fromString)),
+    data => Some(data.id.toId, data.title, data.prize.map(_.toString))
+  )
+
+  def findByClassId(c: ClassId): Option[ClassData] = db.withSession { implicit session: Session =>
+    Query(ClassData).filter(_.id === c.toId).firstOption
+  }
+
+  def all = db.withSession { implicit session: Session =>
+    Query(ClassData).list
+  }
+
+  def findByTimes(t: OrdInt) = db.withSession { implicit session: Session =>
+    // TODO
+    Query(ClassData).list.filter { data =>
+      data.id.times == t
     }
   }
 
-  def findById(t: OrdInt, g: Int, c: Int): Option[ClassData] = {
-    DB.withConnection { implicit connection =>
-      SQL("select * from ClassData where times = {t} and grade = {g} and classn = {c}").on(
-        't -> t.n,
-        'g -> g,
-        'c -> c
-      ).as(ClassData.simple.singleOpt)
-    }
+  def search(times: String, prize: String, grade: String) = db.withSession { implicit session: Session =>
+    // TODO
+    Query(ClassData).list
   }
 
-  def findAll: Seq[ClassData] = {
-    DB.withConnection { implicit connection =>
-      SQL("select * from ClassData").as(ClassData.simple *)
-    }
-  }
-
-  def findByTimes(t: OrdInt): Seq[ClassData] = {
-    DB.withConnection { implicit connection =>
-      SQL("select * from ClassData where times = {t}").on(
-        't -> t.n
-      ).as(ClassData.simple *)
-    }
-  }
-
-  // TODO
-  def search(t: String, p: String, g: String): Seq[ClassData] = {
-    val ts = if (t == "all") "1 = 1" else "times = '" + t + "'"
-    val ps = if (p == "all") "1 = 1" else {
-      if (p == "null") "prize is null" else "prize = '" + p + "'"
-    }
-    val gs = if (g == "all") "1 = 1" else "grade = '" + g + "'"
-    DB.withConnection { implicit connection =>
-      SQL("select * from ClassData where " + ts + " and " + ps + " and " + gs)
-        .as(ClassData.simple *)
-    }
-  }
-
-  def create(data: ClassData): ClassData = {
-    DB.withConnection { implicit connection =>
-      SQL("insert into ClassData values ({t}, {g}, {c}, {title}, {prize})").on(
-        't -> data.times.n,
-        'g -> data.grade,
-        'c -> data.classn,
-        'title -> data.title,
-        'prize -> data.prize.map(_.toString)
-      ).executeUpdate()
-
-      data.copy()
-    }
+  def create(data: ClassData) = db.withSession { implicit session: Session =>
+    ClassData.insert(data)
   }
 }

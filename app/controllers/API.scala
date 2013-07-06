@@ -18,9 +18,7 @@ object API extends Controller {
     } else {
       sr.filter { data =>
         Tags.findClassIdByTag(tag).exists { cid =>
-          cid.times == data.times &&
-          cid.grade == data.grade &&
-          cid.classn == data.classn
+          cid == data.id
         }
       }
     }
@@ -29,9 +27,9 @@ object API extends Controller {
       cps.map { cp =>
         Json.toJson(
           Map(
-            "times" -> Json.toJson(cp._1.times.toString),
-            "grade" -> Json.toJson(cp._1.grade),
-            "classn" -> Json.toJson(cp._1.classn),
+            "times" -> Json.toJson(cp._1.id.times.toString),
+            "grade" -> Json.toJson(cp._1.id.grade),
+            "classn" -> Json.toJson(cp._1.id.classn),
             "title" -> Json.toJson(cp._1.title),
             "prize" -> Json.toJson(cp._1.prize.map(_.toString).getOrElse("")),
             "thumbnail" -> Json.toJson(cp._2)

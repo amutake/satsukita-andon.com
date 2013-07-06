@@ -40,7 +40,7 @@ object Application extends Controller {
   }
 
   def classGallery(t: OrdInt, g: Int, c: Int) = Action {
-    val data = ClassData.findById(t, g, c)
+    val data = ClassData.findByClassId(ClassId(t, g, c))
     // TODO
     if (data.isDefined) {
       val ps = Images.getClassImages(t, g, c).map { p =>
