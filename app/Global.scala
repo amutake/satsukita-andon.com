@@ -80,8 +80,8 @@ object InitialData {
         ClassData(OrdInt(64), 3, 2, "弓取源頼政、鵺成敗", None),
         ClassData(OrdInt(64), 3, 3, "悪鬼羅刹", Some(Gold)),
         ClassData(OrdInt(64), 3, 4, "魚竜爵馬", None),
-        ClassData(OrdInt(64), 3, 5, "驚魂悸魄", None),
-        ClassData(OrdInt(64), 3, 6, "怨鬼闘龍伝", Some(Silver)),
+        ClassData(OrdInt(64), 3, 5, "驚魂悸魄", Some(Silver)),
+        ClassData(OrdInt(64), 3, 6, "怨鬼闘龍伝", None),
         ClassData(OrdInt(64), 3, 7, "夢幻ノ花", None),
         ClassData(OrdInt(64), 3, 8, "末法末世", Some(Grand)),
 
