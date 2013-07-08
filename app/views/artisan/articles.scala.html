@@ -7,7 +7,7 @@
 
   <ul>
     @articles.map { article =>
-      <li>@article.title</li>
+      <li><a href="@routes.Artisan.article(article.id)">@article.title</a></li>
     }
   </ul>
 

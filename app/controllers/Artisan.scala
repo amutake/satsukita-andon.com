@@ -52,6 +52,14 @@ object Artisan extends Controller with Authentication {
     }.getOrElse(Forbidden)
   }
 
+  def article(id: Long) = IsAuthenticated { userid => _ =>
+    Artisans.findById(userid).map { artisan =>
+      Articles.findById(id).map { article =>
+        Ok(views.html.artisan.article(artisan, article))
+      }.getOrElse(NotFound(views.html.errors.notFound("/artisan/article?id=" + id.toString)))
+    }.getOrElse(Forbidden)
+  }
+
   val articleForm = Form(
     tuple(
       "title" -> text,

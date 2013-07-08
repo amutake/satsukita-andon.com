@@ -20,8 +20,9 @@ POST    /artisan/login              controllers.Artisan.authenticate
 GET     /artisan/logout             controllers.Artisan.logout
 GET     /artisan/home               controllers.Artisan.home
 GET     /artisan/articles           controllers.Artisan.articles
-GET     /artisan/articles/create    controllers.Artisan.createArticle
-POST    /artisan/articles/create    controllers.Artisan.postCreateArticle
+GET     /artisan/article            controllers.Artisan.article(id: Long)
+GET     /artisan/article/create     controllers.Artisan.createArticle
+POST    /artisan/article/create     controllers.Artisan.postCreateArticle
 
 
 # API

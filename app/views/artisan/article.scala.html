@@ -1,0 +1,11 @@
+@(artisan: Artisan, article: Article)
+
+@common(article.title) {
+} {
+
+  @Html(article.text)
+
+  <p id="author">Author: @artisan.name  Date: @article.date</p>
+} {
+  <h2>@article.title</h2>
+}
