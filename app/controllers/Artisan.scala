@@ -26,4 +26,10 @@ object Artisan extends Controller with Authentication {
       artisan => Redirect(routes.Artisan.home).withSession("username" -> artisan._1)
     )
   }
+
+  def home = IsAuthenticated { username => _ =>
+    Artisan.findByUsername(username).map { artisan =>
+      Ok(views.html.artisan.home(artisan))
+    }.getOrElse(Forbidden)
+  }
 }

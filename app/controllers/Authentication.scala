@@ -8,7 +8,8 @@ trait Authentication {
 
   private def onUnauthorized(request: RequestHeader) = Results.Redirect(routes.Artisan.login)
 
-  def IsAuthenticated(f: => String => Request[AnyContent] => Result) = Security.Authenticated(username, onUnauthorized) { artisan =>
-    Action(request => f(artisan)(request))
-  }
+  def IsAuthenticated(f: => String => Request[AnyContent] => Result) =
+    Security.Authenticated(username, onUnauthorized) { artisan =>
+      Action(request => f(artisan)(request))
+    }
 }
