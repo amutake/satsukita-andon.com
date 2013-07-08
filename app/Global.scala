@@ -5,8 +5,6 @@ import play.api.mvc.RequestHeader
 import play.api.mvc.Result
 import play.api.mvc.Results._
 
-import anorm._
-
 import scala.slick.driver.H2Driver.simple._
 
 import models._
