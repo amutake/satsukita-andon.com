@@ -1,0 +1,24 @@
+@(form: Form[(String, String)])
+
+@common("Write Article") {
+} {
+
+  <h3>記事の作成</h3>
+
+  @helper.form(routes.Artisan.postCreateArticle) {
+
+    @form.globalError.map { error =>
+      <p class="error">
+        @error.message
+      </p>
+    }
+
+    @helper.inputText(form("title"))
+
+    @helper.textarea(field = form("text"), args = 'rows -> 30, 'cols -> 50)
+
+    <button class="btn" type="submit">送信</button>
+  }
+} {
+  <h2>記事の作成</h2>
+}

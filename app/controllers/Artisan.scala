@@ -47,4 +47,31 @@ object Artisan extends Controller with Authentication {
       Ok(views.html.artisan.articles(artisan, articles))
     }.getOrElse(Forbidden)
   }
+
+  val articleForm = Form(
+    tuple(
+      "title" -> text,
+      "text" -> text
+    ) verifying ("タイトルまたは本文が空です。", result => result match {
+      case ("", _) => false
+      case (_, "") => false
+      case (_, _) => true
+    })
+  )
+
+  def createArticle = IsAuthenticated { username => _ =>
+    Ok(views.html.artisan.createArticle(articleForm))
+  }
+
+  def postCreateArticle = IsAuthenticated { username => implicit request =>
+    Artisans.findByUsername(username).map { artisan =>
+      articleForm.bindFromRequest.fold(
+        formWithErrors => BadRequest(views.html.artisan.createArticle(formWithErrors)),
+        { article =>
+          Articles.create(artisan.id, article._1, article._2)
+          Redirect(routes.Artisan.articles)
+        }
+      )
+    }.getOrElse(Forbidden)
+  }
 }
