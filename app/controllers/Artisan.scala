@@ -5,7 +5,7 @@ import play.api.mvc._
 
 import models._
 
-object Artisan extends Controller {
+object Artisan extends Controller with Authentication {
 
   val loginForm = Form(
     tuple(
