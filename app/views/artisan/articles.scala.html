@@ -1,0 +1,15 @@
+@(artisan: Artisan, articles: Seq[Article])
+
+@common("Articles") {
+} {
+
+  <h3>@artisan.nameさんの記事</h3>
+
+  <ul>
+    @articles.map { article =>
+      <li>@article.title</li>
+    }
+  </ul>
+} {
+  <h2>Articles</h2>
+}

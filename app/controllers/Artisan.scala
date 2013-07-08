@@ -40,4 +40,11 @@ object Artisan extends Controller with Authentication {
       Ok(views.html.artisan.home(artisan))
     }.getOrElse(Forbidden)
   }
+
+  def articles = IsAuthenticated { username => _ =>
+    Artisans.findByUsername(username).map { artisan =>
+      val articles = Articles.findByAuthorId(artisan.id)
+      Ok(views.html.artisan.articles(artisan, articles))
+    }.getOrElse(Forbidden)
+  }
 }

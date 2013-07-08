@@ -45,6 +45,7 @@ object InitialData {
     ClassData.ddl.create
     Tags.ddl.create
     Artisans.ddl.create // TODO
+    Articles.ddl.create
   }
 
   def dropTable = db.withSession { implicit session: Session =>
@@ -52,6 +53,7 @@ object InitialData {
     ClassData.ddl.drop
     Tags.ddl.drop
     Artisans.ddl.drop // TODO
+    Articles.ddl.drop
   }
 
   def insert() = {

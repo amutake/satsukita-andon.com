@@ -19,6 +19,7 @@ GET     /artisan/login              controllers.Artisan.login
 POST    /artisan/login              controllers.Artisan.authenticate
 GET     /artisan/logout             controllers.Artisan.logout
 GET     /artisan/home               controllers.Artisan.home
+GET     /artisan/articles           controllers.Artisan.articles
 
 # API
 # TODO
