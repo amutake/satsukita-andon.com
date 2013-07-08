@@ -44,7 +44,7 @@ object ClassData extends Table[ClassData]("CLASSDATA") {
     val q = if (times == "all") {
       query
     } else {
-      query.filter(_.times == times.toInt)
+      query.filter(_.times === times.toInt)
     }
 
     val q1 = if (prize == "all") {
@@ -58,7 +58,7 @@ object ClassData extends Table[ClassData]("CLASSDATA") {
     val q2 = if (grade == "all") {
       q1
     } else {
-      q1.filter(_.grade == grade.toInt)
+      q1.filter(_.grade === grade.toInt)
     }
 
     val q3 = if (tag == "all") {
