@@ -2,6 +2,7 @@ package models
 
 import play.api.db._
 import play.api.Play.current
+import play.api.libs.Codecs._
 
 import scala.slick.driver.H2Driver.simple._
 
@@ -37,6 +38,6 @@ object Artisans extends Table[Artisan]("ARTISANS") {
   }
 
   def authenticate(username: String, password: String) = db.withSession { implicit session: Session =>
-    query.filter(_.username === username).filter(_.password === password).firstOption
+    query.filter(_.username === username).filter(_.password === sha1(password)).firstOption
   }
 }

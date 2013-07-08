@@ -58,8 +58,9 @@ object InitialData {
 
     // TODO
     db.withSession { implicit session: Session =>
+
       Artisans.ins.insertAll(
-        ("甲乙人", "kohotsunin", "pass", 60)
+        ("甲乙人", "kohotsunin", "9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684", 60)
       )
     }
 
