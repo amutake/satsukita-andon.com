@@ -9,7 +9,7 @@ import andon.utils._
 
 case class Artisan(id: Int, name: String, username: String, password: String, times: OrdInt)
 
-object Artisan extends Table[Artisan]("ARTISAN") {
+object Artisans extends Table[Artisan]("ARTISANS") {
 
   val db = Database.forDataSource(DB.getDataSource("default"))
 
@@ -24,7 +24,7 @@ object Artisan extends Table[Artisan]("ARTISAN") {
     artisan => Some((artisan.id, artisan.name, artisan.username, artisan.password, artisan.times.n))
   )
 
-  val query = Query(Artisan)
+  val query = Query(Artisans)
 
   def findById(id: Int): Option[Artisan] = db.withSession { implicit session: Session =>
     query.filter(_.id === id).firstOption
