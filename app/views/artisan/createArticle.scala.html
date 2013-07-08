@@ -13,9 +13,13 @@
       </p>
     }
 
-    @helper.inputText(form("title"))
+    <p>タイトル:<br>
+      <input class="wide" type="text" name="title">
+    </p>
 
-    @helper.textarea(field = form("text"), args = 'rows -> 30, 'cols -> 50)
+    <p>本文:<br>
+      <textarea class="wide" name="text" cols="80" rows="20"></textarea>
+    </p>
 
     <button class="btn" type="submit">送信</button>
   }
