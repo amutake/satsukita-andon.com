@@ -25,7 +25,11 @@ object Artisan extends Controller with Authentication {
   def authenticate = Action { implicit request =>
     loginForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.artisan.login(formWithErrors)),
-      artisan => Redirect(routes.Artisan.home).withSession("username" -> artisan._1)
+      { artisan =>
+        Artisans.findByUsername(artisan._1).map { artisan_ =>
+          Redirect(routes.Artisan.home).withSession("userid" -> artisan_.id.toString)
+        }.getOrElse(Forbidden)
+      }
     )
   }
 
@@ -35,15 +39,15 @@ object Artisan extends Controller with Authentication {
     )
   }
 
-  def home = IsAuthenticated { username => _ =>
-    Artisans.findByUsername(username).map { artisan =>
+  def home = IsAuthenticated { userid => _ =>
+    Artisans.findById(userid).map { artisan =>
       Ok(views.html.artisan.home(artisan))
     }.getOrElse(Forbidden)
   }
 
-  def articles = IsAuthenticated { username => _ =>
-    Artisans.findByUsername(username).map { artisan =>
-      val articles = Articles.findByAuthorId(artisan.id)
+  def articles = IsAuthenticated { userid => _ =>
+    Artisans.findById(userid).map { artisan =>
+      val articles = Articles.findByAuthorId(userid)
       Ok(views.html.artisan.articles(artisan, articles))
     }.getOrElse(Forbidden)
   }
@@ -59,19 +63,17 @@ object Artisan extends Controller with Authentication {
     })
   )
 
-  def createArticle = IsAuthenticated { username => _ =>
+  def createArticle = IsAuthenticated { _ => _ =>
     Ok(views.html.artisan.createArticle(articleForm))
   }
 
-  def postCreateArticle = IsAuthenticated { username => implicit request =>
-    Artisans.findByUsername(username).map { artisan =>
-      articleForm.bindFromRequest.fold(
-        formWithErrors => BadRequest(views.html.artisan.createArticle(formWithErrors)),
-        { article =>
-          Articles.create(artisan.id, article._1, article._2)
-          Redirect(routes.Artisan.articles)
-        }
-      )
-    }.getOrElse(Forbidden)
+  def postCreateArticle = IsAuthenticated { userid => implicit request =>
+    articleForm.bindFromRequest.fold(
+      formWithErrors => BadRequest(views.html.artisan.createArticle(formWithErrors)),
+      { article =>
+        Articles.create(userid, article._1, article._2)
+        Redirect(routes.Artisan.articles)
+      }
+    )
   }
 }
