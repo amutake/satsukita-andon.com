@@ -17,7 +17,7 @@ object Artisan extends Controller {
   )
 
   def login = Action {
-    Ok(views.html.artisan.login())
+    Ok(views.html.artisan.login(loginForm))
   }
 
   def authenticate = Action { implicit request =>

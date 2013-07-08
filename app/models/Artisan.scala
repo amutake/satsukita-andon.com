@@ -29,4 +29,8 @@ object Artisan extends Table[Artisan]("ARTISAN") {
   def findById(id: Int): Option[Artisan] = db.withSession { implicit session: Session =>
     query.filter(_.id === id).firstOption
   }
+
+  def authenticate(username: String, password: String) = db.withSession { implicit session: Session =>
+    query.filter(_.username === username).filter(_.password === password).firstOption
+  }
 }

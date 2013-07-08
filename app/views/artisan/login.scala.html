@@ -1,0 +1,28 @@
+@(form: Form[(String, String)])
+
+@common("Sign in") {
+} {
+  @helper.form(routes.Artisan.authenticate) {
+
+    <h3>Sign in</h3>
+
+    @form.globalError.map { error =>
+      <p class="error">
+        @error.message
+      </p>
+    }
+
+    @flash.get("success").map { message =>
+      <p class="success">
+        @message
+      </p>
+    }
+
+    <input type="text" name="username" value="@form("username").value">
+    <input type="password" name="password">
+
+    <button type="submit">Login</button>
+  }
+} {
+  <h2>Sign in</h2>
+}
