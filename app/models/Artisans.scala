@@ -15,7 +15,7 @@ object Artisans extends Table[Artisan]("ARTISANS") {
 
   def id = column[Int]("ID", O.NotNull, O.PrimaryKey, O.AutoInc)
   def name = column[String]("NAME", O.NotNull)
-  def username = column[String]("USERNAME", O.NotNull, O.PrimaryKey)
+  def username = column[String]("USERNAME", O.NotNull)
   def password = column[String]("PASSWORD", O.NotNull)
   def times = column[Int]("TIMES", O.NotNull)
 
@@ -23,6 +23,8 @@ object Artisans extends Table[Artisan]("ARTISANS") {
     (id, name, username, password, times) => Artisan(id, name, username, password, OrdInt(times)),
     artisan => Some((artisan.id, artisan.name, artisan.username, artisan.password, artisan.times.n))
   )
+
+  def ins = name ~ username ~ password ~ times returning id
 
   val query = Query(Artisans)
 

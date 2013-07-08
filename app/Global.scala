@@ -44,15 +44,24 @@ object InitialData {
     TimesData.ddl.create
     ClassData.ddl.create
     Tags.ddl.create
+    Artisans.ddl.create // TODO
   }
 
   def dropTable = db.withSession { implicit session: Session =>
     TimesData.ddl.drop
     ClassData.ddl.drop
     Tags.ddl.drop
+    Artisans.ddl.drop // TODO
   }
 
   def insert() = {
+
+    // TODO
+    db.withSession { implicit session: Session =>
+      Artisans.ins.insertAll(
+        ("甲乙人", "kohotsunin", "pass", 60)
+      )
+    }
 
     def mkt(times: Int, title: String) = {
       TimesData(OrdInt(times), title)

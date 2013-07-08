@@ -9,8 +9,6 @@ import models._
 
 object Artisan extends Controller with Authentication {
 
-
-
   val loginForm = Form(
     tuple(
       "username" -> text,
