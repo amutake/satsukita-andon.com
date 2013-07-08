@@ -13,7 +13,7 @@ object Artisan extends Controller with Authentication {
     tuple(
       "username" -> text,
       "password" -> text
-    ) verifying ("Invalid username or password", result => result match {
+    ) verifying ("ユーザー名かパスワードが間違っています。", result => result match {
       case (username, password) => Artisans.authenticate(username, password).isDefined
     })
   )
@@ -26,6 +26,12 @@ object Artisan extends Controller with Authentication {
     loginForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.artisan.login(formWithErrors)),
       artisan => Redirect(routes.Artisan.home).withSession("username" -> artisan._1)
+    )
+  }
+
+  def logout = Action {
+    Redirect(routes.Artisan.login).withNewSession.flashing(
+      "success" -> "ログアウトしました。"
     )
   }
 

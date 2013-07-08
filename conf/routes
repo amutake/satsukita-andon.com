@@ -17,6 +17,7 @@ GET     /contact                    controllers.Application.contact
 # Artisan page
 GET     /artisan/login              controllers.Artisan.login
 POST    /artisan/login              controllers.Artisan.authenticate
+GET     /artisan/logout             controllers.Artisan.logout
 GET     /artisan/home               controllers.Artisan.home
 
 # API
