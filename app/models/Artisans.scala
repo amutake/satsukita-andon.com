@@ -40,4 +40,8 @@ object Artisans extends Table[Artisan]("ARTISANS") {
   def authenticate(username: String, password: String) = db.withSession { implicit session: Session =>
     query.filter(_.username === username).filter(_.password === sha1(password)).firstOption
   }
+
+  def all = db.withSession { implicit session: Session =>
+    query.list
+  }
 }

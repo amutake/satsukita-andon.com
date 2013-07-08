@@ -25,7 +25,7 @@ object ClassData extends Table[ClassData]("CLASSDATA") {
     data => Some((data.id, data.id.times.n, data.id.grade, data.id.classn, data.title, data.prize.map(_.toString)))
   )
 
-  val query = Query(ClassData)
+  val query = Query(ClassData).sortBy(_.times.desc)
 
   def findByClassId(c: ClassId): Option[ClassData] = db.withSession { implicit session: Session =>
     query.filter(_.id === c).firstOption

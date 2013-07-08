@@ -1,14 +1,11 @@
 @(artisan: Artisan, article: Article)
 
-@import com.tristanhunt.knockoff.DefaultDiscounter._
-@import com.tristanhunt.knockoff._
-
-@import andon.utils.Util
+@import andon.utils._
 
 @common(article.title) {
 } {
 
-  @toXHTML(knockoff(HtmlFormat.escape(article.text).toString))
+  @Markdown.escape(article.text)
 
   <p id="author">Author: @artisan.name  Date: @Util.dateFormat(article.date)</p>
 } {

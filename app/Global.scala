@@ -6,6 +6,7 @@ import play.api.mvc.Result
 import play.api.mvc.Results._
 
 import scala.slick.driver.H2Driver.simple._
+import scala.slick.jdbc.meta.MTable
 
 import models._
 import andon.utils._
@@ -15,10 +16,6 @@ object Global extends GlobalSettings {
   override def onStart(app: Application) {
     InitialData.createTable
     InitialData.insert()
-  }
-
-  override def onStop(app: Application) {
-    InitialData.dropTable
   }
 
   override def onBadRequest(request: RequestHeader, error: String) = {
@@ -38,30 +35,42 @@ object InitialData {
 
   val db = Database.forDataSource(DB.getDataSource("default"))
 
-  def createTable = db.withSession { implicit session: Session =>
-    TimesData.ddl.create
-    ClassData.ddl.create
-    Tags.ddl.create
-    Artisans.ddl.create // TODO
-    Articles.ddl.create
+  def makeTableMap(implicit session: Session): Map[String, MTable] = {
+    val tableList = MTable.getTables.list()
+    tableList.map {
+      t => (t.name.name, t)
+    }.toMap
   }
 
-  def dropTable = db.withSession { implicit session: Session =>
-    TimesData.ddl.drop
-    ClassData.ddl.drop
-    Tags.ddl.drop
-    Artisans.ddl.drop // TODO
-    Articles.ddl.drop
+  def createTable = db.withSession { implicit session: Session =>
+    val tableMap = makeTableMap
+    if (!tableMap.contains("TIMESDATA")) {
+      TimesData.ddl.create
+    }
+    if (!tableMap.contains("CLASSDATA")) {
+      ClassData.ddl.create
+    }
+    if (!tableMap.contains("TAGS")) {
+      Tags.ddl.create
+    }
+    if (!tableMap.contains("ARTISANS")) {
+      Artisans.ddl.create // TODO
+    }
+    if (!tableMap.contains("ARTICLES")) {
+      Articles.ddl.create
+    }
   }
 
   def insert() = {
 
     // TODO
-    db.withSession { implicit session: Session =>
+    if (Artisans.all.isEmpty) {
+      db.withSession { implicit session: Session =>
 
-      Artisans.ins.insertAll(
-        ("甲乙人", "kohotsunin", "9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684", 60)
-      )
+        Artisans.ins.insertAll(
+          ("甲乙人", "kohotsunin", "9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684", 60)
+        )
+      }
     }
 
     def mkt(times: Int, title: String) = {

@@ -26,7 +26,7 @@ object TimesData extends Table[TimesData]("TIMESDATA") {
   }
 
   def all = db.withSession { implicit session: Session =>
-    Query(TimesData).list
+    Query(TimesData).sortBy(_.times.desc).list
   }
 
   def create(data: TimesData) = db.withSession { implicit session: Session =>
