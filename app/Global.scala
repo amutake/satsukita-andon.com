@@ -54,7 +54,7 @@ object InitialData {
       Tags.ddl.create
     }
     if (!tableMap.contains("ARTISANS")) {
-      Artisans.ddl.create // TODO
+      Artisans.ddl.create
     }
     if (!tableMap.contains("ARTICLES")) {
       Articles.ddl.create
@@ -849,7 +849,6 @@ object InitialData {
         (63, 3, 8),
         (62, 1, 5),
         (62, 2, 1),
-        (62, 1, 5),
         (62, 2, 2),
         (62, 2, 3),
         (62, 2, 5),
@@ -862,7 +861,6 @@ object InitialData {
         (61, 2, 3),
         (61, 2, 4),
         (61, 2, 6),
-        (61, 2, 4),
         (61, 3, 3),
         (61, 3, 7),
         (61, 3, 3),
@@ -874,7 +872,6 @@ object InitialData {
         (60, 3, 6),
         (60, 3, 7),
         (60, 3, 9),
-        (59, 3, 6),
         (59, 3, 6),
         (58, 1, 7),
         (58, 2, 7),
