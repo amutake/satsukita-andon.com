@@ -8,7 +8,7 @@ import scala.slick.driver.H2Driver.simple._
 
 import andon.utils._
 
-case class Artisan(id: Int, name: String, username: String, password: String, times: OrdInt)
+case class Artisan(id: Int, name: String, username: String, password: String, times: OrdInt, artisanType: ArtisanType)
 
 object Artisans extends Table[Artisan]("ARTISANS") {
 
@@ -19,13 +19,14 @@ object Artisans extends Table[Artisan]("ARTISANS") {
   def username = column[String]("USERNAME", O.NotNull)
   def password = column[String]("PASSWORD", O.NotNull)
   def times = column[Int]("TIMES", O.NotNull)
+  def artisanType = column[ArtisanType]("ARTISAN_TYPE", O.NotNull)
 
-  def * = id ~ name ~ username ~ password ~ times <> (
-    (id, name, username, password, times) => Artisan(id, name, username, password, OrdInt(times)),
-    artisan => Some((artisan.id, artisan.name, artisan.username, artisan.password, artisan.times.n))
+  def * = id ~ name ~ username ~ password ~ times ~ artisanType <> (
+    (id, name, username, password, times, artisanType) => Artisan(id, name, username, password, OrdInt(times), artisanType),
+    artisan => Some((artisan.id, artisan.name, artisan.username, artisan.password, artisan.times.n, artisan.artisanType))
   )
 
-  def ins = name ~ username ~ password ~ times returning id
+  def ins = name ~ username ~ password ~ times ~ artisanType returning id
 
   val query = Query(Artisans)
 
@@ -43,5 +44,9 @@ object Artisans extends Table[Artisan]("ARTISANS") {
 
   def all = db.withSession { implicit session: Session =>
     query.list
+  }
+
+  def findByArtisanType(a: ArtisanType) = db.withSession { implicit session: Session =>
+    query.filter(_.artisanType === a).list
   }
 }
