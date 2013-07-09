@@ -48,8 +48,10 @@ object Artisan extends Controller with Authentication {
 
   def articles = IsAuthenticated { userid => _ =>
     Artisans.findById(userid).map { artisan =>
-      val articles = Articles.findByCreateArtisanId(userid)
-      Ok(views.html.artisan.articles(artisan, articles))
+      artisan.artisanType match {
+        case Admin | Master => Ok(views.html.artisan.articles(artisan, Articles.all))
+        case Writer => Ok(views.html.artisan.articles(artisan, Articles.findByCreateArtisanId(userid)))
+      }
     }.getOrElse(Forbidden)
   }
 

@@ -44,6 +44,10 @@ object Articles extends Table[Article]("ARTICLES") {
     query.filter(_.createArtisanId === aId).list
   }
 
+  def all = db.withSession { implicit session: Session =>
+    query.list
+  }
+
   def create(artisanId: Int, title: String, text: String, articleType: ArticleType) = db.withSession { implicit session: Session =>
     val date = new Date()
     Articles.ins.insert(artisanId, artisanId, title, text, date, date, articleType)
