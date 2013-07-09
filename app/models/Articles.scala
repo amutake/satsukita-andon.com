@@ -10,7 +10,7 @@ import java.util.Date
 
 import andon.utils._
 
-case class Article(id: Long, authorId: Int, title: String, text: String, date: Date)
+case class Article(id: Long, createArtisanId: Int, updateArtisanId: Int, title: String, text: String, createDate: Date, updateDate: Date, articleType: ArticleType)
 
 object Articles extends Table[Article]("ARTICLES") {
 
@@ -22,14 +22,17 @@ object Articles extends Table[Article]("ARTICLES") {
   )
 
   def id = column[Long]("ID", O.NotNull, O.PrimaryKey, O.AutoInc)
-  def authorId = column[Int]("AUTHOR_ID", O.NotNull)
+  def createArtisanId = column[Int]("CREATE_ARTISAN_ID", O.NotNull)
+  def updateArtisanId = column[Int]("UPDATE_ARTISAN_ID", O.NotNull)
   def title = column[String]("TITLE", O.NotNull)
   def text = column[String]("TEXT", O.NotNull)
-  def date = column[Date]("DATE", O.NotNull)
+  def createDate = column[Date]("CREATE_DATE", O.NotNull)
+  def updateDate = column[Date]("UPDATE_DATE", O.NotNull)
+  def articleType = column[ArticleType]("ARTICLE_TYPE", O.NotNull)
 
-  def * = id ~ authorId ~ title ~ text ~ date <> (Article.apply _, Article.unapply _)
+  def * = id ~ createArtisanId ~ updateArtisanId ~ title ~ text ~ createDate ~ updateDate ~ articleType <> (Article.apply _, Article.unapply _)
 
-  def ins = authorId ~ title ~ text ~ date returning id
+  def ins = createArtisanId ~ updateArtisanId ~ title ~ text ~ createDate ~ updateDate ~ articleType returning id
 
   val query = Query(Articles)
 
@@ -37,12 +40,12 @@ object Articles extends Table[Article]("ARTICLES") {
     query.filter(_.id === id).firstOption
   }
 
-  def findByAuthorId(aId: Int) = db.withSession { implicit session: Session =>
-    query.filter(_.authorId === aId).list
+  def findByCreateArtisanId(aId: Int) = db.withSession { implicit session: Session =>
+    query.filter(_.createArtisanId === aId).list
   }
 
-  def create(authorId: Int, title: String, text: String) = db.withSession { implicit session: Session =>
+  def create(artisanId: Int, title: String, text: String, articleType: ArticleType) = db.withSession { implicit session: Session =>
     val date = new Date()
-    Articles.ins.insert(authorId, title, text, date)
+    Articles.ins.insert(artisanId, artisanId, title, text, date, date, articleType)
   }
 }

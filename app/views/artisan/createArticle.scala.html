@@ -1,4 +1,4 @@
-@(form: Form[(String, String)])
+@(form: Form[(String, String, String)])
 
 @common("Write Article") {
 } {
@@ -12,6 +12,13 @@
         @error.message
       </p>
     }
+
+    <p>記事の種類:
+      <select name="type">
+        <option value="info">Info</option>
+        <option value="howto_harigane">Howto</option>
+      </select>
+    </p>
 
     <p>タイトル:<br>
       <input class="wide" type="text" name="title">

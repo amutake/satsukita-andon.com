@@ -6,6 +6,7 @@ import play.api.data._
 import play.api.data.Forms._
 
 import models._
+import andon.utils._
 
 object Artisan extends Controller with Authentication {
 
@@ -47,7 +48,7 @@ object Artisan extends Controller with Authentication {
 
   def articles = IsAuthenticated { userid => _ =>
     Artisans.findById(userid).map { artisan =>
-      val articles = Articles.findByAuthorId(userid)
+      val articles = Articles.findByCreateArtisanId(userid)
       Ok(views.html.artisan.articles(artisan, articles))
     }.getOrElse(Forbidden)
   }
@@ -63,11 +64,12 @@ object Artisan extends Controller with Authentication {
   val articleForm = Form(
     tuple(
       "title" -> text,
-      "text" -> text
+      "text" -> text,
+      "type" -> text
     ) verifying ("タイトルまたは本文が空です。", result => result match {
-      case ("", _) => false
-      case (_, "") => false
-      case (_, _) => true
+      case ("", _, _) => false
+      case (_, "", _) => false
+      case (_, _, _) => true
     })
   )
 
@@ -79,7 +81,7 @@ object Artisan extends Controller with Authentication {
     articleForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.artisan.createArticle(formWithErrors)),
       { article =>
-        Articles.create(userid, article._1, article._2)
+        Articles.create(userid, article._1, article._2, ArticleType.fromString(article._3))
         Redirect(routes.Artisan.articles)
       }
     )
