@@ -11,22 +11,13 @@
 
   <p><a href="@routes.Artisan.account(account.id)">@account.name</a></p>
 
-  <h4>開発者アカウント</h4>
+  @Seq(Admin, Master, Writer).map { l =>
 
-  @accounts.filter(_.level == Admin).map { acc =>
-    <p><a href="@routes.Artisan.account(acc.id)">@acc.name</a></p>
-  }
+    <h4>@l.toJapaneseアカウント</h4>
 
-  <h4>管理人アカウント</h4>
-
-  @accounts.filter(_.level == Master).map { acc =>
-    <p><a href="@routes.Artisan.account(acc.id)">@acc.name</a></p>
-  }
-
-  <h4>執筆者アカウント</h4>
-
-  @accounts.filter(_.level == Writer).map { acc =>
-    <p><a href="@routes.Artisan.account(acc.id)">@acc.name</a></p>
+    @accounts.filter(_.level == l).map { acc =>
+      <p><a href="@routes.Artisan.account(acc.id)">@acc.name</a></p>
+    }
   }
 } {
   <h2>Accounts</h2>

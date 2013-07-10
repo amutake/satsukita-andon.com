@@ -4,18 +4,22 @@ import scala.slick.lifted.MappedTypeMapper
 
 sealed trait AccountLevel {
   override def toString: String
+  def toJapanese: String
 }
 
 case object Admin extends AccountLevel {
   override def toString = "admin"
+  def toJapanese = "開発者"
 }
 
 case object Master extends AccountLevel {
   override def toString = "master"
+  def toJapanese = "管理人"
 }
 
 case object Writer extends AccountLevel {
   override def toString = "writer"
+  def toJapanese = "執筆者"
 }
 
 object AccountLevel {

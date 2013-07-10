@@ -13,7 +13,7 @@
 
   <p>卒業年: @acc.times</p>
 
-  <p>アカウントレベル: @acc.level</p>
+  <p>アカウントレベル: @acc.level.toJapanese</p>
 
   @if(me.level == Admin && (me.id == acc.id || acc.level != Admin)) {
     <p><a href="@routes.Artisan.editAccount(acc.id)">編集する</a></p>

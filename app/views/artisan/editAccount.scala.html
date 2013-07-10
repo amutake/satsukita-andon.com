@@ -41,9 +41,9 @@
       <select name="level">
         @Seq(Admin, Master, Writer).map { l =>
           @if(l == account.level) {
-            <option value="@l" selected>@l</option>
+            <option value="@l" selected>@l.toJapanese</option>
           } else {
-            <option value="@l">@l</option>
+            <option value="@l">@l.toJapanese</option>
           }
         }
       </select>
