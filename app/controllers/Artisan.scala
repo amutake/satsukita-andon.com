@@ -91,6 +91,18 @@ object Artisan extends Controller with Authentication {
     )
   }
 
+  def accounts = IsAuthenticated { userid => _ =>
+    Accounts.findById(userid).map { account =>
+      account.level match {
+        case Admin => Ok(views.html.artisan.accounts(account, Accounts.findByLevels(Seq(Master, Writer))))
+        case Master => Ok(views.html.artisan.accounts(account, Accounts.findByLevel(Writer)))
+        case Writer => Redirect(routes.Artisan.home).flashing(
+          "error" -> "その操作は許可されていません"
+        )
+      }
+    }.getOrElse(Forbidden)
+  }
+
   val accountForm = Form(
     tuple(
       "name" -> text,

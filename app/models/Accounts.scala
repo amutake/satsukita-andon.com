@@ -46,8 +46,15 @@ object Accounts extends Table[Account]("ACCOUNTS") {
     query.list
   }
 
-  def findByAccountLevel(a: AccountLevel) = db.withSession { implicit session: Session =>
-    query.filter(_.level === a).list
+  def findByLevel(l: AccountLevel) = db.withSession { implicit session: Session =>
+    query.filter(_.level === l).list
+  }
+
+  def findByLevels(ls: Seq[AccountLevel]) = db.withSession { implicit session: Session =>
+    val qs = ls.map { l =>
+      query.filter(_.level === l)
+    }
+    qs.reduce(_ union _).list
   }
 
   def create(name: String, username: String, password: String, times: OrdInt, atype: AccountLevel) = db.withSession { implicit session: Session =>
