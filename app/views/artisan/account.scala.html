@@ -1,0 +1,17 @@
+@(account: Account)
+
+@common(account.name + "さん") {
+} {
+
+  <h3>@account.name さん</h3>
+
+  <p>名前: @account.name</p>
+
+  <p>ユーザー名: @account.username</p>
+
+  <p>卒業年: @account.times</p>
+
+  <p>アカウントレベル: @account.level</p>
+} {
+  <h2>@account.name さん</h2>
+}

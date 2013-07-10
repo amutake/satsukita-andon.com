@@ -103,6 +103,23 @@ object Artisan extends Controller with Authentication {
     }.getOrElse(Forbidden)
   }
 
+  def account(id: Int) = IsAuthenticated { userid => _ =>
+    Accounts.findById(userid).map { myaccount =>
+      Accounts.findById(id).map { account =>
+        val mine = userid == id
+        val l = account.level
+        myaccount.level match {
+          case Admin if mine || l == Master || l == Writer => Ok(views.html.artisan.account(account))
+          case Master if mine || l == Writer => Ok(views.html.artisan.account(account))
+          case Writer if mine => Ok(views.html.artisan.account(account))
+          case _ => Redirect(routes.Artisan.home).flashing(
+            "error" -> "その操作は許可されていません"
+          )
+        }
+      }.getOrElse(NotFound(views.html.errors.notFound("/artisan/account?id=" + id.toString)))
+    }.getOrElse(Forbidden)
+  }
+
   val accountForm = Form(
     tuple(
       "name" -> text,

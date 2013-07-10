@@ -9,20 +9,20 @@
 
   <h4>自分のアカウント</h4>
 
-  <p><a href="#">@account.name</a></p>
+  <p><a href="@routes.Artisan.account(account.id)">@account.name</a></p>
 
   @if(account.level == Admin) {
     <h4>管理人アカウント</h4>
 
     @accounts.filter(_.level == Master).map { acc =>
-      <p><a href="#">@acc.name</a></p>
+      <p><a href="@routes.Artisan.account(acc.id)">@acc.name</a></p>
     }
   }
 
   <h4>執筆者アカウント</h4>
 
   @accounts.filter(_.level == Writer).map { acc =>
-    <p><a href="#">@acc.name</a></p>
+    <p><a href="@routes.Artisan.account(acc.id)">@acc.name</a></p>
   }
 } {
   <h2>Accounts</h2>
