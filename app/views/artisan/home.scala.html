@@ -2,6 +2,9 @@
 
 @common(account.username + "'s Home") {
 } {
+  <ul class="breadcrumb">
+    <li class="active">Home</li>
+  </ul>
 
   <h3>@account.name さん</h3>
 
@@ -17,11 +20,15 @@
     </p>
   }
 
-  <p><a href="@routes.Artisan.articles()">編集可能な記事</a></p>
-
   <p><a href="@routes.Artisan.accounts()">アカウント一覧</a></p>
 
   <p><a href="@routes.Artisan.createAccount()">アカウントの作成</a></p>
+
+
+  <p><a href="@routes.Artisan.articles()">記事一覧</a></p>
+
+  <p><a href="@routes.Artisan.createArticle()">記事の作成</a></p>
+
 
   <p><a href="@routes.Artisan.logout()"><button class="btn">ログアウト</button></a></p>
 } {

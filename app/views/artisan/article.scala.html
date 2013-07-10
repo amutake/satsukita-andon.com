@@ -4,6 +4,11 @@
 
 @common(article.title) {
 } {
+  <ul class="breadcrumb">
+    <li><a href="@routes.Artisan.home()">Home</a> <span class="divider">/</span></li>
+    <li><a href="@routes.Artisan.articles()">記事一覧</a> <span class="divider">/</span></li>
+    <li class="active">記事詳細</li>
+  </ul>
 
   @Markdown.escape(article.text)
 

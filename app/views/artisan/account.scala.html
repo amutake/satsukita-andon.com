@@ -4,6 +4,11 @@
 
 @common(acc.name + "さんの情報") {
 } {
+  <ul class="breadcrumb">
+    <li><a href="@routes.Artisan.home()">Home</a> <span class="divider">/</span></li>
+    <li><a href="@routes.Artisan.accounts()">アカウント一覧</a> <span class="divider">/</span></li>
+    <li class="active">アカウント詳細</li>
+  </ul>
 
   <h3>@acc.name</h3>
 

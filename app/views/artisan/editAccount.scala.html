@@ -4,6 +4,12 @@
 
 @common("アカウントの編集") {
 } {
+  <ul class="breadcrumb">
+    <li><a href="@routes.Artisan.home()">Home</a> <span class="divider">/</span></li>
+    <li><a href="@routes.Artisan.accounts()">アカウント一覧</a> <span class="divider">/</span></li>
+    <li><a href="@routes.Artisan.account(account.id)">アカウント詳細</a> <span class="divider">/</span></li>
+    <li class="active">アカウント編集</li>
+  </ul>
 
   <h3>アカウントの編集</h3>
 
