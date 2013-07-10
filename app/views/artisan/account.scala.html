@@ -1,19 +1,23 @@
-@(account: Account)
+@(me: Account, acc: Account)
 
-@common(account.name + "さん") {
+@import andon.utils._
+
+@common(acc.name + "さんの情報") {
 } {
 
-  <h3>@account.name さん</h3>
+  <h3>@acc.name</h3>
 
-  <p>名前: @account.name</p>
+  <p>名前: @acc.name</p>
 
-  <p>ユーザー名: @account.username</p>
+  <p>ユーザー名: @acc.username</p>
 
-  <p>卒業年: @account.times</p>
+  <p>卒業年: @acc.times</p>
 
-  <p>アカウントレベル: @account.level</p>
+  <p>アカウントレベル: @acc.level</p>
 
-  <p><a href="@routes.Artisan.editAccount(account.id)">編集する</a></p>
+  @if(me.level == Admin && (me.id == acc.id || acc.level != Admin)) {
+    <p><a href="@routes.Artisan.editAccount(acc.id)">編集する</a></p>
+  }
 } {
-  <h2>@account.name さん</h2>
+  <h2>@acc.nameさんの情報</h2>
 }

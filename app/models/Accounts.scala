@@ -61,8 +61,10 @@ object Accounts extends Table[Account]("ACCOUNTS") {
     Accounts.ins.insert(name, username, sha1(password), times.n, level)
   }
 
-  def update(acc: Account) = db.withSession { implicit session: Session =>
-    val acc_ = acc.copy(password = sha1(acc.password))
-    Accounts.filter(_.id === acc.id).update(acc_)
+  def update(id: Int, name: String, username: String, times: OrdInt, level: AccountLevel) = db.withSession { implicit session: Session =>
+    findById(id).map { before =>
+      val after = Account(id, name, username, before.password, times, level)
+      Accounts.filter(_.id === id).update(after)
+    }
   }
 }

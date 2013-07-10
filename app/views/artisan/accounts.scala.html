@@ -5,18 +5,22 @@
 @common("Accounts") {
 } {
 
-  <h3>@account.nameさんが編集可能なアカウント</h3>
+  <h3>すべてのアカウント</h3>
 
   <h4>自分のアカウント</h4>
 
   <p><a href="@routes.Artisan.account(account.id)">@account.name</a></p>
 
-  @if(account.level == Admin) {
-    <h4>管理人アカウント</h4>
+  <h4>開発者アカウント</h4>
 
-    @accounts.filter(_.level == Master).map { acc =>
-      <p><a href="@routes.Artisan.account(acc.id)">@acc.name</a></p>
-    }
+  @accounts.filter(_.level == Admin).map { acc =>
+    <p><a href="@routes.Artisan.account(acc.id)">@acc.name</a></p>
+  }
+
+  <h4>管理人アカウント</h4>
+
+  @accounts.filter(_.level == Master).map { acc =>
+    <p><a href="@routes.Artisan.account(acc.id)">@acc.name</a></p>
   }
 
   <h4>執筆者アカウント</h4>

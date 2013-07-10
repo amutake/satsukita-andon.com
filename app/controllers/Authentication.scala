@@ -58,16 +58,14 @@ trait Authentication {
     }).getOrElse(Results.NotFound(views.html.errors.notFound("/artisan/article?id=" + id.toString)))
   }
 
-  def IsEditableAccount(id: Int)(f: => Account => Account => Request[AnyContent] => Result) = IsValidAccount { me => request =>
+  def IsEditableAccount(id: Int)(f: => Account => Account => Request[AnyContent] => Result) = HasAuthority(Admin) { me => request =>
     Accounts.findById(id).map { account =>
       val l = account.level
       val mine = id == me.id
       me.level match {
-        case Admin if mine || l == Master || l == Writer => f(me)(account)(request)
-        case Master if mine || l == Writer => f(me)(account)(request)
-        case Writer if mine => f(me)(account)(request)
+        case Admin if mine || l != Admin => f(me)(account)(request)
         case _ => Results.Forbidden
       }
-    }.getOrElse(Results.NotFound(views.html.errors.notFound("/artisan/account?id=" + id.toString)))
+    }.getOrElse(Results.NotFound(views.html.errors.notFound("/artisan/account/edit?id=" + id.toString)))
   }
 }

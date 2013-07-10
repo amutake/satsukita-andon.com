@@ -83,18 +83,14 @@ object Artisan extends Controller with Authentication {
     )
   }
 
-  def accounts = IsValidAccount { account => _ =>
-    account.level match {
-      case Admin => Ok(views.html.artisan.accounts(account, Accounts.findByLevels(Seq(Master, Writer))))
-      case Master => Ok(views.html.artisan.accounts(account, Accounts.findByLevel(Writer)))
-      case Writer => Redirect(routes.Artisan.home).flashing(
-        "error" -> "その操作は許可されていません"
-      )
-    }
+  def accounts = HasAuthority(Master) { account => _ =>
+    Ok(views.html.artisan.accounts(account, Accounts.all))
   }
 
-  def account(id: Int) = IsEditableAccount(id) { me => acc => _ =>
-    Ok(views.html.artisan.account(acc))
+  def account(id: Int) = HasAuthority(Master) { me => _ =>
+    Accounts.findById(id).map { acc =>
+      Ok(views.html.artisan.account(me, acc))
+    }.getOrElse(Results.NotFound(views.html.errors.notFound("/artisan/account?id=" + id.toString)))
   }
 
   val accountForm = Form(
@@ -109,26 +105,20 @@ object Artisan extends Controller with Authentication {
     })
   )
 
-  def createAccount = IsValidAccount { account => _ =>
-    account.level match {
-      case Admin | Master => Ok(views.html.artisan.createAccount(accountForm))
-      case Writer => Redirect(routes.Artisan.home)
-    }
+  def createAccount = HasAuthority(Master) { acc => _ =>
+    Ok(views.html.artisan.createAccount(acc, accountForm))
   }
 
-  def postCreateAccount = IsValidAccount { account => implicit request =>
-    account.level match {
-      case Admin | Master => accountForm.bindFromRequest.fold(
-        formWithErrors => BadRequest(views.html.artisan.createAccount(formWithErrors)),
-        { newAccount =>
-          Accounts.create(newAccount._1, newAccount._2, Random.nextString(9), OrdInt(newAccount._3.toInt), AccountLevel.fromString(newAccount._4))
-          Redirect(routes.Artisan.home).flashing(
+  def postCreateAccount = HasAuthority(Master) { acc => implicit request =>
+    accountForm.bindFromRequest.fold(
+      formWithErrors => BadRequest(views.html.artisan.createAccount(acc, formWithErrors)),
+      { newacc =>
+        Accounts.create(newacc._1, newacc._2, Random.nextString(9), OrdInt(newacc._3.toInt), AccountLevel.fromString(newacc._4))
+        Redirect(routes.Artisan.home).flashing(
             "success" -> "アカウントを作成しました。"
-          )
-        }
-      )
-      case Writer => Forbidden
-    }
+        )
+      }
+    )
   }
 
   val editAccountForm = Form(
@@ -136,11 +126,10 @@ object Artisan extends Controller with Authentication {
       "id" -> number,
       "name" -> text,
       "username" -> text,
-      "password" -> text,
       "times" -> number,
       "level" -> text
     ) verifying ("空の項目があります。", result => result match {
-      case (i, u, n, p, t, a) if u.trim.isEmpty || n.trim.isEmpty || p.trim.isEmpty || a.trim.isEmpty => false
+      case (i, u, n, t, a) if u.trim.isEmpty || n.trim.isEmpty || a.trim.isEmpty => false
       case _ => true
     })
   )
@@ -149,7 +138,7 @@ object Artisan extends Controller with Authentication {
     Ok(views.html.artisan.editAccount(editAccountForm, acc))
   }
 
-  def postEditAccount = IsValidAccount { me => implicit request =>
+  def postEditAccount = HasAuthority(Admin) { me => implicit request =>
     editAccountForm.bindFromRequest.fold(
       { formWithErrors =>
         Accounts.findById(formWithErrors.get._1).map { acc =>
@@ -158,9 +147,9 @@ object Artisan extends Controller with Authentication {
           "error" -> "不正な操作"
         ))
       },
-      { newAccount =>
-        val acc = Account(newAccount._1.toInt, newAccount._2, newAccount._3, newAccount._4, OrdInt(newAccount._5.toInt), AccountLevel.fromString(newAccount._6))
-        Accounts.update(acc)
+      { case (id, name, username, times, level) =>
+        val l = AccountLevel.fromString(level)
+        Accounts.update(id.toInt, name, username, OrdInt(times.toInt), l)
         Redirect(routes.Artisan.home).flashing(
           "success" -> "アカウントを編集しました。"
         )
