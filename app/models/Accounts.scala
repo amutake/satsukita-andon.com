@@ -57,7 +57,12 @@ object Accounts extends Table[Account]("ACCOUNTS") {
     qs.reduce(_ union _).list
   }
 
-  def create(name: String, username: String, password: String, times: OrdInt, atype: AccountLevel) = db.withSession { implicit session: Session =>
-    Accounts.ins.insert(name, username, sha1(password), times.n, atype)
+  def create(name: String, username: String, password: String, times: OrdInt, level: AccountLevel) = db.withSession { implicit session: Session =>
+    Accounts.ins.insert(name, username, sha1(password), times.n, level)
+  }
+
+  def update(acc: Account) = db.withSession { implicit session: Session =>
+    val acc_ = acc.copy(password = sha1(acc.password))
+    Accounts.filter(_.id === acc.id).update(acc_)
   }
 }

@@ -27,6 +27,8 @@ GET     /artisan/accounts           controllers.Artisan.accounts
 GET     /artisan/account            controllers.Artisan.account(id: Int)
 GET     /artisan/account/create     controllers.Artisan.createAccount
 POST    /artisan/account/create     controllers.Artisan.postCreateAccount
+GET     /artisan/account/edit       controllers.Artisan.editAccount(id: Int)
+POST    /artisan/account/edit       controllers.Artisan.postEditAccount
 
 # API
 # TODO

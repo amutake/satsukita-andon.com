@@ -125,9 +125,9 @@ object Artisan extends Controller with Authentication {
       "name" -> text,
       "username" -> text,
       "times" -> number,
-      "type" -> text
+      "level" -> text
     ) verifying ("空の項目があります。", result => result match {
-      case (u, n, t, a) if u.trim.isEmpty || n.trim.isEmpty || a.trim.isEmpty => false
+      case (u, n, t, l) if u.trim.isEmpty || n.trim.isEmpty || l.trim.isEmpty => false
       case _ => true
     })
   )
@@ -154,6 +154,61 @@ object Artisan extends Controller with Authentication {
           }
         )
       }
+    }.getOrElse(Forbidden)
+  }
+
+  val editAccountForm = Form(
+    tuple(
+      "id" -> number,
+      "name" -> text,
+      "username" -> text,
+      "password" -> text,
+      "times" -> number,
+      "level" -> text
+    ) verifying ("空の項目があります。", result => result match {
+      case (i, u, n, p, t, a) if u.trim.isEmpty || n.trim.isEmpty || p.trim.isEmpty || a.trim.isEmpty => false
+      case _ => true
+    })
+  )
+
+  def editAccount(id: Int) = IsAuthenticated { userid => _ =>
+    Accounts.findById(userid).map { myaccount =>
+      Accounts.findById(id).map { account =>
+        val mine = userid == id
+        val l = account.level
+        val form = editAccountForm
+        myaccount.level match {
+          case Admin if mine || l == Master || l == Writer =>
+            Ok(views.html.artisan.editAccount(form, account))
+          case Master if mine || l == Writer =>
+            Ok(views.html.artisan.editAccount(form, account))
+          case Writer if mine => Ok(views.html.artisan.editAccount(form, account))
+          case _ => Redirect(routes.Artisan.home).flashing(
+            "error" -> "その操作は許可されていません"
+          )
+        }
+      }.getOrElse(NotFound(views.html.errors.notFound("/artisan/account/edit?id=" + id.toString)))
+    }.getOrElse(Forbidden)
+  }
+
+  def postEditAccount = IsAuthenticated { userid => implicit request =>
+    Accounts.findById(userid).map { account =>
+      editAccountForm.bindFromRequest.fold(
+        { formWithErrors =>
+          Accounts.findById(formWithErrors.get._1).map { acc =>
+            BadRequest(views.html.artisan.editAccount(formWithErrors, acc))
+          }.getOrElse(Redirect(routes.Artisan.home).flashing(
+            "error" -> "不正な操作"
+          ))
+        },
+        { newAccount =>
+          val acc = Account(newAccount._1.toInt, newAccount._2, newAccount._3, newAccount._4, OrdInt(newAccount._5.toInt), AccountLevel.fromString(newAccount._6))
+          Accounts.update(acc)
+          Redirect(routes.Artisan.home).flashing(
+            "success" -> "アカウントを編集しました。"
+          )
+        }
+      )
     }.getOrElse(Forbidden)
   }
 }

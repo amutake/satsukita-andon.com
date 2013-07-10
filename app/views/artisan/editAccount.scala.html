@@ -1,0 +1,44 @@
+@(form: Form[(Int, String, String, String, Int, String)], account: Account)
+
+@import andon.utils._
+
+@common("アカウントの編集") {
+} {
+
+  <h3>アカウントの編集</h3>
+
+  @helper.form(routes.Artisan.postEditAccount) {
+
+    @form.globalError.map { error =>
+      <p class="error">
+        @error.message
+      </p>
+    }
+
+    <input type="hidden" name="id" value="@account.id">
+
+    <p>名前: <input type="text" name="name" value="@account.name"></p>
+
+    <p>ユーザー名(半角英数字): <input type="text" name="username" value="@account.username"></p>
+
+    <p>パスワード: <input type="password" name="password"></p>
+
+    <p>卒業年:
+      <select name="times">
+        @TimesData.all.map { t =>
+          @if(t == account.times) {
+            <option value="@t.times.n" selected>@t.times</option>
+          } else {
+            <option value="@t.times.n">@t.times</option>
+          }
+        }
+      </select>
+    </p>
+
+    <input type="hidden" name="level" value="@account.level">
+
+    <button class="btn" type="submit">送信</button>
+  }
+} {
+  <h2>アカウントの編集</h2>
+}
