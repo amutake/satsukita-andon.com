@@ -10,7 +10,7 @@ import java.util.Date
 
 import andon.utils._
 
-case class Article(id: Long, createArtisanId: Int, updateArtisanId: Int, title: String, text: String, createDate: Date, updateDate: Date, articleType: ArticleType)
+case class Article(id: Long, createAccountId: Int, updateAccountId: Int, title: String, text: String, createDate: Date, updateDate: Date, articleType: ArticleType)
 
 object Articles extends Table[Article]("ARTICLES") {
 
@@ -22,17 +22,17 @@ object Articles extends Table[Article]("ARTICLES") {
   )
 
   def id = column[Long]("ID", O.NotNull, O.PrimaryKey, O.AutoInc)
-  def createArtisanId = column[Int]("CREATE_ARTISAN_ID", O.NotNull)
-  def updateArtisanId = column[Int]("UPDATE_ARTISAN_ID", O.NotNull)
+  def createAccountId = column[Int]("CREATE_ACCOUNT_ID", O.NotNull)
+  def updateAccountId = column[Int]("UPDATE_ACCOUNT_ID", O.NotNull)
   def title = column[String]("TITLE", O.NotNull)
   def text = column[String]("TEXT", O.NotNull)
   def createDate = column[Date]("CREATE_DATE", O.NotNull)
   def updateDate = column[Date]("UPDATE_DATE", O.NotNull)
   def articleType = column[ArticleType]("ARTICLE_TYPE", O.NotNull)
 
-  def * = id ~ createArtisanId ~ updateArtisanId ~ title ~ text ~ createDate ~ updateDate ~ articleType <> (Article.apply _, Article.unapply _)
+  def * = id ~ createAccountId ~ updateAccountId ~ title ~ text ~ createDate ~ updateDate ~ articleType <> (Article.apply _, Article.unapply _)
 
-  def ins = createArtisanId ~ updateArtisanId ~ title ~ text ~ createDate ~ updateDate ~ articleType returning id
+  def ins = createAccountId ~ updateAccountId ~ title ~ text ~ createDate ~ updateDate ~ articleType returning id
 
   val query = Query(Articles)
 
@@ -40,16 +40,16 @@ object Articles extends Table[Article]("ARTICLES") {
     query.filter(_.id === id).firstOption
   }
 
-  def findByCreateArtisanId(aId: Int) = db.withSession { implicit session: Session =>
-    query.filter(_.createArtisanId === aId).list
+  def findByCreateAccountId(aId: Int) = db.withSession { implicit session: Session =>
+    query.filter(_.createAccountId === aId).list
   }
 
   def all = db.withSession { implicit session: Session =>
     query.list
   }
 
-  def create(artisanId: Int, title: String, text: String, articleType: ArticleType) = db.withSession { implicit session: Session =>
+  def create(accountId: Int, title: String, text: String, articleType: ArticleType) = db.withSession { implicit session: Session =>
     val date = new Date()
-    Articles.ins.insert(artisanId, artisanId, title, text, date, date, articleType)
+    Articles.ins.insert(accountId, accountId, title, text, date, date, articleType)
   }
 }

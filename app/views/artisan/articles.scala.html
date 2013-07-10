@@ -1,13 +1,13 @@
-@(artisan: Artisan, articles: Seq[Article])
+@(account: Account, articles: Seq[Article])
 
 @import andon.utils._
 
 @common("Articles") {
 } {
 
-  <h3>@artisan.nameさんが編集可能な記事</h3>
+  <h3>@account.nameさんが編集可能な記事</h3>
 
-  @if(artisan.artisanType != Writer) {
+  @if(account.level != Writer) {
     <h4>InfoTop</h4>
     <ul>
       @articles.filter(_.articleType == InfoTop).map { article =>

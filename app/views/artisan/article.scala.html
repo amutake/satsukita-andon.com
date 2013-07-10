@@ -1,4 +1,4 @@
-@(artisan: Artisan, article: Article)
+@(account: Account, article: Article)
 
 @import andon.utils._
 
@@ -7,7 +7,7 @@
 
   @Markdown.escape(article.text)
 
-  <p id="author">Author: @artisan.name  Date: @Util.dateFormat(article.updateDate)</p>
+  <p id="author">Author: @account.name  Date: @Util.dateFormat(article.updateDate)</p>
 } {
   <h2>@article.title</h2>
 }

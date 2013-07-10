@@ -17,7 +17,7 @@ object Artisan extends Controller with Authentication {
       "username" -> text,
       "password" -> text
     ) verifying ("ユーザー名かパスワードが間違っています。", result => result match {
-      case (username, password) => Artisans.authenticate(username, password).isDefined
+      case (username, password) => Accounts.authenticate(username, password).isDefined
     })
   )
 
@@ -28,9 +28,9 @@ object Artisan extends Controller with Authentication {
   def authenticate = Action { implicit request =>
     loginForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.artisan.login(formWithErrors)),
-      { artisan =>
-        Artisans.findByUsername(artisan._1).map { artisan_ =>
-          Redirect(routes.Artisan.home).withSession("userid" -> artisan_.id.toString)
+      { account =>
+        Accounts.findByUsername(account._1).map { account_ =>
+          Redirect(routes.Artisan.home).withSession("userid" -> account_.id.toString)
         }.getOrElse(Forbidden)
       }
     )
@@ -43,24 +43,24 @@ object Artisan extends Controller with Authentication {
   }
 
   def home = IsAuthenticated { userid => implicit request =>
-    Artisans.findById(userid).map { artisan =>
-      Ok(views.html.artisan.home(artisan))
+    Accounts.findById(userid).map { account =>
+      Ok(views.html.artisan.home(account))
     }.getOrElse(Forbidden)
   }
 
   def articles = IsAuthenticated { userid => _ =>
-    Artisans.findById(userid).map { artisan =>
-      artisan.artisanType match {
-        case Admin | Master => Ok(views.html.artisan.articles(artisan, Articles.all))
-        case Writer => Ok(views.html.artisan.articles(artisan, Articles.findByCreateArtisanId(userid)))
+    Accounts.findById(userid).map { account =>
+      account.level match {
+        case Admin | Master => Ok(views.html.artisan.articles(account, Articles.all))
+        case Writer => Ok(views.html.artisan.articles(account, Articles.findByCreateAccountId(userid)))
       }
     }.getOrElse(Forbidden)
   }
 
   def article(id: Long) = IsAuthenticated { userid => _ =>
-    Artisans.findById(userid).map { artisan =>
+    Accounts.findById(userid).map { account =>
       Articles.findById(id).map { article =>
-        Ok(views.html.artisan.article(artisan, article))
+        Ok(views.html.artisan.article(account, article))
       }.getOrElse(NotFound(views.html.errors.notFound("/artisan/article?id=" + id.toString)))
     }.getOrElse(Forbidden)
   }
@@ -91,7 +91,7 @@ object Artisan extends Controller with Authentication {
     )
   }
 
-  val artisanForm = Form(
+  val accountForm = Form(
     tuple(
       "name" -> text,
       "username" -> text,
@@ -103,22 +103,22 @@ object Artisan extends Controller with Authentication {
     })
   )
 
-  def createArtisan = IsAuthenticated { userid => _ =>
-    Artisans.findById(userid).map { artisan =>
-      artisan.artisanType match {
-        case Admin | Master => Ok(views.html.artisan.createArtisan(artisanForm))
+  def createAccount = IsAuthenticated { userid => _ =>
+    Accounts.findById(userid).map { account =>
+      account.level match {
+        case Admin | Master => Ok(views.html.artisan.createAccount(accountForm))
         case Writer => Redirect(routes.Artisan.home)
       }
     }.getOrElse(Forbidden)
   }
 
-  def postCreateArtisan = IsAuthenticated { userid => implicit request =>
-    Artisans.findById(userid).map { artisan =>
-      artisan.artisanType match {
-        case Admin | Master => artisanForm.bindFromRequest.fold(
-          formWithErrors => BadRequest(views.html.artisan.createArtisan(formWithErrors)),
-          { newArtisan =>
-            Artisans.create(newArtisan._1, newArtisan._2, Random.nextString(9), OrdInt(newArtisan._3.toInt), ArtisanType.fromString(newArtisan._4))
+  def postCreateAccount = IsAuthenticated { userid => implicit request =>
+    Accounts.findById(userid).map { account =>
+      account.level match {
+        case Admin | Master => accountForm.bindFromRequest.fold(
+          formWithErrors => BadRequest(views.html.artisan.createAccount(formWithErrors)),
+          { newAccount =>
+            Accounts.create(newAccount._1, newAccount._2, Random.nextString(9), OrdInt(newAccount._3.toInt), AccountLevel.fromString(newAccount._4))
             Redirect(routes.Artisan.home).flashing(
               "success" -> "アカウントを作成しました。"
             )

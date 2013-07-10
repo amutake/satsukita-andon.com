@@ -53,8 +53,8 @@ object InitialData {
     if (!tableMap.contains("TAGS")) {
       Tags.ddl.create
     }
-    if (!tableMap.contains("ARTISANS")) {
-      Artisans.ddl.create
+    if (!tableMap.contains("ACCOUNTS")) {
+      Accounts.ddl.create
     }
     if (!tableMap.contains("ARTICLES")) {
       Articles.ddl.create
@@ -64,10 +64,10 @@ object InitialData {
   def insert() = {
 
     // TODO
-    if (Artisans.all.isEmpty) {
+    if (Accounts.all.isEmpty) {
       db.withSession { implicit session: Session =>
 
-        Artisans.ins.insertAll(
+        Accounts.ins.insertAll(
           ("甲乙人", "kohotsunin", "9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684", 60, Admin)
         )
       }

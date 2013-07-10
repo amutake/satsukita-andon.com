@@ -1,9 +1,9 @@
-@(artisan: Artisan)(implicit flash: Flash)
+@(account: Account)(implicit flash: Flash)
 
-@common(artisan.username + "'s Home") {
+@common(account.username + "'s Home") {
 } {
 
-  <h3>@artisan.name さん</h3>
+  <h3>@account.name さん</h3>
 
   @flash.get("success").map { message =>
     <p class="success">
@@ -13,9 +13,9 @@
 
   <p><a href="@routes.Artisan.articles()">編集可能な記事</a></p>
 
-  <p><a href="@routes.Artisan.createArtisan()">アカウントの作成</a></p>
+  <p><a href="@routes.Artisan.createAccount()">アカウントの作成</a></p>
 
   <p><a href="@routes.Artisan.logout()"><button class="btn">ログアウト</button></a></p>
 } {
-  <h2>@artisan.username's Home</h2>
+  <h2>@account.username's Home</h2>
 }
