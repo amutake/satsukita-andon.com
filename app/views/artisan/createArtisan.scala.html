@@ -1,0 +1,39 @@
+@(form: Form[(String, String, Int, String)])
+
+@common("Write Article") {
+} {
+
+  <h3>記事の作成</h3>
+
+  @helper.form(routes.Artisan.postCreateArtisan) {
+
+    @form.globalError.map { error =>
+      <p class="error">
+        @error.message
+      </p>
+    }
+
+    <p>名前: <input type="text" name="name"></p>
+
+    <p>ユーザー名(半角英数字): <input type="text" name="username"></p>
+
+    <p>卒業年:
+      <select name="times">
+        @TimesData.all.map { t =>
+          <option value="@t.times.n">@t.times</option>
+        }
+      </select>
+    </p>
+
+    <p>タイプ:
+      <select name="type">
+        <option value="master">管理人</option>
+        <option value="writer">執筆者</option>
+      </select>
+    </p>
+
+    <button class="btn" type="submit">送信</button>
+  }
+} {
+  <h2>アカウントの作成</h2>
+}

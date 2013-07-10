@@ -49,4 +49,8 @@ object Artisans extends Table[Artisan]("ARTISANS") {
   def findByArtisanType(a: ArtisanType) = db.withSession { implicit session: Session =>
     query.filter(_.artisanType === a).list
   }
+
+  def create(name: String, username: String, password: String, times: OrdInt, atype: ArtisanType) = db.withSession { implicit session: Session =>
+    Artisans.ins.insert(name, username, sha1(password), times.n, atype)
+  }
 }

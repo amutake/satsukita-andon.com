@@ -23,7 +23,8 @@ GET     /artisan/articles           controllers.Artisan.articles
 GET     /artisan/article            controllers.Artisan.article(id: Long)
 GET     /artisan/article/create     controllers.Artisan.createArticle
 POST    /artisan/article/create     controllers.Artisan.postCreateArticle
-
+GET     /artisan/artisan/create     controllers.Artisan.createArtisan
+POST    /artisan/artisan/create     controllers.Artisan.postCreateArtisan
 
 # API
 # TODO

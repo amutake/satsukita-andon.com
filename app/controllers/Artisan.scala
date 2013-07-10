@@ -1,5 +1,7 @@
 package controllers
 
+import scala.util.Random
+
 import play.api._
 import play.api.mvc._
 import play.api.data._
@@ -40,7 +42,7 @@ object Artisan extends Controller with Authentication {
     )
   }
 
-  def home = IsAuthenticated { userid => _ =>
+  def home = IsAuthenticated { userid => implicit request =>
     Artisans.findById(userid).map { artisan =>
       Ok(views.html.artisan.home(artisan))
     }.getOrElse(Forbidden)
@@ -87,5 +89,42 @@ object Artisan extends Controller with Authentication {
         Redirect(routes.Artisan.articles)
       }
     )
+  }
+
+  val artisanForm = Form(
+    tuple(
+      "name" -> text,
+      "username" -> text,
+      "times" -> number,
+      "type" -> text
+    ) verifying ("空の項目があります。", result => result match {
+      case (u, n, t, a) if u.trim.isEmpty || n.trim.isEmpty || a.trim.isEmpty => false
+      case _ => true
+    })
+  )
+
+  def createArtisan = IsAuthenticated { userid => _ =>
+    Artisans.findById(userid).map { artisan =>
+      artisan.artisanType match {
+        case Admin | Master => Ok(views.html.artisan.createArtisan(artisanForm))
+        case Writer => Redirect(routes.Artisan.home)
+      }
+    }.getOrElse(Forbidden)
+  }
+
+  def postCreateArtisan = IsAuthenticated { userid => implicit request =>
+    Artisans.findById(userid).map { artisan =>
+      artisan.artisanType match {
+        case Admin | Master => artisanForm.bindFromRequest.fold(
+          formWithErrors => BadRequest(views.html.artisan.createArtisan(formWithErrors)),
+          { newArtisan =>
+            Artisans.create(newArtisan._1, newArtisan._2, Random.nextString(9), OrdInt(newArtisan._3.toInt), ArtisanType.fromString(newArtisan._4))
+            Redirect(routes.Artisan.home).flashing(
+              "success" -> "アカウントを作成しました。"
+            )
+          }
+        )
+      }
+    }.getOrElse(Forbidden)
   }
 }
