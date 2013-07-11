@@ -69,4 +69,8 @@ object Articles extends Table[Article]("ARTICLES") {
       query.filter(_.id === id).update(after)
     }
   }
+
+  def delete(id: Long) = db.withSession { implicit session: Session =>
+    query.filter(_.id === id).delete
+  }
 }

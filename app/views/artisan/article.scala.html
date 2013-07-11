@@ -26,6 +26,9 @@
 
   <a class="btn" href="@routes.Artisan.editArticle(article.id)">編集する</a>
 
+  <form method="post" action="@routes.Artisan.deleteArticle(article.id)">
+    <input type="submit" class="btn btn-danger" value="削除する">
+  </form>
 } {
   <h2>@article.title</h2>
 }

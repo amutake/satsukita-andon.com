@@ -55,6 +55,9 @@
 
   <a href="@routes.Artisan.editMyPassword()">パスワードの変更</a>
 
+  @if(acc.level == Admin) {
+    <a href="@routes.Artisan.editAccount(acc.id)">ユーザー情報の変更</a>
+  }
 
 } {
   <h2>@acc.username's Home</h2>

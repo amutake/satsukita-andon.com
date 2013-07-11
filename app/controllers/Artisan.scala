@@ -107,6 +107,13 @@ object Artisan extends Controller with Authentication {
     )
   }
 
+  def deleteArticle(id: Long) = IsEditableArticle(id) { _ => _ => _ =>
+    Articles.delete(id)
+    Redirect(routes.Artisan.home).flashing(
+      "success" -> "記事を削除しました"
+    )
+  }
+
   def accounts = HasAuthority(Master) { account => _ =>
     Ok(views.html.artisan.accounts(account, Accounts.all))
   }
