@@ -15,6 +15,8 @@ object Artisan extends Controller with Authentication {
 
   val notEmpty = pattern(".+".r, error = "値を入力してください。")
 
+  val notSpace = pattern("\\S+".r, error = "空白は含めません。")
+
   val loginForm = Form(
     tuple(
       "username" -> text.verifying(notEmpty),
@@ -126,8 +128,8 @@ object Artisan extends Controller with Authentication {
 
   val accountForm = Form(
     tuple(
-      "name" -> text.verifying(notEmpty),
-      "username" -> text.verifying(notEmpty).verifying(pattern("[a-z0-9]+".r, error = "半角英数字のみです。")),
+      "name" -> text.verifying(notEmpty).verifying(notSpace),
+      "username" -> text.verifying(notEmpty).verifying(pattern("\\w+".r, error = "半角英数字のみです。")),
       "times" -> number,
       "level" -> text.verifying(notEmpty).verifying(pattern("admin|master|writer".r, error = "不正な入力です。"))
     )
