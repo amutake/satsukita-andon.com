@@ -5,6 +5,8 @@ import play.api.mvc.RequestHeader
 import play.api.mvc.Result
 import play.api.mvc.Results._
 
+import java.util.Date
+
 import scala.slick.driver.H2Driver.simple._
 import scala.slick.jdbc.meta.MTable
 
@@ -69,6 +71,17 @@ object InitialData {
 
         Accounts.ins.insertAll(
           ("甲乙人", "kohotsunin", "9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684", 60, Admin)
+        )
+      }
+    }
+
+    if (Articles.all.isEmpty) {
+      db.withSession { implicit session: Session =>
+        val now = new Date()
+        Articles.ins.insertAll(
+          (1, 1, "", "", now, now, InfoTop),
+          (1, 1, "", "", now, now, About),
+          (1, 1, "", "", now, now, Contact)
         )
       }
     }

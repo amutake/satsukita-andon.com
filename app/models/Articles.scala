@@ -44,6 +44,10 @@ object Articles extends Table[Article]("ARTICLES") {
     query.filter(_.createAccountId === aId).list
   }
 
+  def findByType(t: ArticleType) = db.withSession { implicit session: Session =>
+    query.filter(_.articleType === t).list
+  }
+
   def all = db.withSession { implicit session: Session =>
     query.list
   }

@@ -13,41 +13,15 @@
   <h3>@account.nameさんが編集可能な記事</h3>
 
   @if(account.level != Writer) {
-    <h4>InfoTop</h4>
-    <ul>
-      @articles.filter(_.articleType == InfoTop).map { article =>
-        <li><a href="@routes.Artisan.article(article.id)">@article.title</a></li>
-      }
-    </ul>
-
-    <h4>Info</h4>
-    <ul>
-      @articles.filter(_.articleType == Info).map { article =>
-        <li><a href="@routes.Artisan.article(article.id)">@article.title</a></li>
-      }
-    </ul>
+    @Seq(InfoTop, Info, About, Contact).map { a =>
+      <h4>@a</h4>
+      <ul>
+        @articles.filter(_.articleType == a).map { article =>
+          <li><a href="@routes.Artisan.article(article.id)">@article.title</a></li>
+        }
+      </ul>
+    }
   }
-
-  <h4>Howto</h4>
-  <ul>
-    @articles.filter(_.articleType == Howto("")).map { article =>
-      <li><a href="@routes.Artisan.article(article.id)">@article.title</a></li>
-    }
-  </ul>
-
-  <h4>About</h4>
-  <ul>
-    @articles.filter(_.articleType == About).map { article =>
-      <li><a href="@routes.Artisan.article(article.id)">@article.title</a></li>
-    }
-  </ul>
-
-  <h4>Contact</h4>
-  <ul>
-    @articles.filter(_.articleType == Contact).map { article =>
-      <li><a href="@routes.Artisan.article(article.id)">@article.title</a></li>
-    }
-  </ul>
 
   <a href="@routes.Artisan.createArticle()">記事を書く</a>
 } {

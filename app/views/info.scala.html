@@ -1,3 +1,5 @@
+@import andon.utils._
+
 @common("Information") {
 } {
 
@@ -13,6 +15,16 @@
   <p>記事の執筆者を募集しております。興味のある方は<a href="@routes.Application.contact">Contactページ</a>の連絡先までご連絡ください。
   </p>
 
+  <hr>
+
+  <div class="article">
+    @Articles.findByType(Info).map { article =>
+      <h3>@article.title</h3>
+      <p class="author">Author: @Accounts.findById(article.createAccountId).map(_.name).getOrElse("?"), Date: @Util.dateFormat(article.updateDate)</p>
+
+      @Markdown.escape(article.text)
+    }
+  </div>
 } {
   <h2>Information</h2>
 }
