@@ -132,7 +132,7 @@ object Artisan extends Controller with Authentication {
   }
 
   def postCreateAccount = HasAuthority(Master) { acc => implicit request =>
-    accountForm.bindFromRequest.fold(
+    createAccountForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.artisan.createAccount(acc, formWithErrors)),
       { newacc =>
         val pass = Random.alphanumeric.take(9).mkString
