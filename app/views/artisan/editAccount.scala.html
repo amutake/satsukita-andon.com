@@ -1,4 +1,4 @@
-@(form: Form[(Int, String, String, Int, String)], account: Account)
+@(acc: Account, form: Form[(String, String, Int, String)])
 
 @import andon.utils._
 
@@ -7,14 +7,14 @@
   <ul class="breadcrumb">
     <li><a href="@routes.Artisan.home()">Home</a> <span class="divider">/</span></li>
     <li><a href="@routes.Artisan.accounts()">アカウント一覧</a> <span class="divider">/</span></li>
-    <li><a href="@routes.Artisan.account(account.id)">アカウント詳細</a> <span class="divider">/</span></li>
+    <li><a href="@routes.Artisan.account(acc.id)">アカウント詳細</a> <span class="divider">/</span></li>
     <li class="active">アカウント編集</li>
     <li class="pull-right"><a href="@routes.Artisan.logout()"><button class="btn">ログアウト</button></a></li>
   </ul>
 
   <h3>アカウントの編集</h3>
 
-  @helper.form(routes.Artisan.postEditAccount) {
+  @helper.form(routes.Artisan.postEditAccount(acc.id)) {
 
     @form.globalError.map { error =>
       <p class="error">
@@ -22,39 +22,37 @@
       </p>
     }
 
-    <input type="hidden" name="id" value="@account.id">
+    @helper.inputText(
+      form("name"),
+      '_label -> "名前",
+      '_help -> ""
+    )
 
-    <p>名前:<br>
-      <input type="text" name="name" value="@account.name">
-    </p>
+    @helper.inputText(
+      form("username"),
+      '_label -> "ユーザー名",
+      '_help -> ""
+    )
 
-    <p>ユーザー名(半角英数字):<br>
-      <input type="text" name="username" value="@account.username">
-    </p>
+    @helper.select(
+      form("times"),
+      options = {
+        val all = TimesData.all
+        all.map(_.times.n.toString).zip(all.map(_.times.toString))
+      },
+      '_label -> "卒業期",
+      '_help -> ""
+    )
 
-    <p>卒業年:<br>
-      <select name="times">
-        @TimesData.all.map { t =>
-          @if(t.times == account.times) {
-            <option value="@t.times.n" selected>@t.times</option>
-          } else {
-            <option value="@t.times.n">@t.times</option>
-          }
-        }
-      </select>
-    </p>
-
-    <p>アカウントレベル:<br>
-      <select name="level">
-        @Seq(Admin, Master, Writer).map { l =>
-          @if(l == account.level) {
-            <option value="@l" selected>@l.toJapanese</option>
-          } else {
-            <option value="@l">@l.toJapanese</option>
-          }
-        }
-      </select>
-    </p>
+    @helper.select(
+      form("level"),
+      options = {
+        val all = Seq(Admin, Master, Writer)
+        all.map(_.toString).zip(all.map(_.toJapanese))
+      },
+      '_label -> "アカウントレベル",
+      '_help -> ""
+    )
 
     <button class="btn" type="submit">送信</button>
   }
