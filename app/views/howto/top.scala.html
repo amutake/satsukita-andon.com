@@ -103,7 +103,7 @@
     <ul>
     @articles._2.map { article =>
       <li>
-        <a href="#"><i class="icon-file icon-white"></i>@article.title</a>
+        <a href="@routes.Application.howtoArticle(article.id)"><i class="icon-file icon-white"></i>@article.title</a>
         Author: @Accounts.findById(article.createAccountId).map { acc =>
           @acc.name (@acc.times)
         }.getOrElse("?")

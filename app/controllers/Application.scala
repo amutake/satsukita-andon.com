@@ -76,6 +76,12 @@ object Application extends Controller {
     }
   }
 
+  def howtoArticle(id: Long) = Action { request =>
+    Articles.findById(id).map { article =>
+      Ok(views.html.howto.article(article))
+    }.getOrElse(NotFound(views.html.errors.notFound(request.path)))
+  }
+
   def about = Action {
     Ok(views.html.about())
   }

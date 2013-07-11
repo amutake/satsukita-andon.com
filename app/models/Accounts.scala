@@ -59,6 +59,10 @@ object Accounts extends Table[Account]("ACCOUNTS") {
     qs.reduce(_ union _).list
   }
 
+  def findNameById(id: Int) = db.withSession { implicit session: Session =>
+    query.filter(_.id === id).map(_.name).firstOption.getOrElse("?")
+  }
+
   def create(name: String, username: String, password: String, times: OrdInt, level: AccountLevel) = db.withSession { implicit session: Session =>
     Accounts.ins.insert(name, username, sha1(password), times.n, level)
   }
