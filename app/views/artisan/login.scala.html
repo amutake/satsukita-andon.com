@@ -18,10 +18,19 @@
       </p>
     }
 
-    <p>ユーザー名: <input type="text" name="username" value="@form("username").value"><p>
-    <p>パスワード: <input type="password" name="password"></p>
+    @helper.inputText(
+      form("username"),
+      '_label -> "ユーザー名",
+      '_help -> ""
+    )
 
-    <p><button class="btn" type="submit">Login</button></p>
+    @helper.inputPassword(
+      form("password"),
+      '_label -> "パスワード",
+      '_help -> ""
+    )
+
+    <input type="submit" class="btn" value="ログイン">
   }
 } {
   <h2>Sign in</h2>

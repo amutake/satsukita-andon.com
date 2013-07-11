@@ -13,10 +13,12 @@ import andon.utils._
 
 object Artisan extends Controller with Authentication {
 
+  val notEmpty = pattern(".+".r, error = "値を入力してください。")
+
   val loginForm = Form(
     tuple(
-      "username" -> text,
-      "password" -> text
+      "username" -> text.verifying(notEmpty),
+      "password" -> text.verifying(notEmpty)
     ) verifying ("ユーザー名かパスワードが間違っています。", result => result match {
       case (username, password) => Accounts.authenticate(username, password).isDefined
     })
@@ -93,8 +95,6 @@ object Artisan extends Controller with Authentication {
       Ok(views.html.artisan.account(me, acc))
     }.getOrElse(Results.NotFound(views.html.errors.notFound("/artisan/account?id=" + id.toString)))
   }
-
-  val notEmpty = pattern(".+".r, error = "値を入力してください。")
 
   val accountForm = Form(
     tuple(
