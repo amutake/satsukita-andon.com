@@ -10,7 +10,7 @@ import java.util.Date
 
 import andon.utils._
 
-case class Article(id: Long, createAccountId: Int, updateAccountId: Int, title: String, text: String, createDate: Date, updateDate: Date, articleType: ArticleType)
+case class Article(id: Long, createAccountId: Int, updateAccountId: Int, title: String, text: String, createDate: Date, updateDate: Date, articleType: ArticleType, genre: String)
 
 object Articles extends Table[Article]("ARTICLES") {
 
@@ -29,10 +29,11 @@ object Articles extends Table[Article]("ARTICLES") {
   def createDate = column[Date]("CREATE_DATE", O.NotNull)
   def updateDate = column[Date]("UPDATE_DATE", O.NotNull)
   def articleType = column[ArticleType]("ARTICLE_TYPE", O.NotNull)
+  def genre = column[String]("GENRE", O.NotNull)
 
-  def * = id ~ createAccountId ~ updateAccountId ~ title ~ text ~ createDate ~ updateDate ~ articleType <> (Article.apply _, Article.unapply _)
+  def * = id ~ createAccountId ~ updateAccountId ~ title ~ text ~ createDate ~ updateDate ~ articleType ~ genre <> (Article.apply _, Article.unapply _)
 
-  def ins = createAccountId ~ updateAccountId ~ title ~ text ~ createDate ~ updateDate ~ articleType returning id
+  def ins = createAccountId ~ updateAccountId ~ title ~ text ~ createDate ~ updateDate ~ articleType ~ genre returning id
 
   val query = Query(Articles)
 
@@ -48,19 +49,23 @@ object Articles extends Table[Article]("ARTICLES") {
     query.filter(_.articleType === t).list
   }
 
+  def findByGenre(g: String) = db.withSession { implicit session: Session =>
+    query.filter(_.genre === g).list
+  }
+
   def all = db.withSession { implicit session: Session =>
     query.list
   }
 
-  def create(accountId: Int, title: String, text: String, articleType: ArticleType) = db.withSession { implicit session: Session =>
+  def create(accountId: Int, title: String, text: String, articleType: ArticleType, genre: String) = db.withSession { implicit session: Session =>
     val date = new Date()
-    Articles.ins.insert(accountId, accountId, title, text, date, date, articleType)
+    Articles.ins.insert(accountId, accountId, title, text, date, date, articleType, genre)
   }
 
-  def update(id: Long, accountId: Int, title: String, text: String) = db.withSession { implicit session: Session =>
+  def update(id: Long, accountId: Int, title: String, text: String, genre: String) = db.withSession { implicit session: Session =>
     findById(id).map { before =>
       val date = new Date()
-      val after = before.copy(updateAccountId = accountId, title = title, text = text, updateDate = date)
+      val after = before.copy(updateAccountId = accountId, title = title, text = text, updateDate = date, genre = genre)
       query.filter(_.id === id).update(after)
     }
   }

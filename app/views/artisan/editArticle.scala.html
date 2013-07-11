@@ -1,4 +1,4 @@
-@(id: Long, form: Form[(String, String, String)])
+@(id: Long, form: Form[(String, String, String, String)])
 
 @common("記事の編集") {
 } {
@@ -21,6 +21,12 @@
     }
 
     <input type="hidden" name="type" value="@form("type").value">
+
+    @helper.inputText(
+      form("genre"),
+      '_label -> "ジャンル",
+      '_help -> ""
+    )
 
     @helper.inputText(
       form("title"),

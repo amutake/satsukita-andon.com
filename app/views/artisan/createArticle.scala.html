@@ -1,4 +1,4 @@
-@(form: Form[(String, String, String)])
+@(form: Form[(String, String, String, String)])
 
 @import andon.utils._
 
@@ -24,6 +24,12 @@
       form("type"),
       options = helper.options(List(Info).map(_.toString)),
       '_label -> "記事の種類",
+      '_help -> ""
+    )
+
+    @helper.inputText(
+      form("genre"),
+      '_label -> "ジャンル",
       '_help -> ""
     )
 

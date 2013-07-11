@@ -97,7 +97,7 @@ object InitialData {
 # 執筆者募集
 
 記事の執筆者を募集しております。興味のある方は[Contactページ](http://satsukita-andon.com/contact)の連絡先までご連絡ください。
-""", now, now, InfoTop),
+""", now, now, InfoTop, ""),
           (1, 1, "About", """
 このサイトは札幌北高校の学校祭の行事である行灯行列の記録とその製作を支援するために、初代管理人の遊び人(51st)とその仲間たちによって作られたサイトです。
 
@@ -109,14 +109,14 @@ object InitialData {
 # 掲載画像について
 
 掲載されている画像には、個人の顔が写っている写真もあります。不都合がある場合にはお知らせください。即刻削除致します。
-""", now, now, About),
+""", now, now, About, ""),
           (1, 1, "Contact", """
 このサイトに関する意見、要望、バグなど、また、甲乙人個人へのお問い合わせは下記の連絡先までご連絡ください。
 
 - メールアドレス: andon.kohotsunin [at] gmail.com
 - Twitter: [甲乙人](https://twitter.com/kohotsunin)
 - GitHub: [行灯職人への道のGitHubリポジトリ](https://github.com/amkkun/satsukita-andon.com)へのPull RequestまたはIssue登録
-""", now, now, Contact)
+""", now, now, Contact, "")
         )
       }
     }

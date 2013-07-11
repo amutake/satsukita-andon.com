@@ -64,8 +64,8 @@ object Artisan extends Controller with Authentication {
     tuple(
       "title" -> text.verifying(notEmpty),
       "text" -> text.verifying(pattern("""[\s\S]+""".r, error = "本文を入力してください")),
-      "type" -> text.verifying(notEmpty).verifying(pattern("info_top|info|about|contact".r, error = "不正な入力です。"))
-      // "genre" -> option(text)
+      "type" -> text.verifying(notEmpty).verifying(pattern("info_top|info|about|contact".r, error = "不正な入力です。")),
+      "genre" -> text
     )
   )
 
@@ -77,7 +77,7 @@ object Artisan extends Controller with Authentication {
     articleForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.artisan.createArticle(formWithErrors)),
       { article =>
-        val id = Articles.create(userid, article._1, article._2, ArticleType.fromString(article._3))
+        val id = Articles.create(userid, article._1, article._2, ArticleType.fromString(article._3), article._4)
         Redirect(routes.Artisan.article(id)).flashing(
           "success" -> "記事を作成しました。"
         )
@@ -86,7 +86,7 @@ object Artisan extends Controller with Authentication {
   }
 
   def editArticle(id: Long) = IsEditableArticle(id) { acc => art => _ =>
-    val data = (art.title, art.text, art.articleType.toString)
+    val data = (art.title, art.text, art.articleType.toString, art.genre)
     Ok(views.html.artisan.editArticle(id, articleForm.fill(data)))
   }
 
@@ -94,7 +94,7 @@ object Artisan extends Controller with Authentication {
     articleForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.artisan.editArticle(id, formWithErrors)),
       article => {
-        Articles.update(id, acc.id, article._1, article._2)
+        Articles.update(id, acc.id, article._1, article._2, article._4)
         Redirect(routes.Artisan.article(id)).flashing(
           "success" -> "記事を編集しました。"
         )
