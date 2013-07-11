@@ -27,8 +27,8 @@
   @if((me.level == Admin && acc.level != Admin) ||
     (me.level == Master && acc.level == Writer)) {
     <p><a href="@routes.Artisan.editPassword(acc.id)">パスワードの変更</a></p>
-    <form method="POST" action="@routes.Artisan.deleteAccount(acc.id)">
-      <input type="submit" value="アカウントの削除">
+    <p><a class="delete-submit" href="#">アカウントの削除</a></p>
+    <form class="delete-form" method="POST" action="@routes.Artisan.deleteAccount(acc.id)">
     </form>
   }
 } {

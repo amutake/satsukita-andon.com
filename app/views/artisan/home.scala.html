@@ -53,14 +53,14 @@
     <dd>@acc.level.toJapanese</dd>
   </dl>
 
-  <a href="@routes.Artisan.editMyPassword()">パスワードの変更</a>
+  <a class="btn" href="@routes.Artisan.editMyPassword()">パスワードの変更</a>
 
   @if(acc.level == Admin) {
-    <a href="@routes.Artisan.editAccount(acc.id)">ユーザー情報の変更</a>
+    <a class="btn" href="@routes.Artisan.editAccount(acc.id)">ユーザー情報の変更</a>
   }
 
-  <form method="POST" action="@routes.Artisan.deleteMyAccount">
-    <input type="submit" class="btn btn-danger" value="アカウントの削除">
+  <a href="#" class="delete-submit btn btn-danger">アカウントの削除</a>
+  <form class="delete-form" method="POST" action="@routes.Artisan.deleteMyAccount">
   </form>
 
 } {
