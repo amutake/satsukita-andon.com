@@ -17,8 +17,8 @@
     @Articles.findByType(Info).map { article =>
       <h3 class="title">@article.title</h3>
       <p>
-        <span class="date">@Util.dateFormat(article.updateDate)</span>
-        <span class="author">Posted by @Accounts.findNameById(article.createAccountId)</span>
+        <span class="date">create: @Util.dateFormat(article.createDate) update: @Util.dateFormat(article.updateDate)</span>
+        <span class="author">Created by @Accounts.findNameById(article.createAccountId) Last Updated by @Accounts.findNameById(article.updateAccountId)</span>
       </p>
 
       @Conv.markdown(article.text)

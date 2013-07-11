@@ -46,7 +46,7 @@ object Articles extends Table[Article]("ARTICLES") {
   }
 
   def findByType(t: ArticleType) = db.withSession { implicit session: Session =>
-    query.filter(_.articleType === t).list
+    query.filter(_.articleType === t).sortBy(_.id.desc).list
   }
 
   def findByGenre(g: String) = db.withSession { implicit session: Session =>

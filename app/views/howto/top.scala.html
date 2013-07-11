@@ -104,8 +104,8 @@
     @articles._2.map { article =>
       <li>
         <a href="@routes.Application.howtoArticle(article.id)"><i class="icon-file icon-white"></i>@article.title</a>
-        Author: @Accounts.findNameById(article.createAccountId)
-        Date: @Util.dateFormat(article.updateDate)
+        Created by @Accounts.findNameById(article.createAccountId), Updated by @Accounts.findNameById(article.updateAccountId)
+        Create: @Util.dateFormat(article.createDate), Last Update: @Util.dateFormat(article.updateDate)
       </li>
     }
     </ul>
