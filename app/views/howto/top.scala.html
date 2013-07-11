@@ -1,3 +1,5 @@
+@import andon.utils._
+
 @page(url: String, title: String, author: String, date: String) = {
   <li><a href="@routes.Application.eachHowto(url)">
     <i class="icon-file icon-white"></i>@title
@@ -95,6 +97,22 @@
     @file("file/sketchup/6th3-9_gs.skp", "SketchUpファイル(60th3-9)", "甲乙人(60期)", "?")
     @file("file/sketchup/58th3-3_gs.skp", "SketchUpファイル(58th3-3)", "?(58期)", "?")
   </ul>
+
+  @Articles.findByType(Howto).groupBy(_.genre).map { articles =>
+    <h4>@articles._1</h4>
+    <ul>
+    @articles._2.map { article =>
+      <li>
+        <a href="#"><i class="icon-file icon-white"></i>@article.title</a>
+        Author: @Accounts.findById(article.createAccountId).map { acc =>
+          @acc.name (@acc.times)
+        }.getOrElse("?")
+        Date: @Util.dateFormat(article.updateDate)
+      </li>
+    }
+    </ul>
+  }
+
 } {
   <h2>How to</h2>
 }

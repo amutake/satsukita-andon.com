@@ -64,7 +64,7 @@ object Artisan extends Controller with Authentication {
     tuple(
       "title" -> text.verifying(notEmpty),
       "text" -> text.verifying(pattern("""[\s\S]+""".r, error = "本文を入力してください")),
-      "type" -> text.verifying(notEmpty).verifying(pattern(ArticleType.all.mkString("", "|", "").r, error = "不正な入力です。")),
+      "type" -> text.verifying(notEmpty).verifying(pattern(ArticleType.all.mkString("|").r, error = "不正な入力です。")),
       "genre" -> text
     )
   )
