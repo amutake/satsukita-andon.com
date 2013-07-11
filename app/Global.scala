@@ -79,9 +79,27 @@ object InitialData {
       db.withSession { implicit session: Session =>
         val now = new Date()
         Articles.ins.insertAll(
-          (1, 1, "", "", now, now, InfoTop),
-          (1, 1, "", "", now, now, About),
-          (1, 1, "", "", now, now, Contact)
+          (1, 1, "InfoTop", """
+# 2013年度の行灯行列について
+
+2013年度(64th)の行灯行列は7/5(金)に行われました。現役生および教職員、保護者の皆様、お疲れ様でした。
+
+
+# 管理人募集
+
+六代目管理人を募集しております。興味のある方は[Contactページ](http://satsukita-andon.com/contact)の連絡先までご連絡ください。
+
+条件 : 行灯が好き ・ 62nd ~ 64th(64thの方は卒業後) ・ 浪人生でない
+
+※Web制作に関する知識は必要ありません。
+
+
+# 執筆者募集
+
+記事の執筆者を募集しております。興味のある方は[Contactページ](http://satsukita-andon.com/contact)の連絡先までご連絡ください。
+""", now, now, InfoTop),
+          (1, 1, "About", "", now, now, About),
+          (1, 1, "Contact", "", now, now, Contact)
         )
       }
     }
