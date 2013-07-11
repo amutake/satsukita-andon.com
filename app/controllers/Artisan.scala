@@ -159,4 +159,32 @@ object Artisan extends Controller with Authentication {
       }
     )
   }
+
+  val passwordForm = Form(
+    tuple(
+      "yourpass" -> text.verifying(notEmpty),
+      "password" -> text.verifying(notEmpty),
+      "confirm" -> text.verifying(notEmpty)
+    ).verifying("パスワードが一致しません", result => result match {
+      case (_, c, p) => c == p
+    })
+  )
+
+  def editMyPassword = IsValidAccount { acc => _ =>
+    Ok(views.html.artisan.editMyPassword(passwordForm))
+  }
+
+  def postEditMyPassword = IsValidAccount { acc => implicit request =>
+    passwordForm.bindFromRequest.fold(
+      formWithErrors => BadRequest(views.html.artisan.editMyPassword(formWithErrors)),
+      pass => if (acc.validPassword(pass._1)) {
+        Accounts.updatePassword(acc.id, pass._2)
+        Redirect(routes.Artisan.home).flashing(
+          "success" -> "パスワードを変更しました。"
+        )
+      } else {
+        BadRequest(views.html.artisan.editMyPassword(passwordForm.withGlobalError("パスワードが間違っています。")))
+      }
+    )
+  }
 }

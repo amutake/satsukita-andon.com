@@ -8,7 +8,9 @@ import scala.slick.driver.H2Driver.simple._
 
 import andon.utils._
 
-case class Account(id: Int, name: String, username: String, password: String, times: OrdInt, level: AccountLevel)
+case class Account(id: Int, name: String, username: String, password: String, times: OrdInt, level: AccountLevel) {
+  def validPassword(pass: String) = sha1(pass) == password
+}
 
 object Accounts extends Table[Account]("ACCOUNTS") {
 
@@ -66,5 +68,9 @@ object Accounts extends Table[Account]("ACCOUNTS") {
       val after = Account(id, name, username, before.password, times, level)
       Accounts.filter(_.id === id).update(after)
     }
+  }
+
+  def updatePassword(id: Int, password: String) = db.withSession { implicit session: Session =>
+    Accounts.filter(_.id === id).map(_.password).update(sha1(password))
   }
 }
