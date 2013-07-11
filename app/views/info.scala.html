@@ -19,8 +19,11 @@
 
   <div class="article">
     @Articles.findByType(Info).map { article =>
-      <h3>@article.title</h3>
-      <p class="author">Author: @Accounts.findById(article.createAccountId).map(_.name).getOrElse("?"), Date: @Util.dateFormat(article.updateDate)</p>
+      <h3 class="title">@article.title</h3>
+      <p>
+        <span class="date">@Util.dateFormat(article.updateDate)</span>
+        <span class="author">Posted by @Accounts.findById(article.createAccountId).map(_.name).getOrElse("?")</span>
+      </p>
 
       @Markdown.escape(article.text)
     }
