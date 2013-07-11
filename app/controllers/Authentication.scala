@@ -19,14 +19,14 @@ trait Authentication {
   def IsValidAccount(f: => Account => Request[AnyContent] => Result) = IsAuthenticated { userid => request =>
     Accounts.findById(userid).map { account =>
       f(account)(request)
-    }.getOrElse(Results.Forbidden)
+    }.getOrElse(Results.Forbidden(views.html.errors.forbidden()))
   }
 
   def HasAuthority(level: AccountLevel)(f: => Account => Request[AnyContent] => Result) = IsValidAccount { account => request =>
     if (AccountLevel.gte(account.level, level)) {
       f(account)(request)
     } else {
-      Results.Forbidden
+      Results.Forbidden(views.html.errors.forbidden())
     }
   }
 
@@ -52,7 +52,7 @@ trait Authentication {
         if (a.createAccountId == account.id) {
           f(account)(a)(request)
         } else {
-          Results.Forbidden
+          Results.Forbidden(views.html.errors.forbidden())
         }
       }
     }).getOrElse(Results.NotFound(views.html.errors.notFound("/artisan/article?id=" + id.toString)))
@@ -64,7 +64,7 @@ trait Authentication {
       val mine = id == me.id
       me.level match {
         case Admin if mine || l != Admin => f(me)(account)(request)
-        case _ => Results.Forbidden
+        case _ => Results.Forbidden(views.html.errors.forbidden())
       }
     }.getOrElse(Results.NotFound(views.html.errors.notFound("/artisan/account/edit?id=" + id.toString)))
   }

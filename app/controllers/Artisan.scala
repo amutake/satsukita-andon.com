@@ -31,7 +31,7 @@ object Artisan extends Controller with Authentication {
       { account =>
         Accounts.findByUsername(account._1).map { account_ =>
           Redirect(routes.Artisan.home).withSession("userid" -> account_.id.toString)
-        }.getOrElse(Forbidden)
+        }.getOrElse(Forbidden(views.html.errors.forbidden()))
       }
     )
   }
