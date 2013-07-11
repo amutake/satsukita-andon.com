@@ -51,13 +51,13 @@ object Artisan extends Controller with Authentication {
 
   def articles = IsValidAccount { account => _ =>
     account.level match {
-      case Admin | Master => Ok(views.html.artisan.articles(account, Articles.all))
-      case Writer => Ok(views.html.artisan.articles(account, Articles.findByCreateAccountId(account.id)))
+      case Admin | Master => Ok(views.html.artisan.articles(Articles.all))
+      case Writer => Ok(views.html.artisan.articles(Articles.findByCreateAccountId(account.id)))
     }
   }
 
-  def article(id: Long) = IsEditableArticle(id) { account => article => implicit request =>
-    Ok(views.html.artisan.article(account, article))
+  def article(id: Long) = IsEditableArticle(id) { _ => article => implicit request =>
+    Ok(views.html.artisan.article(article))
   }
 
   val articleForm = Form(

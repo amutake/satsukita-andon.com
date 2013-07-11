@@ -1,4 +1,4 @@
-@(account: Account, article: Article)(implicit flash: Flash)
+@(article: Article)(implicit flash: Flash)
 
 @import andon.utils._
 
@@ -21,7 +21,7 @@
     @Conv.markdown(article.text)
   </div>
 
-  <p id="author">Author: @account.name  Date: @Util.dateFormat(article.updateDate)</p>
+  <p id="author">Author: @Accounts.findNameById(article.createAccountId)  Date: @Util.dateFormat(article.updateDate)</p>
 
 
   <a href="@routes.Artisan.editArticle(article.id)">編集する</a>

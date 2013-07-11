@@ -18,7 +18,7 @@
       <h3 class="title">@article.title</h3>
       <p>
         <span class="date">@Util.dateFormat(article.updateDate)</span>
-        <span class="author">Posted by @Accounts.findById(article.createAccountId).map(_.name).getOrElse("?")</span>
+        <span class="author">Posted by @Accounts.findNameById(article.createAccountId)</span>
       </p>
 
       @Conv.markdown(article.text)
