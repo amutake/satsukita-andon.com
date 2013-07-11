@@ -56,4 +56,12 @@ object Articles extends Table[Article]("ARTICLES") {
     val date = new Date()
     Articles.ins.insert(accountId, accountId, title, text, date, date, articleType)
   }
+
+  def update(id: Long, accountId: Int, title: String, text: String) = db.withSession { implicit session: Session =>
+    findById(id).map { before =>
+      val date = new Date()
+      val after = before.copy(updateAccountId = accountId, title = title, text = text, updateDate = date)
+      query.filter(_.id === id).update(after)
+    }
+  }
 }

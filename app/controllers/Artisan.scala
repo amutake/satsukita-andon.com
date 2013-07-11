@@ -64,7 +64,7 @@ object Artisan extends Controller with Authentication {
     tuple(
       "title" -> text.verifying(notEmpty),
       "text" -> text.verifying(pattern("""[\s\S]+""".r, error = "本文を入力してください")),
-      "type" -> text.verifying(notEmpty).verifying(pattern("info".r, error = "不正な入力です。"))
+      "type" -> text.verifying(notEmpty).verifying(pattern("info_top|info|about|contact".r, error = "不正な入力です。"))
       // "genre" -> option(text)
     )
   )
@@ -80,6 +80,23 @@ object Artisan extends Controller with Authentication {
         val id = Articles.create(userid, article._1, article._2, ArticleType.fromString(article._3))
         Redirect(routes.Artisan.article(id)).flashing(
           "success" -> "記事を作成しました。"
+        )
+      }
+    )
+  }
+
+  def editArticle(id: Long) = IsEditableArticle(id) { acc => art => _ =>
+    val data = (art.title, art.text, art.articleType.toString)
+    Ok(views.html.artisan.editArticle(id, articleForm.fill(data)))
+  }
+
+  def postEditArticle(id: Long) = IsEditableArticle(id) { acc => art => implicit request =>
+    articleForm.bindFromRequest.fold(
+      formWithErrors => BadRequest(views.html.artisan.editArticle(id, formWithErrors)),
+      article => {
+        Articles.update(id, acc.id, article._1, article._2)
+        Redirect(routes.Artisan.article(id)).flashing(
+          "success" -> "記事を編集しました。"
         )
       }
     )
@@ -143,7 +160,7 @@ object Artisan extends Controller with Authentication {
       },
       { case (name, username, times, level) =>
         val l = AccountLevel.fromString(level)
-        Accounts.update(id.toInt, name, username, OrdInt(times.toInt), l)
+        Accounts.update(id, name, username, OrdInt(times.toInt), l)
         Redirect(routes.Artisan.home).flashing(
           "success" -> "アカウントを編集しました。"
         )
