@@ -1,15 +1,15 @@
-@(account: Account)(implicit flash: Flash)
+@(acc: Account)(implicit flash: Flash)
 
 @import andon.utils._
 
-@common(account.username + "'s Home") {
+@common(acc.username + "'s Home") {
 } {
   <ul class="breadcrumb">
     <li class="active">Home</li>
     <li class="pull-right"><a href="@routes.Artisan.logout()"><button class="btn">ログアウト</button></a></li>
   </ul>
 
-  <h3>@account.name さん</h3>
+  <h3>@acc.name さん</h3>
 
   @flash.get("success").map { message =>
     <p class="success">
@@ -23,7 +23,7 @@
     </p>
   }
 
-  @if(account.level != Writer) {
+  @if(acc.level != Writer) {
 
     <p><a href="@routes.Artisan.accounts()">アカウント一覧</a></p>
 
@@ -35,6 +35,27 @@
 
   <p><a href="@routes.Artisan.createArticle()">記事の作成</a></p>
 
+
+  <dl>
+    <dt>ID</dt>
+    <dd>@acc.id</dd>
+
+    <dt>名前</dt>
+    <dd>@acc.name</dd>
+
+    <dt>ユーザー名</dt>
+    <dd>@acc.username</dd>
+
+    <dt>卒業期</dt>
+    <dd>@acc.times</dd>
+
+    <dt>アカウントレベル</dt>
+    <dd>@acc.level.toJapanese</dd>
+  </dl>
+
+  <a href="@routes.Artisan.editMyPassword()">パスワードの変更</a>
+
+
 } {
-  <h2>@account.username's Home</h2>
+  <h2>@acc.username's Home</h2>
 }
