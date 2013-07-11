@@ -1,4 +1,4 @@
-@(account: Account, article: Article)
+@(account: Account, article: Article)(implicit flash: Flash)
 
 @import andon.utils._
 
@@ -10,6 +10,12 @@
     <li class="active">記事詳細</li>
     <li class="pull-right"><a href="@routes.Artisan.logout()"><button class="btn">ログアウト</button></a></li>
   </ul>
+
+  @flash.get("success").map { message =>
+    <p class="success">
+      @message
+    </p>
+  }
 
   @Markdown.escape(article.text)
 

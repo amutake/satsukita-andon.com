@@ -1,5 +1,7 @@
 @(form: Form[(String, String, String)])
 
+@import andon.utils._
+
 @common("Write Article") {
 } {
   <ul class="breadcrumb">
@@ -18,20 +20,27 @@
       </p>
     }
 
-    <p>記事の種類:
-      <select name="type">
-        <option value="info">Info</option>
-        <option value="howto_harigane">Howto</option>
-      </select>
-    </p>
+    @helper.select(
+      form("type"),
+      options = helper.options(List(Info).map(_.toString)),
+      '_label -> "記事の種類",
+      '_help -> ""
+    )
 
-    <p>タイトル:<br>
-      <input class="wide" type="text" name="title">
-    </p>
+    @helper.inputText(
+      form("title"),
+      '_label -> "タイトル",
+      '_help -> "",
+      'class -> "wide"
+    )
 
-    <p>本文:<br>
-      <textarea class="wide" name="text" cols="80" rows="20"></textarea>
-    </p>
+    @helper.textarea(
+      form("text"),
+      '_label -> "本文",
+      '_help -> "",
+      'class -> "wide",
+      'rows -> 20
+    )
 
     <button class="btn" type="submit">送信</button>
   }

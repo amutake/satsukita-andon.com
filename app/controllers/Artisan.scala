@@ -56,20 +56,17 @@ object Artisan extends Controller with Authentication {
     }
   }
 
-  def article(id: Long) = IsEditableArticle(id) { account => article => _ =>
+  def article(id: Long) = IsEditableArticle(id) { account => article => implicit request =>
     Ok(views.html.artisan.article(account, article))
   }
 
   val articleForm = Form(
     tuple(
-      "title" -> text,
-      "text" -> text,
-      "type" -> text
-    ) verifying ("タイトルまたは本文が空です。", result => result match {
-      case ("", _, _) => false
-      case (_, "", _) => false
-      case (_, _, _) => true
-    })
+      "title" -> text.verifying(notEmpty),
+      "text" -> text.verifying(pattern("""[\s\S]+""".r, error = "本文を入力してください")),
+      "type" -> text.verifying(notEmpty).verifying(pattern("info".r, error = "不正な入力です。"))
+      // "genre" -> option(text)
+    )
   )
 
   def createArticle = IsAuthenticated { _ => _ =>
@@ -80,8 +77,10 @@ object Artisan extends Controller with Authentication {
     articleForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.artisan.createArticle(formWithErrors)),
       { article =>
-        Articles.create(userid, article._1, article._2, ArticleType.fromString(article._3))
-        Redirect(routes.Artisan.articles)
+        val id = Articles.create(userid, article._1, article._2, ArticleType.fromString(article._3))
+        Redirect(routes.Artisan.article(id)).flashing(
+          "success" -> "記事を作成しました。"
+        )
       }
     )
   }
