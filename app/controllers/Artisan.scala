@@ -6,6 +6,7 @@ import play.api._
 import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
+import play.api.data.validation.Constraints._
 
 import models._
 import andon.utils._
@@ -93,15 +94,16 @@ object Artisan extends Controller with Authentication {
     }.getOrElse(Results.NotFound(views.html.errors.notFound("/artisan/account?id=" + id.toString)))
   }
 
+  val notEmpty = pattern(".+".r, error = "値を入力してください。")
+
   val accountForm = Form(
     tuple(
-      "name" -> text,
-      "username" -> text,
+      "name" -> text.verifying(notEmpty),
+      "username" -> text.verifying(notEmpty).verifying(pattern("[a-zA-Z0-9]+".r, error = "半角英数字のみです。")),
       "times" -> number,
-      "level" -> text
-    ) verifying ("空の項目があります。", result => result match {
-      case (u, n, t, l) if u.trim.isEmpty || n.trim.isEmpty || l.trim.isEmpty => false
-      case _ => true
+      "level" -> text.verifying(notEmpty).verifying(pattern("admin|master|writer".r, error = "不正な入力です。"))
+    ).verifying("そのユーザー名は既に使われています。", result => result match {
+      case (_, u, _, _) => !Accounts.all.map(_.username).contains(u)
     })
   )
 
