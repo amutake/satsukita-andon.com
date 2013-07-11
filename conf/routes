@@ -35,8 +35,10 @@ GET     /artisan/account/edit       controllers.Artisan.editAccount(id: Int)
 POST    /artisan/account/edit       controllers.Artisan.postEditAccount(id: Int)
 GET     /artisan/account/password   controllers.Artisan.editPassword(id: Int)
 POST    /artisan/account/password   controllers.Artisan.postEditPassword(id: Int)
+POST    /artisan/account/delete     controllers.Artisan.deleteAccount(id: Int)
 GET     /artisan/password           controllers.Artisan.editMyPassword
 POST    /artisan/password           controllers.Artisan.postEditMyPassword
+POST    /artisan/delete             controllers.Artisan.deleteMyAccount
 
 # API
 # TODO

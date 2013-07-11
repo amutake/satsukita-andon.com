@@ -114,7 +114,7 @@ object Artisan extends Controller with Authentication {
     )
   }
 
-  def accounts = HasAuthority(Master) { account => _ =>
+  def accounts = HasAuthority(Master) { account => implicit request =>
     Ok(views.html.artisan.accounts(account, Accounts.all))
   }
 
@@ -180,6 +180,20 @@ object Artisan extends Controller with Authentication {
     )
   }
 
+  def deleteAccount(id: Int) = GreaterThan(id) { _ => _ => _ =>
+    Accounts.delete(id)
+    Redirect(routes.Artisan.accounts()).flashing(
+      "success" -> "アカウントを削除しました。"
+    )
+  }
+
+  def deleteMyAccount = IsValidAccount { me => _ =>
+    Accounts.delete(me.id)
+    Redirect(routes.Artisan.login()).withNewSession.flashing(
+      "success" -> "アカウントを削除しました。"
+    )
+  }
+
   val passwordForm = Form(
     tuple(
       "yourpass" -> text.verifying(notEmpty),
@@ -208,15 +222,11 @@ object Artisan extends Controller with Authentication {
     )
   }
 
-  def editPassword(id: Int) = AboutAccount(id) { me => acc => request =>
-    me.level match {
-      case Admin if acc.level != Admin => Ok(views.html.artisan.editPassword(acc, passwordForm))
-      case Master if acc.level == Writer => Ok(views.html.artisan.editPassword(acc, passwordForm))
-      case _ => Forbidden(views.html.errors.forbidden())
-    }
+  def editPassword(id: Int) = GreaterThan(id) { me => acc => request =>
+    Ok(views.html.artisan.editPassword(acc, passwordForm))
   }
 
-  def postEditPassword(id: Int) = AboutAccount(id) { me => acc => implicit request =>
+  def postEditPassword(id: Int) = GreaterThan(id) { me => acc => implicit request =>
     passwordForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.artisan.editPassword(acc, formWithErrors)),
       pass => if (me.validPassword(pass._1)) {

@@ -59,6 +59,10 @@
     <a href="@routes.Artisan.editAccount(acc.id)">ユーザー情報の変更</a>
   }
 
+  <form method="POST" action="@routes.Artisan.deleteMyAccount">
+    <input type="submit" class="btn btn-danger" value="アカウントの削除">
+  </form>
+
 } {
   <h2>@acc.username's Home</h2>
 }

@@ -77,4 +77,8 @@ object Accounts extends Table[Account]("ACCOUNTS") {
   def updatePassword(id: Int, password: String) = db.withSession { implicit session: Session =>
     Accounts.filter(_.id === id).map(_.password).update(sha1(password))
   }
+
+  def delete(id: Int) = db.withSession { implicit session: Session =>
+    query.filter(_.id === id).delete
+  }
 }

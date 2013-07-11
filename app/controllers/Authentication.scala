@@ -74,4 +74,12 @@ trait Authentication {
       f(me)(acc)(request)
     }.getOrElse(Results.NotFound(views.html.errors.notFound(request.path)))
   }
+
+  def GreaterThan(id: Int)(f: => Account => Account => Request[AnyContent] => Result) = AboutAccount(id) { me => acc => request =>
+    me.level match {
+      case Admin if acc.level != Admin => f(me)(acc)(request)
+      case Master if acc.level == Writer => f(me)(acc)(request)
+      case _ => Results.Forbidden(views.html.errors.forbidden())
+    }
+  }
 }

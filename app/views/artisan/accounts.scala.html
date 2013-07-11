@@ -1,4 +1,4 @@
-@(account: Account, accounts: Iterable[Account])
+@(account: Account, accounts: Iterable[Account])(implicit flash: Flash)
 
 @import andon.utils._
 
@@ -9,6 +9,13 @@
     <li class="active">アカウント一覧</li>
     <li class="pull-right"><a href="@routes.Artisan.logout()"><button class="btn">ログアウト</button></a></li>
   </ul>
+
+  @flash.get("success").map { message =>
+    <p class="success">
+      @message
+    </p>
+  }
+
 
   <h3>アカウント一覧</h3>
   @Seq(Admin, Master, Writer).map { l =>
