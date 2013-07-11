@@ -18,7 +18,7 @@
   }
 
   <div class="article">
-    @Markdown.escape(article.text)
+    @Conv.markdown(article.text)
   </div>
 
   <p id="author">Author: @account.name  Date: @Util.dateFormat(article.updateDate)</p>

@@ -7,7 +7,7 @@
 
   <div class="article">
     @Articles.findByType(InfoTop).map { article =>
-      @Markdown.escape(article.text)
+      @Conv.markdown(article.text)
     }
   </div>
 
@@ -21,7 +21,7 @@
         <span class="author">Posted by @Accounts.findById(article.createAccountId).map(_.name).getOrElse("?")</span>
       </p>
 
-      @Markdown.escape(article.text)
+      @Conv.markdown(article.text)
     }
   </div>
 } {

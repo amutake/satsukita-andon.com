@@ -7,7 +7,7 @@
 
   <div class="article">
     @Articles.findByType(About).map { article =>
-      @Markdown.escape(article.text)
+      @Conv.markdown(article.text)
     }
   </div>
 

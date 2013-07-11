@@ -11,7 +11,7 @@ object ApplicationBuild extends Build {
     // Add your project dependencies here,
     jdbc,
     "com.typesafe.slick" %% "slick" % "1.0.1",
-    "com.tristanhunt" %% "knockoff" % "0.8.1"
+    "org.pegdown" % "pegdown" % "1.1.0"
   )
 
 
