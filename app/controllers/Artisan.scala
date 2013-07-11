@@ -115,10 +115,11 @@ object Artisan extends Controller with Authentication {
     accountForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.artisan.createAccount(acc, formWithErrors)),
       { newacc =>
-        Accounts.create(newacc._1, newacc._2, Random.nextString(9), OrdInt(newacc._3.toInt), AccountLevel.fromString(newacc._4))
-        Redirect(routes.Artisan.home).flashing(
-            "success" -> "アカウントを作成しました。"
-        )
+        val pass = Random.alphanumeric.take(9).mkString
+        val id = Accounts.create(newacc._1, newacc._2, pass, OrdInt(newacc._3.toInt), AccountLevel.fromString(newacc._4))
+        Accounts.findById(id).map { acc =>
+          Ok(views.html.artisan.confirmAccount(acc, pass))
+        }.getOrElse(InternalServerError)
       }
     )
   }

@@ -1,0 +1,36 @@
+@(acc: Account, pass: String)
+
+@common(acc.name) {
+} {
+  <ul class="breadcrumb">
+    <li><a href="@routes.Artisan.home()">Home</a> <span class="divider">/</span></li>
+    <li><a href="@routes.Artisan.accounts()">アカウント一覧</a> <span class="divider">/</span></li>
+    <li class="active">アカウント確認</li>
+  </ul>
+
+  <p>@acc.nameさんのアカウントを作成しました。</p>
+
+  <dl>
+    <dt>ID</dt>
+    <dd>@acc.id</dd>
+
+    <dt>名前</dt>
+    <dd>@acc.name</dd>
+
+    <dt>ユーザー名</dt>
+    <dd>@acc.username</dd>
+
+    <dt>パスワード</dt>
+    <dd>@pass</dd>
+
+    <dt>卒業期</dt>
+    <dd>@acc.times</dd>
+
+    <dt>アカウントレベル</dt>
+    <dd>@acc.level.toJapanese</dd>
+  </dl>
+
+  <p><a href="@routes.Artisan.home()">ホームへ</a></p>
+} {
+  <h2>アカウントの確認</h2>
+}
