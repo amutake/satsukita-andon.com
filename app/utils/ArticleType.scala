@@ -7,33 +7,35 @@ sealed trait ArticleType {
 }
 
 case object InfoTop extends ArticleType {
-  override def toString = "info_top"
+  override def toString = "InfoTop"
 }
 
 case object Info extends ArticleType {
-  override def toString = "info"
+  override def toString = "Info"
 }
 
 case object Howto extends ArticleType {
-  override def toString = "howto"
+  override def toString = "Howto"
 }
 
 case object About extends ArticleType {
-  override def toString = "about"
+  override def toString = "About"
 }
 
 case object Contact extends ArticleType {
-  override def toString = "contact"
+  override def toString = "Contact"
 }
 
 object ArticleType {
   def fromString(str: String) = str match {
-    case "info_top" => InfoTop
-    case "info" => Info
-    case "howto" => Howto
-    case "about" => About
-    case "contact" => Contact
+    case "InfoTop" => InfoTop
+    case "Info" => Info
+    case "Howto" => Howto
+    case "About" => About
+    case "Contact" => Contact
   }
+
+  val all = Seq(InfoTop, Info, Howto, About, Contact)
 
   implicit val articleTypeTypeMapper = MappedTypeMapper.base[ArticleType, String](
     { a => a.toString },

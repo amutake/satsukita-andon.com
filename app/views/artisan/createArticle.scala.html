@@ -1,8 +1,6 @@
-@(form: Form[(String, String, String, String)])
+@(types: List[andon.utils.ArticleType], form: Form[(String, String, String, String)])
 
-@import andon.utils._
-
-@common("Write Article") {
+@common("記事の作成") {
 } {
   <ul class="breadcrumb">
     <li><a href="@routes.Artisan.home()">Home</a> <span class="divider">/</span></li>
@@ -22,7 +20,7 @@
 
     @helper.select(
       form("type"),
-      options = helper.options(List(Info).map(_.toString)),
+      options = helper.options(types.map(_.toString)),
       '_label -> "記事の種類",
       '_help -> ""
     )
