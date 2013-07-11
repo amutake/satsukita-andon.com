@@ -21,8 +21,12 @@
 
   <p>アカウントレベル: @acc.level.toJapanese</p>
 
-  @if(me.level == Admin && (me.id == acc.id || acc.level != Admin)) {
-    <p><a href="@routes.Artisan.editAccount(acc.id)">編集する</a></p>
+  @if(me.level == Admin && acc.level != Admin) {
+    <p><a href="@routes.Artisan.editAccount(acc.id)">ユーザー情報の編集</a></p>
+  }
+  @if((me.level == Admin && acc.level != Admin) ||
+    (me.level == Master && acc.level == Writer)) {
+    <p><a href="@routes.Artisan.editPassword(acc.id)">パスワードの変更</a></p>
   }
 } {
   <h2>@acc.nameさんの情報</h2>

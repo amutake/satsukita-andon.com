@@ -68,4 +68,10 @@ trait Authentication {
       }
     }.getOrElse(Results.NotFound(views.html.errors.notFound("/artisan/account/edit?id=" + id.toString)))
   }
+
+  def AboutAccount(id: Int)(f: => Account => Account => Request[AnyContent] => Result) = IsValidAccount { me => request =>
+    Accounts.findById(id).map { acc =>
+      f(me)(acc)(request)
+    }.getOrElse(Results.NotFound(views.html.errors.notFound(request.path)))
+  }
 }

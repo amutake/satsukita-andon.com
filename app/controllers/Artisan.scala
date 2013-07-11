@@ -187,4 +187,26 @@ object Artisan extends Controller with Authentication {
       }
     )
   }
+
+  def editPassword(id: Int) = AboutAccount(id) { me => acc => request =>
+    me.level match {
+      case Admin if acc.level != Admin => Ok(views.html.artisan.editPassword(acc, passwordForm))
+      case Master if acc.level == Writer => Ok(views.html.artisan.editPassword(acc, passwordForm))
+      case _ => Forbidden(views.html.errors.forbidden())
+    }
+  }
+
+  def postEditPassword(id: Int) = AboutAccount(id) { me => acc => implicit request =>
+    passwordForm.bindFromRequest.fold(
+      formWithErrors => BadRequest(views.html.artisan.editPassword(acc, formWithErrors)),
+      pass => if (me.validPassword(pass._1)) {
+        Accounts.updatePassword(acc.id, pass._2)
+        Redirect(routes.Artisan.home).flashing(
+          "success" -> "パスワードを変更しました。"
+        )
+      } else {
+        BadRequest(views.html.artisan.editPassword(acc, passwordForm.withGlobalError("パスワードが間違っています。")))
+      }
+    )
+  }
 }

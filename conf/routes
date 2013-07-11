@@ -29,6 +29,8 @@ GET     /artisan/account/create     controllers.Artisan.createAccount
 POST    /artisan/account/create     controllers.Artisan.postCreateAccount
 GET     /artisan/account/edit       controllers.Artisan.editAccount(id: Int)
 POST    /artisan/account/edit       controllers.Artisan.postEditAccount
+GET     /artisan/account/password   controllers.Artisan.editPassword(id: Int)
+POST    /artisan/account/password   controllers.Artisan.postEditPassword(id: Int)
 GET     /artisan/password           controllers.Artisan.editMyPassword
 POST    /artisan/password           controllers.Artisan.postEditMyPassword
 
