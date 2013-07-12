@@ -32,25 +32,40 @@ h3 {
 }
 
 .article {
-    .title {
-        padding-left: 10px;
-        background-color: rgba(71, 11, 17, 0.5);
-    }
-    .date {
-    }
-    .author {
-    }
-
-
     h1 {
-        font-size: 1.6em;
+        font-size: 1.8em;
+        border-bottom: 2px solid #999;
+        line-height: 1.8em;
+        margin-bottom: 30px;
     }
     h2 {
         font-size: 1.4em;
+        border-bottom: 1px dashed #666;
+        margin-bottom: 20px;
     }
     h3 {
-        background-color: rgba(0, 0, 0, 0);
+        background-color: transparent;
         padding: 0;
         font-size: 1.2em;
+    }
+
+    .table {
+        @tableColor: rgba(180, 180, 180, 0.5);
+        border-color: @tableColor;
+        th {
+            text-align: center;
+            border-color: @tableColor;
+        }
+        td {
+            border-color: @tableColor;
+        }
+        tbody>tr:nth-child(even)>td,
+        tbody>tr:nth-child(even)>th {
+            background-color: rgba(180, 180, 180, 0.2);
+        }
+        tbody>tr:nth-child(odd)>td,
+        tbody>tr:nth-child(odd)>th {
+            background-color: transparent;
+        }
     }
 }

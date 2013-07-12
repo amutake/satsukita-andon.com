@@ -4,5 +4,7 @@
 @import andon.utils._
 
 @howto.common(article.title)(findNameById(article.createAccountId))(Util.dateFormat(article.updateDate)) {
-  @Conv.markdown(article.text)
+  <div class="article">
+    @Conv.markdown(article.text)
+  </div>
 }

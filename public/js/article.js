@@ -1,5 +1,5 @@
 $(function() {
-	$(".article table").addClass("table");
+	$(".article table").addClass("table table-bordered table-striped");
 
 	$(".article code").css({
 		backgroundColor: "transparent",

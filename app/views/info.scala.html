@@ -1,6 +1,7 @@
 @import andon.utils._
 
 @common("Information") {
+  <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/info.css")">
 } {
 
   <h3>お知らせ</h3>
@@ -15,13 +16,14 @@
 
   <div class="article">
     @Articles.findByType(Info).map { article =>
-      <h3 class="title">@article.title</h3>
-      <p>
-        <span class="date">create: @Util.dateFormat(article.createDate) update: @Util.dateFormat(article.updateDate)</span>
-        <span class="author">Created by @Accounts.findNameById(article.createAccountId) Last Updated by @Accounts.findNameById(article.updateAccountId)</span>
-      </p>
-
-      @Conv.markdown(article.text)
+      <div class="info-post">
+        <p class="date">@Util.dateFormat(article.createDate)</p>
+        <h3 class="title">@article.title</h3>
+        <div class="info-text">
+          @Conv.markdown(article.text)
+        </div>
+        <p class="author">Posted by @Accounts.findNameById(article.createAccountId)</p>
+      </div>
     }
   </div>
 } {
