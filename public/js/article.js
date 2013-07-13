@@ -52,20 +52,18 @@ $(function() {
 		}
 	});
 
-	var insert = function(path) {
+	var insert = function(path, thumbnail) {
 		$img = $("<img>").attr({
-			src: path,
+			src: thumbnail,
 			width: "210px"
 		});
 		$button = $("<button>").text("この画像を挿入").click(function() {
-			var anchor = "[![" + path + "](" + path + ")](" + path + ")\n";
+			var anchor = "[![" + path + "](" + thumbnail + ")](" + path + ")\n";
 			$("textarea").insertAtCaret(anchor);
 		});
 		$caption = $("<p>").text(path).append($img).append($button).css({
 			padding: "10px"
 		});
-
-
 
 		$(".fileupload-wrapper").append($caption);
 	};
@@ -88,7 +86,7 @@ $(function() {
 				processData: false,
 				success: function(data) {
 					if (data.status === "success") {
-						insert(data.path);
+						insert(data.path, data.thumbnail);
 					} else {
 						window.alert("エラー。" + data.message);
 					}

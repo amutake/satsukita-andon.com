@@ -2,10 +2,13 @@ package controllers
 
 import play.api._
 import play.api.mvc._
+import play.api.libs.Files
 import play.api.libs.json.Json
 
 import java.io.File
 import java.util.Date
+
+import scala.sys.process._
 
 import models._
 import andon.utils._
@@ -37,14 +40,26 @@ object API extends Controller with Authentication {
   def upload = IsValidAccountWithParser(parse.multipartFormData) { acc => request =>
     request.body.file("file").map { file =>
       if (file.contentType.map(_.take(5)) == Some("image")) {
-        val path = "./files/" + new Date().getTime().toString + "-" + file.filename
-        file.ref.moveTo(new File(path), true)
-        Ok(Json.toJson(Map("status" -> "success", "path" -> path.drop(1))))
+        val fullsize = "/files/images/fullsize/"
+        val thumbnail = "/files/images/thumbnail/"
+        val filename = new Date().getTime().toString + "-" + file.filename
+
+        file.ref.moveTo(new File("." + fullsize + filename), true)
+        Files.copyFile(new File("." + fullsize + filename), new File("." + thumbnail + filename))
+
+        Process("mogrify -quality 50 ." + fullsize + filename) !
+
+        Process("mogrify -resize 320x -unsharp 2x1.2+0.5+0.5 -quality 75 ." + thumbnail + filename) !
+
+        Ok(Json.toJson(Map(
+          "status" -> "success",
+          "path" -> (fullsize + filename),
+          "thumbnail" -> (thumbnail + filename))))
       } else {
-        Ok(Json.toJson(Map("status" -> "error", "message" -> "画像ではありません。")))
+        BadRequest(Json.toJson(Map("status" -> "error", "message" -> "画像ではありません。")))
       }
     }.getOrElse {
-      Ok(Json.toJson(Map("status" -> "error", "message" -> "ファイルを送信出来ませんでした。")))
+      BadRequest(Json.toJson(Map("status" -> "error", "message" -> "ファイルを送信出来ませんでした。")))
     }
   }
 }
