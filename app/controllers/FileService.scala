@@ -11,6 +11,10 @@ object FileService extends Controller {
 
   def get(filename: String) = Action {
     val file = new File(dir + filename)
-    Ok.sendFile(file)
+    if (file.exists()) {
+      Ok.sendFile(file)
+    } else {
+      NotFound(views.html.errors.notFound("/files/" + filename))
+    }
   }
 }
