@@ -17,18 +17,50 @@ $(function() {
 	$(".article ol li").css({
 		listStyleType: "decimal"
 	});
+
+	$(".article a:has(img)").addClass("fresco").attr("data-fresco-group", "article");
+	$(".article a img").attr("width", "210px");
+	$(".article ul:has(img)").addClass("thumbnails");
+	$(".article ul li:has(img)").addClass("span3").css({
+		listStyleType: "none"
+	});
 });
 
 $(function() {
+
+	$.fn.extend({
+		insertAtCaret: function(text) {
+			$.each(this, function(i, textarea) {
+				textarea.focus();
+				if ($.support.msie) {
+					var range = document.selection.createRange();
+					range.text = text;
+					range.select();
+				} else {
+					var s = textarea.value;
+					var p = textarea.selectionStart;
+					var np = p + text.length;
+					textarea.value = s.substr(0, p) + text + s.substr(p);
+					textarea.setSelectionRange(np, np);
+				}
+			});
+		}
+	});
 
 	var insert = function(path) {
 		$img = $("<img>").attr({
 			src: path,
 			width: "210px"
 		});
-		$caption = $("<p>").text(path).append($img).css({
+		$button = $("<button>").text("この画像を挿入").click(function() {
+			var anchor = "[![" + path + "](" + path + ")](" + path + ")\n";
+			$("textarea").insertAtCaret(anchor);
+		});
+		$caption = $("<p>").text(path).append($img).append($button).css({
 			padding: "10px"
 		});
+
+
 
 		$(".fileupload-wrapper").append($caption);
 	};
@@ -64,4 +96,7 @@ $(function() {
 			});
 		});
 	});
+});
+
+$(function() {
 });
