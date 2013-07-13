@@ -1,28 +1,33 @@
 $(function() {
-	$(".article table").addClass("table table-bordered table-striped");
 
-	$(".article code").css({
-		backgroundColor: "transparent",
-		color: "white",
-		border: "none"
-	});
-	$(".article pre").css({
-		backgroundColor: "rgba(255, 255, 255, 0.1)",
-		border: "none"
-	});
+	$.each($(".article"), function(i, article) {
+		var $article = $(article);
 
-	$(".article ul li").css({
-		listStyleType: "disc"
-	});
-	$(".article ol li").css({
-		listStyleType: "decimal"
-	});
+		$article.find("table").addClass("table table-bordered table-striped");
 
-	$(".article a:has(img)").addClass("fresco").attr("data-fresco-group", "article");
-	$(".article a img").attr("width", "210px");
-	$(".article ul:has(img)").addClass("thumbnails");
-	$(".article ul li:has(img)").addClass("span3").css({
-		listStyleType: "none"
+		$article.find("code").css({
+			backgroundColor: "transparent",
+			color: "white",
+			border: "none"
+		});
+		$article.find("pre").css({
+			backgroundColor: "rgba(255, 255, 255, 0.1)",
+			border: "none"
+		});
+
+		$article.find("ul li").css({
+			listStyleType: "disc"
+		});
+		$article.find("ol li").css({
+			listStyleType: "decimal"
+		});
+
+		$article.find("a:has(img)").addClass("fresco").attr("data-fresco-group", "article-" + i);
+		$article.find("a img").attr("width", "210px");
+		$article.find("ul:has(img)").addClass("thumbnails");
+		$article.find("ul li:has(img)").addClass("span3").css({
+			listStyleType: "none"
+		});
 	});
 });
 

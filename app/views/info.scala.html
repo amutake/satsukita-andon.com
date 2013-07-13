@@ -14,18 +14,16 @@
 
   <h3>管理人の一言</h3>
 
-  <div class="article">
-    @Articles.findByType(Info).map { article =>
-      <div class="info-post">
-        <p class="date">@Util.dateFormat(article.createDate)</p>
-        <h1 class="title">@article.title</h1>
-        <div class="info-text">
-          @Conv.markdown(article.text)
-        </div>
-        <p class="author">Posted by @Accounts.findNameById(article.createAccountId)</p>
+  @Articles.findByType(Info).map { article =>
+    <div class="info-post article">
+      <p class="date">@Util.dateFormat(article.createDate)</p>
+      <h1 class="title">@article.title</h1>
+      <div class="info-text">
+        @Conv.markdown(article.text)
       </div>
-    }
-  </div>
+      <p class="author">Posted by @Accounts.findNameById(article.createAccountId)</p>
+    </div>
+  }
 } {
   <h2>Information</h2>
 }
