@@ -22,6 +22,15 @@ trait Authentication {
     }.getOrElse(Results.Forbidden(views.html.errors.forbidden()))
   }
 
+  def IsValidAccountWithParser[A](parser: BodyParser[A])(f: => Account => Request[A] => Result) =
+    Security.Authenticated(userid, onUnauthorized) { id =>
+      Action(parser) { request =>
+        Accounts.findById(id.toInt).map { account =>
+          f(account)(request)
+        }.getOrElse(Results.Forbidden(views.html.errors.forbidden()))
+      }
+    }
+
   def HasAuthority(level: AccountLevel)(f: => Account => Request[AnyContent] => Result) = IsValidAccount { account => request =>
     if (AccountLevel.gte(account.level, level)) {
       f(account)(request)

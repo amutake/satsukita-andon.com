@@ -10,44 +10,51 @@
 
   <h3>記事の作成</h3>
 
-  @helper.form(routes.Artisan.postCreateArticle) {
+  <div class="span9">
+    @helper.form(routes.Artisan.postCreateArticle, 'style -> "margin: 0 0 80px;") {
 
-    @form.globalError.map { error =>
-      <p class="error">
-        @error.message
-      </p>
+      @form.globalError.map { error =>
+        <p class="error">
+          @error.message
+        </p>
+      }
+
+      @helper.select(
+        form("type"),
+        options = helper.options(types.map(_.toString)),
+        '_label -> "記事の種類",
+        '_help -> ""
+      )
+
+      @helper.inputText(
+        form("genre"),
+        '_label -> "ジャンル",
+        '_help -> ""
+      )
+
+      @helper.inputText(
+        form("title"),
+        '_label -> "タイトル",
+        '_help -> "",
+        'class -> "wide"
+      )
+
+      @helper.textarea(
+        form("text"),
+        '_label -> "本文",
+        '_help -> "",
+        'class -> "wide",
+        'rows -> 20
+      )
+
+      <button class="btn" type="submit">送信</button>
     }
+  </div>
 
-    @helper.select(
-      form("type"),
-      options = helper.options(types.map(_.toString)),
-      '_label -> "記事の種類",
-      '_help -> ""
-    )
-
-    @helper.inputText(
-      form("genre"),
-      '_label -> "ジャンル",
-      '_help -> ""
-    )
-
-    @helper.inputText(
-      form("title"),
-      '_label -> "タイトル",
-      '_help -> "",
-      'class -> "wide"
-    )
-
-    @helper.textarea(
-      form("text"),
-      '_label -> "本文",
-      '_help -> "",
-      'class -> "wide",
-      'rows -> 20
-    )
-
-    <button class="btn" type="submit">送信</button>
-  }
+  <div class="fileupload-wrapper span3">
+    <input class="fileupload-input" type="file" name="file" multiple>
+    <button class="btn fileupload-submit">画像を送信</button>
+  </div>
 } {
   <h2>記事の作成</h2>
 }

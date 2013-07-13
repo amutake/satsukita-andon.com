@@ -29,3 +29,4 @@ shutdown.sh
 defreeze.sh
 
 db/
+public/uploaded/

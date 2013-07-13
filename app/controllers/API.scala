@@ -4,10 +4,13 @@ import play.api._
 import play.api.mvc._
 import play.api.libs.json.Json
 
+import java.io.File
+import java.util.Date
+
 import models._
 import andon.utils._
 
-object API extends Controller {
+object API extends Controller with Authentication {
 
   // TODO
   def search(times: String, prize: String, grade: String, tag: String) = Action {
@@ -29,5 +32,19 @@ object API extends Controller {
       }
     )
     Ok(json)
+  }
+
+  def upload = IsValidAccountWithParser(parse.multipartFormData) { acc => request =>
+    request.body.file("file").map { file =>
+      if (file.contentType == Some("image/jpeg")) {
+        val filename = new Date().getTime().toString + "-" + file.filename
+        file.ref.moveTo(new File("./public/uploaded/" + filename), true)
+        Ok(Json.toJson(Map("status" -> "success", "path" -> ("/assets/uploaded/" + filename))))
+      } else {
+        Ok(Json.toJson(Map("status" -> "error", "message" -> "画像ではありません。")))
+      }
+    }.getOrElse {
+      Ok(Json.toJson(Map("status" -> "error", "message" -> "ファイルを送信出来ませんでした。")))
+    }
   }
 }
