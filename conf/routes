@@ -45,5 +45,8 @@ POST    /artisan/delete             controllers.Artisan.deleteMyAccount
 GET     /api/search                 controllers.API.search(times: String, prize: String, grade: String, tag: String)
 POST    /api/upload                 controllers.API.upload
 
+# uploaded file
+GET     /files/:filename            controllers.FileService.get(filename: String)
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

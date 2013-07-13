@@ -37,9 +37,9 @@ object API extends Controller with Authentication {
   def upload = IsValidAccountWithParser(parse.multipartFormData) { acc => request =>
     request.body.file("file").map { file =>
       if (file.contentType == Some("image/jpeg")) {
-        val filename = new Date().getTime().toString + "-" + file.filename
-        file.ref.moveTo(new File("./public/uploaded/" + filename), true)
-        Ok(Json.toJson(Map("status" -> "success", "path" -> ("/assets/uploaded/" + filename))))
+        val path = "./files/" + new Date().getTime().toString + "-" + file.filename
+        file.ref.moveTo(new File(path), true)
+        Ok(Json.toJson(Map("status" -> "success", "path" -> path.drop(1))))
       } else {
         Ok(Json.toJson(Map("status" -> "error", "message" -> "画像ではありません。")))
       }

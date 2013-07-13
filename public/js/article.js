@@ -88,9 +88,7 @@ $(function() {
 				processData: false,
 				success: function(data) {
 					if (data.status === "success") {
-						setTimeout(function() {
-							insert(data.path);
-						}, 1000);
+						insert(data.path);
 					} else {
 						window.alert("エラー。" + data.message);
 					}
@@ -101,7 +99,4 @@ $(function() {
 			});
 		});
 	});
-});
-
-$(function() {
 });
