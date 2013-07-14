@@ -16,7 +16,7 @@
 
   @Articles.findByType(Info).map { article =>
     <div class="info-post article">
-      <p class="date">@Util.dateFormat(article.createDate)</p>
+      <p class="date">@DateUtil.dateFormat(article.createDate)</p>
       <h1 class="title">@article.title</h1>
       <div class="info-text">
         @Conv.markdown(article.text)

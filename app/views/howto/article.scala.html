@@ -3,7 +3,7 @@
 @import models.Accounts._
 @import andon.utils._
 
-@howto.common(article.title)(findNameById(article.createAccountId))(Util.dateFormat(article.updateDate)) {
+@howto.common(article.title)(findNameById(article.createAccountId))(DateUtil.dateFormat(article.updateDate)) {
   <div class="article">
     @Conv.markdown(article.text)
   </div>

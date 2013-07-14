@@ -4,22 +4,17 @@ import play.api.db._
 import play.api.Play.current
 
 import scala.slick.driver.H2Driver.simple._
-import scala.slick.lifted.MappedTypeMapper
 
 import java.util.Date
 
 import andon.utils._
+import andon.utils.DateUtil.dateTypeMapper
 
 case class Article(id: Long, createAccountId: Int, updateAccountId: Int, title: String, text: String, createDate: Date, updateDate: Date, articleType: ArticleType, genre: String)
 
 object Articles extends Table[Article]("ARTICLES") {
 
   val db = Database.forDataSource(DB.getDataSource("default"))
-
-  implicit val dateTypeMapper = MappedTypeMapper.base[Date, Long](
-    { d => d.getTime() },
-    { l => new Date(l) }
-  )
 
   def id = column[Long]("ID", O.NotNull, O.PrimaryKey, O.AutoInc)
   def createAccountId = column[Int]("CREATE_ACCOUNT_ID", O.NotNull)

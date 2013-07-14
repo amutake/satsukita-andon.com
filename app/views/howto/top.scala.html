@@ -105,7 +105,7 @@
       <li>
         <a href="@routes.Application.howtoArticle(article.id)"><i class="icon-file icon-white"></i>@article.title</a>
         Created by @Accounts.findNameById(article.createAccountId), Updated by @Accounts.findNameById(article.updateAccountId)
-        Create: @Util.dateFormat(article.createDate), Last Update: @Util.dateFormat(article.updateDate)
+        Create: @DateUtil.dateFormat(article.createDate), Last Update: @DateUtil.dateFormat(article.updateDate)
       </li>
     }
     </ul>
