@@ -54,16 +54,13 @@ $(function() {
 
 	var insert = function(path, thumbnail) {
 		$img = $("<img>").attr({
-			src: thumbnail,
-			width: "210px"
+			src: thumbnail
 		});
 		$button = $("<button>").text("この画像を挿入").click(function() {
 			var anchor = "[![" + path + "](" + thumbnail + ")](" + path + ")\n";
 			$("textarea").insertAtCaret(anchor);
 		});
-		$caption = $("<p>").text(path).append($img).append($button).css({
-			padding: "10px"
-		});
+		$caption = $("<li>").text(path).append($img).append($button).addClass("span3");
 
 		$(".fileupload-wrapper").append($caption);
 	};
