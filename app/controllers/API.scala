@@ -42,7 +42,14 @@ object API extends Controller with Authentication {
       if (file.contentType.map(_.take(5)) == Some("image")) {
         val fullsize = "/files/images/fullsize/"
         val thumbnail = "/files/images/thumbnail/"
-        val filename = new Date().getTime().toString + "-" + file.filename
+        def valid(c: Char) = {
+          val r = """[\w\.]""".r
+          c.toString match {
+            case r() => true
+            case _ => false
+          }
+        }
+        val filename = new Date().getTime().toString + "-" + file.filename.filter(valid)
 
         file.ref.moveTo(new File("." + fullsize + filename), true)
         Files.copyFile(new File("." + fullsize + filename), new File("." + thumbnail + filename))
