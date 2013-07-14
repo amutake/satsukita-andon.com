@@ -74,7 +74,15 @@ $(function() {
 
 	$submit.click(function() {
 
-		$.each($input[0].files, function(_, file) {
+		$.each($input[0].files, function(i, file) {
+			$loading = $("<img>").attr({
+				src: "/assets/img/loading.gif",
+				width: 64,
+				height: 64,
+				id: "loading-" + i
+			});
+			$(".fileupload-wrapper").append($loading);
+
 			var fd = new FormData();
 			fd.append("file", file);
 			$.ajax({
@@ -85,6 +93,7 @@ $(function() {
 				contentType: false,
 				processData: false,
 				success: function(data) {
+					$("#loading-" + i).remove();
 					if (data.status === "success") {
 						insert(data.path, data.thumbnail);
 					} else {
@@ -92,6 +101,7 @@ $(function() {
 					}
 				},
 				error: function() {
+					$("#loading-" + i).remove();
 					window.alert("エラー。もう一度送信してください。");
 				}
 			});
