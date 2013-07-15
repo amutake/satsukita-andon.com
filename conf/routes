@@ -39,6 +39,8 @@ POST    /artisan/account/delete     controllers.Artisan.deleteAccount(id: Int)
 GET     /artisan/password           controllers.Artisan.editMyPassword
 POST    /artisan/password           controllers.Artisan.postEditMyPassword
 POST    /artisan/delete             controllers.Artisan.deleteMyAccount
+GET     /artisan/data/upload        controllers.Artisan.uploadDatum
+POST    /artisan/data/upload        controllers.Artisan.postUploadDatum
 
 # API
 # TODO

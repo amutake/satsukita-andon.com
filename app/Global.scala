@@ -61,6 +61,9 @@ object InitialData {
     if (!tableMap.contains("ARTICLES")) {
       Articles.ddl.create
     }
+    if (!tableMap.contains("DATA")) {
+      Data.ddl.create
+    }
   }
 
   def insert() = {

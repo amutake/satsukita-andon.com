@@ -1,5 +1,8 @@
 package controllers
 
+import java.io.File
+import java.util.Date
+
 import scala.util.Random
 
 import play.api._
@@ -240,5 +243,35 @@ object Artisan extends Controller with Authentication {
         BadRequest(views.html.artisan.editPassword(acc, passwordForm.withGlobalError("パスワードが間違っています。")))
       }
     )
+  }
+
+  val datumForm = Form(
+    tuple(
+      "name" -> text.verifying(notEmpty),
+      "genre" -> text.verifying(notEmpty)
+    )
+  )
+
+  def uploadDatum = HasAuthority(Master) { acc => _ =>
+    Ok(views.html.artisan.uploadDatum(datumForm))
+  }
+
+  def postUploadDatum = IsValidAccountWithParser(parse.multipartFormData) { acc => implicit request =>
+    request.body.file("file").map { file =>
+      datumForm.bindFromRequest().fold(
+        formWithErrors => BadRequest(views.html.artisan.uploadDatum(formWithErrors)),
+        result => {
+          val now = new Date()
+          val path = "/files/data/" + now.getTime().toString + "-" + file.filename.filter(_ != ' ')
+          file.ref.moveTo(new File("." + path), true)
+          Data.create(result._1, acc.id, path, result._2)
+          Redirect(routes.Artisan.home).flashing(
+            "success" -> "資料をアップロードしました。"
+          )
+        }
+      )
+    }.getOrElse {
+      BadRequest(views.html.artisan.uploadDatum(datumForm.withGlobalError("ファイルのアップロードに失敗しました。")))
+    }
   }
 }
