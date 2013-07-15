@@ -5,23 +5,6 @@ $(function() {
 
 		$article.find("table").addClass("table table-bordered table-striped");
 
-		$article.find("code").css({
-			backgroundColor: "transparent",
-			color: "white",
-			border: "none"
-		});
-		$article.find("pre").css({
-			backgroundColor: "rgba(255, 255, 255, 0.1)",
-			border: "none"
-		});
-
-		$article.find("ul li").css({
-			listStyleType: "disc"
-		});
-		$article.find("ol li").css({
-			listStyleType: "decimal"
-		});
-
 		$article.find("a:has(img)").addClass("fresco").attr("data-fresco-group", "article-" + i);
 		$article.find("a img").attr("width", "210px");
 		$article.find("ul:has(img)").addClass("thumbnails");

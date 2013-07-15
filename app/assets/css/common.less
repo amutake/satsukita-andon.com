@@ -31,6 +31,15 @@ h3 {
     text-align: right;
 }
 
+blockquote{
+    padding: 8px 20px;
+    border-left: #777777 solid 3px;
+    p {
+        font-size: 1.05em;
+        color: #cccccc;
+    }
+}
+
 .article {
 
     margin: 20px 20px 40px;
@@ -61,6 +70,26 @@ h3 {
         font-size: 1em;
     }
 
+    ul li {
+        list-style-type: disc;
+        margin-left: 30px;
+    }
+    ol li {
+        list-style-type: decimal;
+        margin-left: 30px;
+    }
+
+    code {
+        background-color: transparent;
+        color: white;
+        border: none;
+        font-size: 1.1em;
+    }
+
+    pre {
+        background-color: rgba(255, 255, 255, 0.05);
+        border: none;
+    }
 
     .table {
         @tableColor: rgba(180, 180, 180, 0.5);
