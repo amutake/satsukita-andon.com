@@ -18,11 +18,11 @@
       </tr>
       @data._2.map { datum =>
         <tr>
-          <th>@data._1</th>
-          <th><a href="@datum.path">@datum.name</a></th>
-          <th><form action="@routes.Artisan.deleteDatum(datum.id)" method="POST">
+          <td>@data._1</td>
+          <td><a href="@datum.path">@datum.name</a></td>
+          <td><form action="@routes.Artisan.deleteDatum(datum.id)" metdod="POST">
             <button class="btn btn-danger delete-submit">削除</button>
-          </form></th>
+          </form></td>
         </tr>
       }
     </table>
