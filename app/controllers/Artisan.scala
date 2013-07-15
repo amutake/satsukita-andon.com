@@ -245,6 +245,10 @@ object Artisan extends Controller with Authentication {
     )
   }
 
+  def data = HasAuthority(Master) { acc => _ =>
+    Ok(views.html.artisan.data())
+  }
+
   val datumForm = Form(
     tuple(
       "name" -> text.verifying(notEmpty),

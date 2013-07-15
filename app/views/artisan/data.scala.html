@@ -1,0 +1,21 @@
+@common("資料一覧") {
+} {
+  <ul class="breadcrumb">
+    <li><a href="@routes.Artisan.home()">Home</a> <span class="divider">/</span></li>
+    <li class="active">資料一覧</li>
+    <li class="pull-right"><a href="@routes.Artisan.logout()"><button class="btn">ログアウト</button></a></li>
+  </ul>
+
+  <h3>資料一覧</h3>
+
+  @Data.all.groupBy(_.genre).map { data =>
+    <h4>@data._1</h4>
+    <ul>
+      @data._2.map { datum =>
+        <li><a href="@datum.path">@datum.name</a></li>
+      }
+    </ul>
+  }
+} {
+  <h2>資料一覧</h2>
+}
