@@ -111,6 +111,17 @@
     </ul>
   }
 
+  @Data.all.groupBy(_.genre).map { files =>
+    <h4>@files._1</h4>
+    <ul>
+      @files._2.map { file =>
+        <li>
+          <a href="@file.path"><i class="icon-download icon-white"></i>@file.name</a>
+          Uploaded by @Accounts.findNameById(file.accountId), Date @DateUtil.dateFormat(file.date)
+        </li>
+      }
+    </ul>
+  }
 } {
   <h2>How to</h2>
 }
