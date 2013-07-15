@@ -28,9 +28,8 @@
 
   @if(article.articleType == Info || article.articleType == Howto) {
 
-    <a href="#" class="delete-submit">削除する</a>
-
-    <form class="delete-form" method="post" action="@routes.Artisan.deleteArticle(article.id)">
+    <form method="post" action="@routes.Artisan.deleteArticle(article.id)">
+      <button class="btn btn-danger delete-submit">削除する</button>
     </form>
   }
 } {

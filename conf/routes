@@ -42,6 +42,7 @@ POST    /artisan/delete             controllers.Artisan.deleteMyAccount
 GET     /artisan/data               controllers.Artisan.data
 GET     /artisan/data/upload        controllers.Artisan.uploadDatum
 POST    /artisan/data/upload        controllers.Artisan.postUploadDatum
+POST    /artisan/data/delete        controllers.Artisan.deleteDatum(id: Int)
 
 # API
 # TODO

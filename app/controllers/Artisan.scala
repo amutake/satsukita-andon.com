@@ -278,4 +278,16 @@ object Artisan extends Controller with Authentication {
       BadRequest(views.html.artisan.uploadDatum(datumForm.withGlobalError("ファイルのアップロードに失敗しました。")))
     }
   }
+
+  def deleteDatum(id: Int) = HasAuthority(Master) { acc => _ =>
+    Data.findById(id).map { datum =>
+      Data.delete(id)
+      new File("." + datum.path).delete()
+      Redirect(routes.Artisan.home).flashing(
+        "success" -> "資料を削除しました。"
+      )
+    }.getOrElse(Redirect(routes.Artisan.home).flashing(
+      "error" -> "その資料は既に削除されています。"
+    ))
+  }
 }

@@ -22,13 +22,13 @@
   <p>アカウントレベル: @acc.level.toJapanese</p>
 
   @if(me.level == Admin && acc.level != Admin) {
-    <p><a href="@routes.Artisan.editAccount(acc.id)">ユーザー情報の編集</a></p>
+    <p><a class="btn" href="@routes.Artisan.editAccount(acc.id)">ユーザー情報の編集</a></p>
   }
   @if((me.level == Admin && acc.level != Admin) ||
     (me.level == Master && acc.level == Writer)) {
-    <p><a href="@routes.Artisan.editPassword(acc.id)">パスワードの変更</a></p>
-    <p><a class="delete-submit" href="#">アカウントの削除</a></p>
-    <form class="delete-form" method="POST" action="@routes.Artisan.deleteAccount(acc.id)">
+    <p><a class="btn" href="@routes.Artisan.editPassword(acc.id)">パスワードの変更</a></p>
+    <form method="POST" action="@routes.Artisan.deleteAccount(acc.id)">
+      <button class="delete-submit btn btn-danger">アカウントの削除</button>
     </form>
   }
 } {

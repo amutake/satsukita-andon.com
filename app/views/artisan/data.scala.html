@@ -10,11 +10,22 @@
 
   @Data.all.groupBy(_.genre).map { data =>
     <h4>@data._1</h4>
-    <ul>
+    <table class="table">
+      <tr>
+        <th>ジャンル</th>
+        <th>タイトル</th>
+        <th>操作</th>
+      </tr>
       @data._2.map { datum =>
-        <li><a href="@datum.path">@datum.name</a></li>
+        <tr>
+          <th>@data._1</th>
+          <th><a href="@datum.path">@datum.name</a></th>
+          <th><form action="@routes.Artisan.deleteDatum(datum.id)" method="POST">
+            <button class="btn btn-danger delete-submit">削除</button>
+          </form></th>
+        </tr>
       }
-    </ul>
+    </table>
   }
 } {
   <h2>資料一覧</h2>

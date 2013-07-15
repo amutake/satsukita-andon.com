@@ -2,7 +2,7 @@ $(function() {
 	$(".delete-submit").click(function() {
 		var ok = window.confirm("削除します。よろしいですか?");
 		if (ok) {
-			$(".delete-form").submit();
+			$(this).parent("form").submit();
 		}
 	});
 });
