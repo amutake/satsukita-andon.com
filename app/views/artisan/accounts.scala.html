@@ -22,9 +22,20 @@
 
     <h4>@l.toJapaneseアカウント</h4>
 
-    @accounts.filter(_.level == l).map { acc =>
-      <p><a href="@routes.Artisan.account(acc.id)">@acc.name</a></p>
-    }
+    <table class="table">
+      <tr>
+        <th>名前</th>
+        <th>ユーザー名</th>
+        <th>卒業期</th>
+      </tr>
+      @accounts.filter(_.level == l).map { acc =>
+        <tr>
+          <td><a href="@routes.Artisan.account(acc.id)">@acc.name</a></td>
+          <td>@acc.username</td>
+          <td>@acc.times</td>
+        </tr>
+      }
+    </table>
   }
 } {
   <h2>アカウント一覧</h2>
