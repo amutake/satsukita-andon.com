@@ -7,7 +7,7 @@
 
   <div class="article">
     @Articles.findByType(Contact).map { article =>
-      @Conv.markdown(article.text)
+      @Conv.both(article.text)
     }
   </div>
 

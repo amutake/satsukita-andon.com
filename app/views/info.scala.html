@@ -8,7 +8,7 @@
 
   <div class="article">
     @Articles.findByType(InfoTop).map { article =>
-      @Conv.markdown(article.text)
+      @Conv.both(article.text)
     }
   </div>
 
@@ -19,7 +19,7 @@
       <p class="date">@DateUtil.dateFormat(article.createDate)</p>
       <h1 class="title">@article.title</h1>
       <div class="info-text">
-        @Conv.markdown(article.text)
+        @Conv.both(article.text)
       </div>
       <p class="author">Posted by @Accounts.findNameById(article.createAccountId)</p>
     </div>
