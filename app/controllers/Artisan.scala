@@ -261,22 +261,45 @@ object Artisan extends Controller with Authentication {
   }
 
   def postUploadDatum = IsValidAccountWithParser(parse.multipartFormData) { acc => implicit request =>
-    request.body.file("file").map { file =>
-      datumForm.bindFromRequest().fold(
-        formWithErrors => BadRequest(views.html.artisan.uploadDatum(formWithErrors)),
-        result => {
-          val now = new Date()
-          val path = "/files/data/" + now.getTime().toString + "-" + file.filename.filter(_ != ' ')
-          file.ref.moveTo(new File("." + path), true)
-          Data.create(result._1, acc.id, path, result._2)
-          Redirect(routes.Artisan.home).flashing(
-            "success" -> "資料をアップロードしました。"
+    acc.level match {
+      case Admin | Master =>
+        request.body.file("file").map { file =>
+          datumForm.bindFromRequest().fold(
+            formWithErrors => BadRequest(views.html.artisan.uploadDatum(formWithErrors)),
+            result => {
+              val now = new Date()
+              val path = "/files/data/" + now.getTime().toString + "-" + file.filename.filter(_ != ' ')
+              file.ref.moveTo(new File("." + path), true)
+              Data.create(result._1, acc.id, path, result._2)
+              Redirect(routes.Artisan.home).flashing(
+                "success" -> "資料をアップロードしました。"
+              )
+            }
           )
+        }.getOrElse {
+          BadRequest(views.html.artisan.uploadDatum(datumForm.withGlobalError("ファイルのアップロードに失敗しました。")))
         }
-      )
-    }.getOrElse {
-      BadRequest(views.html.artisan.uploadDatum(datumForm.withGlobalError("ファイルのアップロードに失敗しました。")))
+      case Writer => Forbidden(views.html.errors.forbidden())
     }
+  }
+
+  def editDatum(id: Int) = HasAuthority(Master) { acc => request =>
+    Data.findById(id).map { datum =>
+      val data = (datum.name, datum.genre)
+      Ok(views.html.artisan.editDatum(id, datumForm.fill(data)))
+    }.getOrElse(NotFound(views.html.errors.notFound(request.path)))
+  }
+
+  def postEditDatum(id: Int) = HasAuthority(Master) { acc => implicit request =>
+    datumForm.bindFromRequest().fold(
+      formWithErrors => BadRequest(views.html.artisan.editDatum(id, formWithErrors)),
+      result => {
+        Data.update(id, result._1, result._2)
+        Redirect(routes.Artisan.home).flashing(
+          "success" -> "資料情報を編集しました。"
+        )
+      }
+    )
   }
 
   def deleteDatum(id: Int) = HasAuthority(Master) { acc => _ =>

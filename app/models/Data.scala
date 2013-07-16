@@ -49,6 +49,12 @@ object Data extends Table[Datum]("DATA") {
     Data.ins.insert(name, accountId, date, path, genre)
   }
 
+  def update(id: Int, name: String, genre: String) = db.withSession { implicit session: Session =>
+    val target = query.filter(_.id === id)
+    target.map(_.name).update(name)
+    target.map(_.genre).update(genre)
+  }
+
   def delete(id: Int) = db.withSession { implicit session: Session =>
     query.filter(_.id === id).delete
   }

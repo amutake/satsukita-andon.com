@@ -20,9 +20,12 @@
         <tr>
           <td>@data._1</td>
           <td><a href="@datum.path">@datum.name</a></td>
-          <td><form action="@routes.Artisan.deleteDatum(datum.id)" metdod="POST">
-            <button class="btn btn-danger delete-submit">削除</button>
-          </form></td>
+          <td>
+            <a class="btn" href="@routes.Artisan.editDatum(datum.id)">編集</a>
+            <form action="@routes.Artisan.deleteDatum(datum.id)" method="POST" class="inline">
+              <button class="btn btn-danger delete-submit">削除</button>
+            </form>
+          </td>
         </tr>
       }
     </table>

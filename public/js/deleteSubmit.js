@@ -4,5 +4,6 @@ $(function() {
 		if (ok) {
 			$(this).parent("form").submit();
 		}
+		return false;
 	});
 });
