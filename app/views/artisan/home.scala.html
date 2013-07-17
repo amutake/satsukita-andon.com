@@ -55,8 +55,6 @@
     <dd>@acc.level.toJapanese</dd>
   </dl>
 
-  <p><a class="btn" href="@routes.Artisan.editMyPassword()">パスワードの変更</a></p>
-
   @if(acc.level == Admin) {
     <p><a class="btn" href="@routes.Artisan.editAccount(acc.id)">ユーザー情報の変更</a></p>
   }
