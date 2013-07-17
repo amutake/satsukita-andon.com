@@ -4,13 +4,11 @@
 
 @common("アカウントの編集") {
 } {
-  <ul class="breadcrumb">
-    <li><a href="@routes.Artisan.home()">Home</a> <span class="divider">/</span></li>
-    <li><a href="@routes.Artisan.accounts()">アカウント一覧</a> <span class="divider">/</span></li>
-    <li><a href="@routes.Artisan.account(acc.id)">アカウント詳細</a> <span class="divider">/</span></li>
-    <li class="active">アカウント編集</li>
-    <li class="pull-right"><a href="@routes.Artisan.logout()"><button class="btn">ログアウト</button></a></li>
-  </ul>
+  @breadcrumb(Seq(
+    (routes.Artisan.home, "Home"),
+    (routes.Artisan.accounts, "アカウント一覧"),
+    (routes.Artisan.account(acc.id),"アカウント詳細")
+  ), "アカウント編集")
 
   <h3>アカウントの編集</h3>
 

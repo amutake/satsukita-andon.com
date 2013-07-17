@@ -2,12 +2,10 @@
 
 @common("資料情報の編集") {
 } {
-  <ul class="breadcrumb">
-    <li><a href="@routes.Artisan.home()">Home</a> <span class="divider">/</span></li>
-    <li><a href="@routes.Artisan.data()">資料一覧</a> <span class="divider">/</span></li>
-    <li class="active">資料情報の編集</li>
-    <li class="pull-right"><a href="@routes.Artisan.logout()"><button class="btn">ログアウト</button></a></li>
-  </ul>
+  @breadcrumb(Seq(
+    (routes.Artisan.home, "Home"),
+    (routes.Artisan.data, "資料一覧")
+  ), "資料情報の編集")
 
   <h3>資料情報の編集</h3>
 

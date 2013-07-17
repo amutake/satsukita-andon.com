@@ -4,11 +4,9 @@
 
 @common("アカウントの作成") {
 } {
-  <ul class="breadcrumb">
-    <li><a href="@routes.Artisan.home()">Home</a> <span class="divider">/</span></li>
-    <li class="active">アカウント作成</li>
-    <li class="pull-right"><a href="@routes.Artisan.logout()"><button class="btn">ログアウト</button></a></li>
-  </ul>
+  @breadcrumb(Seq(
+    (routes.Artisan.home, "Home")
+  ), "アカウント作成")
 
   <h3>アカウントの作成</h3>
 

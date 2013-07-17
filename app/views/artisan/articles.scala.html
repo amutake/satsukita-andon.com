@@ -4,11 +4,9 @@
 
 @common("記事一覧") {
 } {
-  <ul class="breadcrumb">
-    <li><a href="@routes.Artisan.home()">Home</a> <span class="divider">/</span></li>
-    <li class="active">記事一覧</li>
-    <li class="pull-right"><a href="@routes.Artisan.logout()"><button class="btn">ログアウト</button></a></li>
-  </ul>
+  @breadcrumb(Seq(
+    (routes.Artisan.home, "Home")
+  ), "記事一覧")
 
   <h3>編集可能な記事一覧</h3>
 

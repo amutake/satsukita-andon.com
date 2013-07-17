@@ -4,11 +4,9 @@
 
 @common("アカウント一覧") {
 } {
-  <ul class="breadcrumb">
-    <li><a href="@routes.Artisan.home()">Home</a> <span class="divider">/</span></li>
-    <li class="active">アカウント一覧</li>
-    <li class="pull-right"><a href="@routes.Artisan.logout()"><button class="btn">ログアウト</button></a></li>
-  </ul>
+  @breadcrumb(Seq(
+    (routes.Artisan.home, "Home")
+  ), "アカウント一覧")
 
   @flash.get("success").map { message =>
     <p class="success">
