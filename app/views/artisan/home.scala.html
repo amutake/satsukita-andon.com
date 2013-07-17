@@ -37,32 +37,6 @@
 
   <p><a href="@routes.Artisan.createArticle()">記事の作成</a></p>
 
-
-  <dl>
-    <dt>ID</dt>
-    <dd>@acc.id</dd>
-
-    <dt>名前</dt>
-    <dd>@acc.name</dd>
-
-    <dt>ユーザー名</dt>
-    <dd>@acc.username</dd>
-
-    <dt>卒業期</dt>
-    <dd>@acc.times</dd>
-
-    <dt>アカウントレベル</dt>
-    <dd>@acc.level.toJapanese</dd>
-  </dl>
-
-  @if(acc.level == Admin) {
-    <p><a class="btn" href="@routes.Artisan.editAccount(acc.id)">ユーザー情報の変更</a></p>
-  }
-
-  <form method="POST" action="@routes.Artisan.deleteMyAccount">
-    <button class="btn btn-danger delete-submit">アカウントの削除</button>
-  </form>
-
 } {
   <h2>@acc.username's Home</h2>
 }

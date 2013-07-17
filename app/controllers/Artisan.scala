@@ -54,6 +54,10 @@ object Artisan extends Controller with Authentication {
     Ok(views.html.artisan.home(account))
   }
 
+  def myAccount = IsValidAccount { acc => _ =>
+    Ok(views.html.artisan.myAccount(acc))
+  }
+
   def articles = IsValidAccount { account => _ =>
     account.level match {
       case Admin | Master => Ok(views.html.artisan.articles(Articles.all))

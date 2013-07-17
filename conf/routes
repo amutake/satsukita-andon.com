@@ -20,6 +20,7 @@ GET     /artisan/login              controllers.Artisan.login
 POST    /artisan/login              controllers.Artisan.authenticate
 GET     /artisan/logout             controllers.Artisan.logout
 GET     /artisan/home               controllers.Artisan.home
+GET     /artisan/my-account         controllers.Artisan.myAccount
 GET     /artisan/articles           controllers.Artisan.articles
 GET     /artisan/article            controllers.Artisan.article(id: Long)
 GET     /artisan/article/create     controllers.Artisan.createArticle
