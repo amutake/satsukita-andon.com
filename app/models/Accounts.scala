@@ -1,7 +1,5 @@
 package models
 
-import play.api.db._
-import play.api.Play.current
 import play.api.libs.Codecs._
 
 import scala.slick.driver.H2Driver.simple._
@@ -14,7 +12,7 @@ case class Account(id: Int, name: String, username: String, password: String, ti
 
 object Accounts extends Table[Account]("ACCOUNTS") {
 
-  val db = Database.forDataSource(DB.getDataSource("default"))
+  val db = DB.db
 
   def id = column[Int]("ID", O.NotNull, O.PrimaryKey, O.AutoInc)
   def name = column[String]("NAME", O.NotNull)

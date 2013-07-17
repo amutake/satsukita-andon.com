@@ -1,8 +1,5 @@
 package models
 
-import play.api.db._
-import play.api.Play.current
-
 import scala.slick.driver.H2Driver.simple._
 
 import andon.utils._
@@ -11,7 +8,7 @@ case class ClassData(id: ClassId, title: String, prize: Option[Prize])
 
 object ClassData extends Table[ClassData]("CLASSDATA") {
 
-  val db = Database.forDataSource(DB.getDataSource("default"))
+  val db = DB.db
 
   def id = column[ClassId]("ID", O.NotNull, O.PrimaryKey)
   def times = column[Int]("TIMES", O.NotNull)

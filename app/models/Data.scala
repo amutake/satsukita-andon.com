@@ -1,8 +1,5 @@
 package models
 
-import play.api.db._
-import play.api.Play.current
-
 import scala.slick.driver.H2Driver.simple._
 
 import java.util.Date
@@ -14,7 +11,7 @@ case class Datum(id: Int, name: String, accountId: Int, date: Date, path: String
 
 object Data extends Table[Datum]("DATA") {
 
-  val db = Database.forDataSource(DB.getDataSource("default"))
+  val db = DB.db
 
   def id = column[Int]("ID", O.NotNull, O.PrimaryKey, O.AutoInc)
   def name = column[String]("NAME", O.NotNull)
