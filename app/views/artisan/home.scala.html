@@ -2,6 +2,13 @@
 
 @import andon.utils._
 
+@tr(call: Call, name: String, exp: String) = {
+  <tr>
+    <td><a href="@call">@name</a></td>
+    <td>@exp</td>
+  </tr>
+}
+
 @common(acc.username + "'s Home") {
 } {
   @breadcrumb(Seq(
@@ -21,21 +28,34 @@
     </p>
   }
 
+  <table class="table">
+    <tr>
+      <th>操作</th>
+      <th>説明</th>
+    </tr>
+
+    <tr>
   @if(acc.level != Writer) {
 
-    <p><a href="@routes.Artisan.accounts()">アカウント一覧</a></p>
+    @tr(routes.Artisan.accounts, "アカウント一覧",
+      "登録されているアカウント一覧です。(管理人のみ)")
 
-    <p><a href="@routes.Artisan.createAccount()">アカウントの作成</a></p>
+    @tr(routes.Artisan.createAccount, "アカウントの作成",
+      "新しいアカウントを作成出来ます。(管理人のみ)")
 
-    <p><a href="@routes.Artisan.data()">資料一覧</a></p>
+    @tr(routes.Artisan.data, "資料一覧",
+      "アップロードされた資料一覧です。(管理人のみ)")
 
-    <p><a href="@routes.Artisan.uploadDatum()">資料のアップロード</a></p>
+    @tr(routes.Artisan.uploadDatum, "資料のアップロード",
+      "資料をアップロードできます。ここにアップロードされた資料はHowtoページからダウンロード出来るようになります。(管理人のみ)")
   }
 
 
-  <p><a href="@routes.Artisan.articles()">記事一覧</a></p>
+  @tr(routes.Artisan.articles, "記事一覧",
+    "あなたが編集できる記事一覧です。")
 
-  <p><a href="@routes.Artisan.createArticle()">記事の作成</a></p>
+  @tr(routes.Artisan.createArticle, "記事の作成",
+    "記事の作成画面です。ここで作成された記事は、InfoまたはHowtoで閲覧できるようになります。")
 
 } {
   <h2>@acc.username's Home</h2>
