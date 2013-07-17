@@ -11,13 +11,22 @@
 
   <h3>@acc.name</h3>
 
-  <p>名前: @acc.name</p>
+  <dl class="dl">
+    <dt>ID</dt>
+    <dd>@acc.id</dd>
 
-  <p>ユーザー名: @acc.username</p>
+    <dt>名前</dt>
+    <dd>@acc.name</dd>
 
-  <p>卒業年: @acc.times</p>
+    <dt>ユーザー名</dt>
+    <dd>@acc.username</dd>
 
-  <p>アカウントレベル: @acc.level.toJapanese</p>
+    <dt>卒業期</dt>
+    <dd>@acc.times</dd>
+
+    <dt>アカウントレベル</dt>
+    <dd>@acc.level.toJapanese</dd>
+  </dl>
 
   @if(me.level == Admin && acc.level != Admin) {
     <p><a class="btn" href="@routes.Artisan.editAccount(acc.id)">ユーザー情報の編集</a></p>
