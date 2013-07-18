@@ -320,6 +320,10 @@ object Artisan extends Controller with Authentication {
     ))
   }
 
+  def classData = HasAuthority(Master) { _ => _ =>
+    Ok(views.html.artisan.classData())
+  }
+
   val imageForm = Form(
     tuple(
       "times" -> number,
