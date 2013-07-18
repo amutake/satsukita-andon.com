@@ -73,7 +73,7 @@ object Images {
 
     val options: Seq[Option[(ClassData, String)]] = cs.map { c =>
       c.top.flatMap { name => // String -> Option[(ClassData, String)]
-        val path = toThumbnail(fullsizePath(c.id, name))
+        val path = thumbnailPath(c.id, name)
         val file = new File(path)
         if (file.exists) {
           Some(c, toPath(file))
