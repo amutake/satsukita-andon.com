@@ -320,7 +320,7 @@ object Artisan extends Controller with Authentication {
     ))
   }
 
-  def classData = HasAuthority(Master) { _ => _ =>
+  def classData = HasAuthority(Master) { _ => implicit request =>
     Ok(views.html.artisan.classData())
   }
 
@@ -356,7 +356,7 @@ object Artisan extends Controller with Authentication {
 
             Process("mogrify -resize 600x -unsharp 2x1.2+0.5+0.5 -quality 75 ." + thumbnail + filename) !
           }
-          Redirect(routes.Artisan.home).flashing(
+          Redirect(routes.Artisan.classData).flashing(
             "success" -> "画像をアップロードしました。"
           )
         }
@@ -381,12 +381,12 @@ object Artisan extends Controller with Authentication {
         formWithErrors => BadRequest(views.html.artisan.selectTop(classId, formWithErrors)),
         top => {
           ClassData.updateTop(classId, top)
-          Redirect(routes.Artisan.home).flashing(
+          Redirect(routes.Artisan.classData).flashing(
             "success" -> "トップ画像を変更しました。"
           )
         }
       )
-    }.getOrElse(Redirect(routes.Artisan.home).flashing(
+    }.getOrElse(Redirect(routes.Artisan.classData).flashing(
       "error" -> "そのクラスは存在しません。"
     ))
   }
@@ -415,12 +415,12 @@ object Artisan extends Controller with Authentication {
             new File(tpath).delete()
           }
 
-          Redirect(routes.Artisan.home).flashing(
+          Redirect(routes.Artisan.classData).flashing(
             "success" -> "画像を削除しました。"
           )
         }
       )
-    }.getOrElse(Redirect(routes.Artisan.home).flashing(
+    }.getOrElse(Redirect(routes.Artisan.classData).flashing(
       "error" -> "そのクラスは存在しません。"
     ))
   }

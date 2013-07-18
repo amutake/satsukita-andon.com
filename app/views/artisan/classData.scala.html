@@ -1,3 +1,5 @@
+@()(implicit flash: Flash)
+
 @common("クラス一覧") {
 } {
   @breadcrumb(Seq(
@@ -5,6 +7,18 @@
   ), "クラス一覧")
 
   <h3>クラス一覧</h3>
+
+  @flash.get("success").map { message =>
+    <p class="success">
+      @message
+    </p>
+  }
+
+  @flash.get("error").map { message =>
+    <p class="error">
+      @message
+    </p>
+  }
 
   <select id="select-times" name="times">
     @TimesData.all.map { t =>
