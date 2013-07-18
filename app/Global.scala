@@ -14,6 +14,7 @@ object Global extends GlobalSettings {
   override def onStart(app: Application) {
     InitialData.createTable
     InitialData.insert
+    Cleaner.clean
   }
 
   override def onBadRequest(request: RequestHeader, error: String) = {
