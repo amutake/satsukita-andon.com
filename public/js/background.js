@@ -10,7 +10,7 @@ $(function() {
 		};
 	};
 	var mkSpeed = function(n) {
-		return ((imgNum - n + 1) * 0.1) * 0.8 + 0.2;
+		return (imgNum - n + 1) * 0.1 + 0.02;
 	};
 	var mkOpacity = function(n) {
 		return (-0.03 * n) + 1;
@@ -33,7 +33,7 @@ $(function() {
 		$img.img.css({
 			position: "fixed",
 			left: random(width - 200),
-			top: random(height * 2),
+			top: random(height * 3),
 			opacity: $img.opacity,
 			zIndex: $img.zIndex
 		});
@@ -43,14 +43,10 @@ $(function() {
 		var next = function(top, speed) {
 			var n = parseInt(top);
 			if (n < -300) {
-				if (Math.random() < 0.01) {
-					return {
-						left: random(width - 200),
-						top: height
-					};
-				} else {
-					return {};
-				}
+				return {
+					left: random(width - 200),
+					top: random(height * 2) + height
+				};
 			} else {
 				return {
 					top: "-=" + speed + "px"
