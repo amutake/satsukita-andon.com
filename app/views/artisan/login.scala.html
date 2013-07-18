@@ -1,10 +1,10 @@
 @(form: Form[(String, String)])(implicit flash: Flash)
 
-@common("Sign in") {
+@common("ログイン") {
 } {
   @helper.form(routes.Artisan.authenticate) {
 
-    <h3>Sign in</h3>
+    <h3>ログイン</h3>
 
     @form.globalError.map { error =>
       <p class="error">
@@ -33,5 +33,4 @@
     <input type="submit" class="btn" value="ログイン">
   }
 } {
-  <h2>Sign in</h2>
 }

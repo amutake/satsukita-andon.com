@@ -7,6 +7,8 @@ case class ClassId(times: OrdInt, grade: Int, classn: Int) {
   // ClassId(OrdInt(60), 3, 9).toId => 60000 + 300 + 19 = 60319
   // ClassId(OrdInt(48), 3, -9).toId => 48000 + 300 + 1 = 48301
   def toId: Int = (times.n * 1000) + (grade * 100) + (classn + 10)
+
+  override def toString = times.toString + " " + grade + "-" + Util.showClassN(classn)
 }
 
 object ClassId {

@@ -10,12 +10,11 @@
   </li>
 }
 
-@common("Gallery " + data.id.times + " " + data.id.grade + "-" + data.id.classn) {
+@common(data.id.toString + " " + data.title) {
   <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/gallery.css")">
 } {
   <ul class="thumbnails">
     @ps.map { p => @li(p._1, p._2) }
   </ul>
 } {
-  <h2>@data.id.times @data.id.grade-@Util.showClassN(data.id.classn) @data.title @data.prize.map(_.span)</h2>
 }

@@ -1,6 +1,6 @@
 @(id: andon.utils.ClassId)
 
-@common("資料のアップロード") {
+@common(id.times + id.grade.toString + " " + id.classn.toString + " 画像のアップロード") {
 } {
   @breadcrumb(Seq(
     (routes.Artisan.home, "Home"),
@@ -16,5 +16,4 @@
     <button class="btn" type="submit">送信</button>
   }
 } {
-  <h2>@id.times @id.grade-@id.classn 画像のアップロード</h2>
 }
