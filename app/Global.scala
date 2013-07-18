@@ -66,5 +66,6 @@ object InitialData {
     inits.ClassData.initialize
     inits.Tags.initialize
     inits.Accounts.initialize
+    inits.Articles.initialize
   }
 }
