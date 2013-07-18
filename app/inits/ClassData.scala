@@ -7,7 +7,7 @@ object ClassData {
   def initialize = {
 
     def mkc(times: Int, grade: Int, classn: Int, title: String, prize: Option[Prize]) = {
-      models.ClassData(ClassId(OrdInt(times), grade, classn), title, prize)
+      models.ClassData(ClassId(OrdInt(times), grade, classn), title, prize, None)
     }
 
     if (models.ClassData.all.isEmpty) {

@@ -367,4 +367,29 @@ object Artisan extends Controller with Authentication {
     }
   }
 
+  val topForm = Form(single("top" -> optional(text)))
+
+  def selectTop(id: Int) = HasAuthority(Master) { acc => request =>
+    val classId = ClassId.fromId(id)
+    ClassData.findByClassId(classId).map { c =>
+      Ok(views.html.artisan.selectTop(classId, topForm.fill(c.top)))
+    }.getOrElse(NotFound(views.html.errors.notFound(request.path)))
+  }
+
+  def postSelectTop(id: Int) = HasAuthority(Master) { acc => implicit request =>
+    val classId = ClassId.fromId(id)
+    ClassData.findByClassId(classId).map { c =>
+      topForm.bindFromRequest.fold(
+        formWithErrors => BadRequest(views.html.artisan.selectTop(classId, formWithErrors)),
+        top => {
+          ClassData.updateTop(classId, top)
+          Redirect(routes.Artisan.home).flashing(
+            "success" -> "トップ画像を変更しました。"
+          )
+        }
+      )
+    }.getOrElse(Redirect(routes.Artisan.home).flashing(
+      "error" -> "そのクラスは存在しません。"
+    ))
+  }
 }

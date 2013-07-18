@@ -4,7 +4,7 @@ import scala.slick.driver.H2Driver.simple._
 
 import andon.utils._
 
-case class ClassData(id: ClassId, title: String, prize: Option[Prize])
+case class ClassData(id: ClassId, title: String, prize: Option[Prize], top: Option[String])
 
 object ClassData extends Table[ClassData]("CLASSDATA") {
 
@@ -16,10 +16,11 @@ object ClassData extends Table[ClassData]("CLASSDATA") {
   def classn = column[Int]("CLASSN", O.NotNull)
   def title = column[String]("TITLE", O.NotNull)
   def prize = column[Option[String]]("PRIZE")
+  def top = column[Option[String]]("TOP")
 
-  def * = id ~ times ~ grade ~ classn ~ title ~ prize <> (
-    (id, times, grade, classn, title, prize) => ClassData(id, title, prize.flatMap(Prize.fromString)),
-    data => Some((data.id, data.id.times.n, data.id.grade, data.id.classn, data.title, data.prize.map(_.toString)))
+  def * = id ~ times ~ grade ~ classn ~ title ~ prize ~ top <> (
+    (id, times, grade, classn, title, prize, top) => ClassData(id, title, prize.flatMap(Prize.fromString), top),
+    data => Some((data.id, data.id.times.n, data.id.grade, data.id.classn, data.title, data.prize.map(_.toString), data.top))
   )
 
   val query = Query(ClassData).sortBy(_.times.desc)
@@ -77,5 +78,12 @@ object ClassData extends Table[ClassData]("CLASSDATA") {
 
   def create(data: ClassData) = db.withSession { implicit session: Session =>
     ClassData.insert(data)
+  }
+
+  def updateTop(id: ClassId, top: Option[String]) = db.withSession { implicit session: Session =>
+    // query.filter(_.id === id).map(_.top).update(top)
+    // This does not work
+    val q = for { c <- ClassData if c.id === id } yield c.top
+    q.update(top)
   }
 }
