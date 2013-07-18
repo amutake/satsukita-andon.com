@@ -1,43 +1,20 @@
-@(form: Form[(Int, Int, Int)])
+@(id: andon.utils.ClassId)
 
 @common("資料のアップロード") {
 } {
   @breadcrumb(Seq(
-    (routes.Artisan.home, "Home")
+    (routes.Artisan.home, "Home"),
+    (routes.Artisan.classData, "クラス一覧")
   ), "画像のアップロード")
 
-  <h3>画像のアップロード</h3>
+  <h3>@id.times @id.grade-@id.classn 画像のアップロード</h3>
 
-  @helper.form(routes.Artisan.postUploadImage, 'enctype -> "multipart/form-data") {
-
-    @form.globalError.map { error =>
-      <p class="error">
-      @error.message
-      </p>
-    }
-
-    @helper.inputText(
-      form("times"),
-      '_label -> "第n回",
-      '_help -> ""
-    )
-
-    @helper.inputText(
-      form("grade"),
-      '_label -> "学年",
-      '_help -> ""
-    )
-
-    @helper.inputText(
-      form("classn"),
-      '_label -> "クラス",
-      '_help -> ""
-    )
+  @helper.form(routes.Artisan.postUploadImage(id.toId), 'enctype -> "multipart/form-data") {
 
     <input type="file" name="images" multiple>
 
     <button class="btn" type="submit">送信</button>
   }
 } {
-  <h2>画像のアップロード</h2>
+  <h2>@id.times @id.grade-@id.classn 画像のアップロード</h2>
 }

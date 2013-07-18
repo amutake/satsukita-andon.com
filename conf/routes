@@ -47,8 +47,8 @@ GET     /artisan/data/edit          controllers.Artisan.editDatum(id: Int)
 POST    /artisan/data/edit          controllers.Artisan.postEditDatum(id: Int)
 POST    /artisan/data/delete        controllers.Artisan.deleteDatum(id: Int)
 GET     /artisan/classdata          controllers.Artisan.classData
-GET     /artisan/gallery/upload     controllers.Artisan.uploadImage
-POST    /artisan/gallery/upload     controllers.Artisan.postUploadImage
+GET     /artisan/gallery/upload     controllers.Artisan.uploadImage(id: Int)
+POST    /artisan/gallery/upload     controllers.Artisan.postUploadImage(id: Int)
 GET     /artisan/gallery/select     controllers.Artisan.selectTop(id: Int)
 POST    /artisan/gallery/select     controllers.Artisan.postSelectTop(id: Int)
 

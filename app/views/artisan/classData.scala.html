@@ -24,7 +24,7 @@
         <td>@c.title</td>
         <td>@c.prize.map(_.toJapanese)</td>
         <td>
-          <a class="btn" href="@routes.Artisan.uploadImage">画像のアップロード</a>
+          <a class="btn" href="@routes.Artisan.uploadImage(c.id.toId)">画像のアップロード</a>
           <a class="btn" href="@routes.Artisan.selectTop(c.id.toId)">トップ画像の選択</a>
         </td>
       </tr>

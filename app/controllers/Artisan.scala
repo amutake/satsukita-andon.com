@@ -324,51 +324,45 @@ object Artisan extends Controller with Authentication {
     Ok(views.html.artisan.classData())
   }
 
-  val imageForm = Form(
-    tuple(
-      "times" -> number,
-      "grade" -> number,
-      "classn" -> number
-    )
-  )
-
-  def uploadImage = HasAuthority(Master) { acc => _ =>
-    Ok(views.html.artisan.uploadImage(imageForm))
+  def uploadImage(id: Int) = HasAuthority(Master) { _ => request =>
+    val classId = ClassId.fromId(id)
+    ClassData.findByClassId(classId).map { c =>
+      Ok(views.html.artisan.uploadImage(classId))
+    }.getOrElse(NotFound(views.html.errors.notFound(request.path)))
   }
 
-  def postUploadImage = IsValidAccountWithParser(parse.multipartFormData) { acc => implicit request =>
-    acc.level match {
-      case Admin | Master =>
-        imageForm.bindFromRequest().fold(
-          formWithErrors => BadRequest(views.html.artisan.uploadImage(formWithErrors)),
-          result => {
-            request.body.files.foreach { file =>
-              val classDir = OrdInt(result._1).toString + "/" + result._2 + "/" + result._3 + "/"
-              val fullsize = "/files/gallery/fullsize/" + classDir
-              val thumbnail = "/files/gallery/thumbnail/" + classDir
-              def valid(c: Char) = {
-                val r = """[\w\.]""".r
-                c.toString match {
-                  case r() => true
-                  case _ => false
-                }
+  def postUploadImage(id: Int) = IsValidAccountWithParser(parse.multipartFormData) { acc => request =>
+    val classId = ClassId.fromId(id)
+    ClassData.findByClassId(classId).map { c =>
+      acc.level match {
+        case Admin | Master => {
+          request.body.files.foreach { file =>
+            val classDir = c.id.times + "/" + c.id.grade + "/" + c.id.classn + "/"
+            val fullsize = "/files/gallery/fullsize/" + classDir
+            val thumbnail = "/files/gallery/thumbnail/" + classDir
+            def valid(c: Char) = {
+              val r = """[\w\.]""".r
+              c.toString match {
+                case r() => true
+                case _ => false
               }
-              val filename = new Date().getTime().toString + "-" + file.filename.filter(valid)
-
-              file.ref.moveTo(new File("." + fullsize + filename), true)
-              Files.copyFile(new File("." + fullsize + filename), new File("." + thumbnail + filename))
-
-              Process("mogrify -quality 50 ." + fullsize + filename) !
-
-              Process("mogrify -resize 600x -unsharp 2x1.2+0.5+0.5 -quality 75 ." + thumbnail + filename) !
             }
-            Redirect(routes.Artisan.home).flashing(
-              "success" -> "画像をアップロードしました。"
-            )
+            val filename = new Date().getTime().toString + "-" + file.filename.filter(valid)
+
+            file.ref.moveTo(new File("." + fullsize + filename), true)
+            Files.copyFile(new File("." + fullsize + filename), new File("." + thumbnail + filename))
+
+            Process("mogrify -quality 50 ." + fullsize + filename) !
+
+            Process("mogrify -resize 600x -unsharp 2x1.2+0.5+0.5 -quality 75 ." + thumbnail + filename) !
           }
-        )
-      case Writer => Forbidden(views.html.errors.forbidden())
-    }
+          Redirect(routes.Artisan.home).flashing(
+            "success" -> "画像をアップロードしました。"
+          )
+        }
+        case Writer => Forbidden(views.html.errors.forbidden())
+      }
+    }.getOrElse(BadRequest)
   }
 
   val topForm = Form(single("top" -> optional(text)))
