@@ -12,22 +12,38 @@ object Images {
   def thumbnailsDir(t: OrdInt, g: Int, c: Int) =
     "./files/gallery/thumbnail/" + t + "/" + g + "/" + c
 
-  def img(t: OrdInt, g: Int, c: Int, n: Int, f: (OrdInt, Int, Int) => String) =
-    f(t, g, c) + "/" + t + g + "-" + c + "_" + pictNumber(n) + ".jpg"
+  def fullsizePath(id: ClassId, filename: String) = {
+    productsDir(id.times, id.grade, id.classn) + "/" + filename
+  }
 
-  def pictNumber(n: Int) = if (n < 10) ("0" + n) else (n.toString)
+  def thumbnailPath(id: ClassId, filename: String) = toThumbnail(fullsizePath(id, filename))
 
   def toThumbnail(path: String) = """/fullsize/""".r.replaceFirstIn(path, "/thumbnail/")
 
-  def getClassImages(t: OrdInt, g: Int, c: Int): Seq[String] = {
-    val path = productsDir(t, g, c)
-    val dir = new File(path)
+  def dirOption(id: ClassId) = {
+    val dir = new File(productsDir(id.times, id.grade, id.classn))
     if (dir.isDirectory) {
-      dir.listFiles.map(_.getPath.substring(1))
+      Some(dir)
     } else {
-      Seq()
+      None
     }
   }
+
+  def headOption(id: ClassId) = {
+    dirOption(id).flatMap { d =>
+      d.listFiles.headOption
+    }
+  }
+
+  def list(id: ClassId) = {
+    dirOption(id).map { d =>
+      d.listFiles.toSeq
+    }.getOrElse(Seq[File]())
+  }
+
+  def toPath(file: File) = file.getPath.substring(1)
+
+  def getClassImages(id: ClassId) = list(id).map(toPath _)
 
   def getTimesImages(t: OrdInt): Seq[(ClassData, String)] = {
     val cs = ClassData.findByTimes(t)
@@ -42,18 +58,33 @@ object Images {
   }
 
   def getTopImages(cs: Seq[ClassData]): Seq[(ClassData, String)] = {
-    cs.map { c =>
-      val path = c.top.map { name =>
-        thumbnailsDir(c.id.times, c.id.grade, c.id.classn) + "/" + name
-      }.getOrElse(img(c.id.times, c.id.grade, c.id.classn, 1, thumbnailsDir))
-      val file = new File(path)
-      if (file.exists) {
-        (c, file.getPath.substring(1))
-      } else {
-        (c, "img/logo.png")
-      }
-    }.filter { p =>
-        p._2 != "img/logo.png"
+    // 1. top some
+    //   1. exists
+    //   2. not exists
+    // 2. top none
+    //   1. head some
+    //   2. head none
+    def flatOptions[A](options: Seq[Option[A]]): Seq[A] = {
+      options.flatMap(_ match {
+        case Some(a) => Seq(a)
+        case None => Seq()
+      })
     }
+
+    val options: Seq[Option[(ClassData, String)]] = cs.map { c =>
+      c.top.flatMap { name => // String -> Option[(ClassData, String)]
+        val path = toThumbnail(fullsizePath(c.id, name))
+        val file = new File(path)
+        if (file.exists) {
+          Some(c, toPath(file))
+        } else {
+          None
+        }
+      }.orElse(headOption(c.id).map { file =>
+        (c, toPath(file))
+      })
+    }
+
+    flatOptions(options)
   }
 }

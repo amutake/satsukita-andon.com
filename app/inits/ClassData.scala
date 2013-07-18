@@ -7,7 +7,8 @@ object ClassData {
   def initialize = {
 
     def mkc(times: Int, grade: Int, classn: Int, title: String, prize: Option[Prize]) = {
-      models.ClassData(ClassId(OrdInt(times), grade, classn), title, prize, None)
+      val top = OrdInt(times).toString + grade.toString + "-" + classn.toString + "_01.jpg"
+      models.ClassData(ClassId(OrdInt(times), grade, classn), title, prize, Some(top))
     }
 
     if (models.ClassData.all.isEmpty) {
