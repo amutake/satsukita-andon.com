@@ -6,29 +6,23 @@
 
   <h3>クラス一覧</h3>
 
+  <select id="select-times" name="times">
+    @TimesData.all.map { t =>
+      <option value="@t.times.n.toString">@t.times.toString</option>
+    }
+  </select>
+
   <table class="table">
     <tr>
-      <th>第n回</th>
+      <th>写真</th>
+      <th>回</th>
       <th>学年</th>
       <th>組</th>
       <th>タイトル</th>
       <th>賞</th>
       <th>操作</th>
     </tr>
-
-    @ClassData.all.map { c =>
-      <tr>
-        <td>@c.id.times</td>
-        <td>@c.id.grade</td>
-        <td>@c.id.classn</td>
-        <td>@c.title</td>
-        <td>@c.prize.map(_.toJapanese)</td>
-        <td>
-          <a class="btn" href="@routes.Artisan.uploadImage(c.id.toId)">画像のアップロード</a>
-          <a class="btn" href="@routes.Artisan.selectTop(c.id.toId)">トップ画像の選択</a>
-        </td>
-      </tr>
-    }
   </table>
 } {
+  <script type="text/javascript" src="@routes.Assets.at("js/pagenationClass.js")"></script>
 }

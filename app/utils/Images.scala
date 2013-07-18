@@ -18,6 +18,8 @@ object Images {
 
   def thumbnailPath(id: ClassId, filename: String) = toThumbnail(fullsizePath(id, filename))
 
+  def toFullsize(path: String) = """/thumbnail/""".r.replaceFirstIn(path, "/fullsize/")
+
   def toThumbnail(path: String) = """/fullsize/""".r.replaceFirstIn(path, "/thumbnail/")
 
   def dirOption(id: ClassId) = {
@@ -57,13 +59,28 @@ object Images {
     }
   }
 
-  def getTopImages(cs: Seq[ClassData]): Seq[(ClassData, String)] = {
+  def findImage(c: ClassData): Option[File] = {
     // 1. top some
     //   1. exists
     //   2. not exists
     // 2. top none
     //   1. head some
     //   2. head none
+    c.top.flatMap { name =>
+      val path = thumbnailPath(c.id, name)
+      val file = new File(path)
+      if (file.exists) {
+        Some(file)
+      } else {
+        None
+      }
+    }.orElse(headOption(c.id))
+  }
+
+  def findImagePath(c: ClassData) = findImage(c).map(toPath _)
+
+  def getTopImages(cs: Seq[ClassData]): Seq[(ClassData, String)] = {
+
     def flatOptions[A](options: Seq[Option[A]]): Seq[A] = {
       options.flatMap(_ match {
         case Some(a) => Seq(a)
@@ -72,19 +89,15 @@ object Images {
     }
 
     val options: Seq[Option[(ClassData, String)]] = cs.map { c =>
-      c.top.flatMap { name => // String -> Option[(ClassData, String)]
-        val path = thumbnailPath(c.id, name)
-        val file = new File(path)
-        if (file.exists) {
-          Some(c, toPath(file))
-        } else {
-          None
-        }
-      }.orElse(headOption(c.id).map { file =>
-        (c, toPath(file))
-      })
+      findImagePath(c).map((c, _))
     }
 
     flatOptions(options)
+  }
+
+  def getTopImagesOption(cs: Seq[ClassData]): Seq[(ClassData, Option[String])] = {
+    cs.map { c =>
+      (c, findImagePath(c))
+    }
   }
 }

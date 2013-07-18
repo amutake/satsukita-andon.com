@@ -55,6 +55,7 @@ POST    /artisan/gallery/select     controllers.Artisan.postSelectTop(id: Int)
 # API
 # TODO
 GET     /api/search                 controllers.API.search(times: String, prize: String, grade: String, tag: String)
+GET     /api/search/times           controllers.API.searchByTimes(times: Int)
 POST    /api/upload                 controllers.API.upload
 
 # uploaded file

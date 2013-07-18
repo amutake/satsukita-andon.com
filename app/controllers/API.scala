@@ -24,12 +24,35 @@ object API extends Controller with Authentication {
       cps.map { cp =>
         Json.toJson(
           Map(
+            "id" -> Json.toJson(cp._1.id.toId),
             "times" -> Json.toJson(cp._1.id.times.toString),
             "grade" -> Json.toJson(cp._1.id.grade),
             "classn" -> Json.toJson(cp._1.id.classn),
             "title" -> Json.toJson(cp._1.title),
-            "prize" -> Json.toJson(cp._1.prize.map(_.toString).getOrElse("")),
+            "prize" -> Json.toJson(cp._1.prize.map(_.toJapanese).getOrElse("")),
             "thumbnail" -> Json.toJson(cp._2)
+          )
+        )
+      }
+    )
+    Ok(json)
+  }
+
+  def searchByTimes(times: Int) = Action {
+    val cs = ClassData.findByTimes(OrdInt(times))
+    val cps = Images.getTopImagesOption(cs)
+    val json = Json.toJson(
+      cps.map { cp =>
+        Json.toJson(
+          Map(
+            "id" -> Json.toJson(cp._1.id.toId),
+            "times" -> Json.toJson(cp._1.id.times.toString),
+            "grade" -> Json.toJson(cp._1.id.grade),
+            "classn" -> Json.toJson(cp._1.id.classn),
+            "title" -> Json.toJson(cp._1.title),
+            "prize" -> Json.toJson(cp._1.prize.map(_.toJapanese).getOrElse("")),
+            "thumbnail" -> Json.toJson(cp._2.getOrElse("")),
+            "fullsize" -> Json.toJson(cp._2.map(Images.toFullsize _).getOrElse(""))
           )
         )
       }
