@@ -1,0 +1,35 @@
+@(id: Int, form: Form[(String, String)])
+
+@common("資料情報の編集") {
+} {
+  @breadcrumb(Seq(
+    (routes.Artisan.home, "Home"),
+    (routes.Artisan.data, "資料一覧")
+  ), "資料情報の編集")
+
+  <h3>資料情報の編集</h3>
+
+  @helper.form(routes.Artisan.postEditDatum(id)) {
+
+    @form.globalError.map { error =>
+      <p class="error">
+      @error.message
+      </p>
+    }
+
+    @helper.inputText(
+      form("name"),
+      '_label -> "資料名",
+      '_help -> ""
+    )
+
+    @helper.inputText(
+      form("genre"),
+      '_label -> "ジャンル",
+      '_help -> ""
+    )
+
+    <button class="btn" type="submit">送信</button>
+  }
+} {
+}

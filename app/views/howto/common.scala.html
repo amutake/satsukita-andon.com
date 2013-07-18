@@ -1,10 +1,9 @@
 @(title: String)(author: String)(date: String)(content: Html)
 
-@views.html.common("How to") {
+@views.html.common("How to - " + title) {
   <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/howto.css")">
 } {
   @content
   <p id="author">Author: @author  Date: @date</p>
 } {
-  <h2>How to - @title</h2>
 }

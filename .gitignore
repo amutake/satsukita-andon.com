@@ -23,7 +23,8 @@ public/file/
 
 send.sh
 resize.sh
-startup.sh
 deploy.sh
-shutdown.sh
 defreeze.sh
+
+db/
+files/

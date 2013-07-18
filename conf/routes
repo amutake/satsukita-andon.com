@@ -10,13 +10,58 @@ GET     /gallery/search             controllers.Application.search
 GET     /gallery/:t                 controllers.Application.timesGallery(t: andon.utils.OrdInt)
 GET     /gallery/:t/:g/:c           controllers.Application.classGallery(t: andon.utils.OrdInt, g: Int, c: Int)
 GET     /howto                      controllers.Application.howto
+GET     /howto/article              controllers.Application.howtoArticle(id: Long)
 GET     /howto/:page                controllers.Application.eachHowto(page: String)
 GET     /about                      controllers.Application.about
 GET     /contact                    controllers.Application.contact
 
+# Artisan page
+GET     /artisan/login              controllers.Artisan.login
+POST    /artisan/login              controllers.Artisan.authenticate
+GET     /artisan/logout             controllers.Artisan.logout
+GET     /artisan/home               controllers.Artisan.home
+GET     /artisan/my-account         controllers.Artisan.myAccount
+GET     /artisan/articles           controllers.Artisan.articles
+GET     /artisan/article            controllers.Artisan.article(id: Long)
+GET     /artisan/article/create     controllers.Artisan.createArticle
+POST    /artisan/article/create     controllers.Artisan.postCreateArticle
+GET     /artisan/article/edit       controllers.Artisan.editArticle(id: Long)
+POST    /artisan/article/edit       controllers.Artisan.postEditArticle(id: Long)
+POST    /artisan/article/delete     controllers.Artisan.deleteArticle(id: Long)
+GET     /artisan/accounts           controllers.Artisan.accounts
+GET     /artisan/account            controllers.Artisan.account(id: Int)
+GET     /artisan/account/create     controllers.Artisan.createAccount
+POST    /artisan/account/create     controllers.Artisan.postCreateAccount
+GET     /artisan/account/edit       controllers.Artisan.editAccount(id: Int)
+POST    /artisan/account/edit       controllers.Artisan.postEditAccount(id: Int)
+GET     /artisan/account/password   controllers.Artisan.editPassword(id: Int)
+POST    /artisan/account/password   controllers.Artisan.postEditPassword(id: Int)
+POST    /artisan/account/delete     controllers.Artisan.deleteAccount(id: Int)
+GET     /artisan/password           controllers.Artisan.editMyPassword
+POST    /artisan/password           controllers.Artisan.postEditMyPassword
+POST    /artisan/delete             controllers.Artisan.deleteMyAccount
+GET     /artisan/data               controllers.Artisan.data
+GET     /artisan/data/upload        controllers.Artisan.uploadDatum
+POST    /artisan/data/upload        controllers.Artisan.postUploadDatum
+GET     /artisan/data/edit          controllers.Artisan.editDatum(id: Int)
+POST    /artisan/data/edit          controllers.Artisan.postEditDatum(id: Int)
+POST    /artisan/data/delete        controllers.Artisan.deleteDatum(id: Int)
+GET     /artisan/classdata          controllers.Artisan.classData
+GET     /artisan/gallery/upload     controllers.Artisan.uploadImage(id: Int)
+POST    /artisan/gallery/upload     controllers.Artisan.postUploadImage(id: Int)
+GET     /artisan/gallery/select     controllers.Artisan.selectTop(id: Int)
+POST    /artisan/gallery/select     controllers.Artisan.postSelectTop(id: Int)
+GET     /artisan/gallery/delete     controllers.Artisan.deleteImage(id: Int)
+POST    /artisan/gallery/delete     controllers.Artisan.postDeleteImage(id: Int)
+
 # API
 # TODO
 GET     /api/search                 controllers.API.search(times: String, prize: String, grade: String, tag: String)
+GET     /api/search/times           controllers.API.searchByTimes(times: Int)
+POST    /api/upload                 controllers.API.upload
+
+# uploaded file
+GET     /files/*filename            controllers.FileService.get(filename: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

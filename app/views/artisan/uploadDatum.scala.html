@@ -1,0 +1,36 @@
+@(form: Form[(String, String)])
+
+@common("資料のアップロード") {
+} {
+  @breadcrumb(Seq(
+    (routes.Artisan.home, "Home")
+  ), "資料のアップロード")
+
+  <h3>資料のアップロード</h3>
+
+  @helper.form(routes.Artisan.postUploadDatum, 'enctype -> "multipart/form-data") {
+
+    @form.globalError.map { error =>
+      <p class="error">
+      @error.message
+      </p>
+    }
+
+    <input type="file" name="file">
+
+    @helper.inputText(
+      form("name"),
+      '_label -> "資料名",
+      '_help -> ""
+    )
+
+    @helper.inputText(
+      form("genre"),
+      '_label -> "ジャンル",
+      '_help -> ""
+    )
+
+    <button class="btn" type="submit">送信</button>
+  }
+} {
+}

@@ -40,16 +40,13 @@ object Application extends Controller {
   }
 
   def classGallery(t: OrdInt, g: Int, c: Int) = Action {
-    val data = ClassData.findByClassId(ClassId(t, g, c))
-    // TODO
-    if (data.isDefined) {
-      val ps = Images.getClassImages(t, g, c).map { p =>
-        (p, Images.toThumbnail(p))
+    val id = ClassId(t, g, c)
+    ClassData.findByClassId(id).map { data =>
+      val ft = Images.getClassImages(id).map { f =>
+        (f, Images.toThumbnail(f))
       }
-      Ok(views.html.gallery.classg(data.get, ps))
-    } else {
-      NotFound(views.html.errors.notFound("/gallery/" + t + "/" + g + "/" + c))
-    }
+      Ok(views.html.gallery.classg(data, ft))
+    }.getOrElse(NotFound)
   }
 
   def howto = Action {
@@ -74,6 +71,12 @@ object Application extends Controller {
       case "sketchup" => Ok(views.html.howto.sketchup())
       case _ => NotFound(views.html.errors.notFound("/howto/" + page))
     }
+  }
+
+  def howtoArticle(id: Long) = Action { request =>
+    Articles.findById(id).map { article =>
+      Ok(views.html.howto.article(article))
+    }.getOrElse(NotFound(views.html.errors.notFound(request.path)))
   }
 
   def about = Action {

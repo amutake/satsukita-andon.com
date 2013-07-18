@@ -1,0 +1,39 @@
+@(acc: Account)
+
+@import andon.utils._
+
+@common("アカウント情報") {
+} {
+  @breadcrumb(Seq(
+    (routes.Artisan.home, "Home")
+  ), "アカウント情報")
+
+  <h3>アカウント情報</h3>
+
+  <dl class="dl">
+    <dt>ID</dt>
+    <dd>@acc.id</dd>
+
+    <dt>名前</dt>
+    <dd>@acc.name</dd>
+
+    <dt>ユーザー名</dt>
+    <dd>@acc.username</dd>
+
+    <dt>卒業期</dt>
+    <dd>@acc.times</dd>
+
+    <dt>アカウントレベル</dt>
+    <dd>@acc.level.toJapanese</dd>
+  </dl>
+
+  @if(acc.level == Admin) {
+    <a class="btn" href="@routes.Artisan.editAccount(acc.id)">ユーザー情報の変更</a>
+  }
+
+  <form class="inline" method="POST" action="@routes.Artisan.deleteMyAccount">
+    <button class="btn btn-danger delete-submit">アカウントの削除</button>
+  </form>
+} {
+  <script type="text/javascript" src="@routes.Assets.at("js/deleteSubmit.js")"></script>
+}

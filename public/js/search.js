@@ -7,7 +7,7 @@
 		data.map(function(datum) {
 
 			var $img = $("<img>").attr({
-				src: "/assets/" + datum.thumbnail
+				src: datum.thumbnail
 			});
 
 			var $detail = $("<div>").text(

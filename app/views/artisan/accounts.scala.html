@@ -1,0 +1,39 @@
+@(account: Account, accounts: Iterable[Account])(implicit flash: Flash)
+
+@import andon.utils._
+
+@common("アカウント一覧") {
+} {
+  @breadcrumb(Seq(
+    (routes.Artisan.home, "Home")
+  ), "アカウント一覧")
+
+  @flash.get("success").map { message =>
+    <p class="success">
+      @message
+    </p>
+  }
+
+
+  <h3>アカウント一覧</h3>
+  @Seq(Admin, Master, Writer).map { l =>
+
+    <h4>@l.toJapaneseアカウント</h4>
+
+    <table class="table">
+      <tr>
+        <th>名前</th>
+        <th>ユーザー名</th>
+        <th>卒業期</th>
+      </tr>
+      @accounts.filter(_.level == l).map { acc =>
+        <tr>
+          <td><a href="@routes.Artisan.account(acc.id)">@acc.name</a></td>
+          <td>@acc.username</td>
+          <td>@acc.times</td>
+        </tr>
+      }
+    </table>
+  }
+} {
+}

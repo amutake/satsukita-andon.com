@@ -1,0 +1,60 @@
+@(types: List[andon.utils.ArticleType], form: Form[(String, String, String, String)])
+
+@common("記事の作成") {
+} {
+  @breadcrumb(Seq(
+    (routes.Artisan.home, "Home")
+  ), "記事作成")
+
+  <h3>記事の作成</h3>
+
+  <div class="span9">
+    @helper.form(routes.Artisan.postCreateArticle, 'style -> "margin-bottom: 80px;") {
+
+      @form.globalError.map { error =>
+        <p class="error">
+          @error.message
+        </p>
+      }
+
+      @helper.select(
+        form("type"),
+        options = helper.options(types.map(_.toString)),
+        '_label -> "記事の種類",
+        '_help -> ""
+      )
+
+      @helper.inputText(
+        form("genre"),
+        '_label -> "ジャンル",
+        '_help -> ""
+      )
+
+      @helper.inputText(
+        form("title"),
+        '_label -> "タイトル",
+        '_help -> "",
+        'class -> "wide"
+      )
+
+      @helper.textarea(
+        form("text"),
+        '_label -> "本文",
+        '_help -> "",
+        'class -> "wide",
+        'rows -> 20
+      )
+
+      <button class="btn" type="submit">送信</button>
+    }
+  </div>
+
+  <div class="span3">
+    <input class="fileupload-input" type="file" name="file" multiple>
+    <button class="btn fileupload-submit">画像を送信</button>
+    <ul class="thumbnails fileupload-wrapper" style="margin-bottom: 80px;">
+    </ul>
+  </div>
+} {
+  <script type="text/javascript" src="@routes.Assets.at("js/insertImage.js")"></script>
+}

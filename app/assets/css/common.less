@@ -4,3 +4,137 @@ h3 {
     padding: 6px 0 6px 30px;
     background-color: rgba(71, 11, 17, 0.5);
 }
+
+.error {
+    color: red;
+}
+
+.success {
+    color: #33ff33;
+}
+
+.wide {
+    width: 100%;
+}
+
+.inline {
+    display: inline;
+}
+
+.breadcrumb {
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 0;
+    li {
+        text-shadow: 0 0 0 #000000;
+    }
+}
+
+#author {
+    margin: 50px 0 0 0;
+    width: @mainWidth;
+    text-align: right;
+}
+
+blockquote{
+    padding: 8px 20px;
+    border-left: #777777 solid 3px;
+    p {
+        font-size: 1.05em;
+        color: #cccccc;
+    }
+}
+
+.dl {
+    margin: 0 0 15px;
+    padding: 0 10px 10px;
+
+    dt {
+        float: left;
+        width: 200px;
+        padding: 10px 0;
+        font-weight: bold;
+        text-indent: 1em;
+        line-height: 150%;
+    }
+
+    dd {
+        padding: 10px 0;
+        line-height: 150%;
+        border-bottom: 1px #cccccc solid;
+    }
+    dd:nth-child(2) {
+        border-top: 1px #cccccc solid;
+    }
+}
+
+.article {
+
+    margin: 20px 20px 40px;
+
+    h1 {
+        font-size: 1.8em;
+        border-bottom: 2px solid #999;
+        line-height: 1.8em;
+        margin: 36px auto 28px;
+    }
+    h2 {
+        font-size: 1.4em;
+        border-bottom: 1px dashed #666;
+        margin: 26px auto 20px;
+    }
+    h3 {
+        border-left: 5px solid rgba(255, 255, 255, 0.2);
+        background-color: transparent;
+        padding-left: 10px;
+        font-size: 1.2em;
+        line-height: 1.2em;
+        margin: 18px auto 12px;
+    }
+    h4 {
+        font-size: 1.1em;
+    }
+    h5 {
+        font-size: 1em;
+    }
+
+    ul li {
+        list-style-type: disc;
+        margin-left: 30px;
+    }
+    ol li {
+        list-style-type: decimal;
+        margin-left: 30px;
+    }
+
+    code {
+        background-color: transparent;
+        color: white;
+        border: none;
+        font-size: 1.1em;
+    }
+
+    pre {
+        background-color: rgba(255, 255, 255, 0.05);
+        border: none;
+    }
+
+    .table {
+        @tableColor: rgba(180, 180, 180, 0.5);
+        border-color: @tableColor;
+        th {
+            text-align: center;
+            border-color: @tableColor;
+        }
+        td {
+            border-color: @tableColor;
+        }
+        tbody>tr:nth-child(even)>td,
+        tbody>tr:nth-child(even)>th {
+            background-color: rgba(180, 180, 180, 0.1);
+        }
+        tbody>tr:nth-child(odd)>td,
+        tbody>tr:nth-child(odd)>th {
+            background-color: transparent;
+        }
+    }
+}

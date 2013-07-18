@@ -1,0 +1,42 @@
+@()(implicit flash: Flash)
+
+@common("クラス一覧") {
+} {
+  @breadcrumb(Seq(
+    (routes.Artisan.home, "Home")
+  ), "クラス一覧")
+
+  <h3>クラス一覧</h3>
+
+  @flash.get("success").map { message =>
+    <p class="success">
+      @message
+    </p>
+  }
+
+  @flash.get("error").map { message =>
+    <p class="error">
+      @message
+    </p>
+  }
+
+  <select id="select-times" name="times">
+    @TimesData.all.map { t =>
+      <option value="@t.times.n.toString">@t.times.toString</option>
+    }
+  </select>
+
+  <table class="table">
+    <tr>
+      <th>写真</th>
+      <th>回</th>
+      <th>学年</th>
+      <th>組</th>
+      <th>タイトル</th>
+      <th>賞</th>
+      <th>操作</th>
+    </tr>
+  </table>
+} {
+  <script type="text/javascript" src="@routes.Assets.at("js/pagenationClass.js")"></script>
+}

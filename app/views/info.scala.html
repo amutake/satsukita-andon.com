@@ -1,18 +1,28 @@
+@import andon.utils._
+
 @common("Information") {
+  <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/info.css")">
 } {
 
-  <h3>2013年度の行灯行列について</h3>
-  <p>2013年度(64th)の行灯行列は7/5(金)に行われました。現役生および教職員、保護者の皆様、お疲れ様でした。</p>
+  <h3>お知らせ</h3>
 
-  <h3>管理人募集</h3>
-  <p>六代目管理人を募集しております。興味のある方は<a href="@routes.Application.contact">Contactページ</a>の連絡先までご連絡ください。</p>
-  <p>条件 : 行灯が好き ・ 62nd ~ 64th(64thの方は卒業後) ・ 浪人生でない</p>
-  <p>※Web制作に関する知識は必要ありません。</p>
+  <div class="article">
+    @Articles.findByType(InfoTop).map { article =>
+      @Conv.both(article.text)
+    }
+  </div>
 
-  <h3>執筆者募集</h3>
-  <p>記事の執筆者を募集しております。興味のある方は<a href="@routes.Application.contact">Contactページ</a>の連絡先までご連絡ください。
-  </p>
+  <h3>管理人の一言</h3>
 
+  @Articles.findByType(Info).map { article =>
+    <div class="info-post article">
+      <p class="date">@DateUtil.dateFormat(article.createDate)</p>
+      <h1 class="title">@article.title</h1>
+      <div class="info-text">
+        @Conv.both(article.text)
+      </div>
+      <p class="author">Posted by @Accounts.findNameById(article.createAccountId)</p>
+    </div>
+  }
 } {
-  <h2>Information</h2>
 }

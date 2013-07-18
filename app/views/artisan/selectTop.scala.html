@@ -1,0 +1,38 @@
+@(id: andon.utils.ClassId, form: Form[Option[String]])
+
+@import andon.utils._
+
+@common("トップ画像の選択") {
+} {
+  @breadcrumb(Seq(
+    (routes.Artisan.home, "Home")
+  ), "トップ画像の選択")
+
+  <h3>トップ画像の選択</h3>
+
+  @helper.form(routes.Artisan.postSelectTop(id.toId)) {
+
+    @form.globalError.map { error =>
+      <p class="error">
+        @error.message
+      </p>
+    }
+
+    <ul class="thumbnails">
+      @Images.getClassImages(id).map { path =>
+        @defining(Images.toFilename(path)) { filename =>
+          <li class="span3">
+            <input type="radio" name="top" value="@filename" id="@filename" @if(form("top").value == Some(filename)) { checked } >
+            <label for="@filename">
+              <img src="@Images.toThumbnail(path)">
+            </label>
+          </li>
+        }
+      }
+    </ul>
+
+    <button type="submit" class="btn">送信</button>
+  }
+} {
+  <h2>トップ画像の選択</h2>
+}

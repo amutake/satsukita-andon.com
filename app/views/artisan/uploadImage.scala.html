@@ -1,0 +1,19 @@
+@(id: andon.utils.ClassId)
+
+@common(id.times + id.grade.toString + " " + id.classn.toString + " 画像のアップロード") {
+} {
+  @breadcrumb(Seq(
+    (routes.Artisan.home, "Home"),
+    (routes.Artisan.classData, "クラス一覧")
+  ), "画像のアップロード")
+
+  <h3>@id.times @id.grade-@id.classn 画像のアップロード</h3>
+
+  @helper.form(routes.Artisan.postUploadImage(id.toId), 'enctype -> "multipart/form-data") {
+
+    <input type="file" name="images" multiple>
+
+    <button class="btn" type="submit">送信</button>
+  }
+} {
+}

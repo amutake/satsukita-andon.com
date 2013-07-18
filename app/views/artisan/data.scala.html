@@ -1,0 +1,33 @@
+@common("資料一覧") {
+} {
+  @breadcrumb(Seq(
+    (routes.Artisan.home, "Home")
+  ), "資料一覧")
+
+  <h3>資料一覧</h3>
+
+  @Data.all.groupBy(_.genre).map { data =>
+    <h4>@data._1</h4>
+    <table class="table">
+      <tr>
+        <th>ジャンル</th>
+        <th>タイトル</th>
+        <th>操作</th>
+      </tr>
+      @data._2.map { datum =>
+        <tr>
+          <td>@data._1</td>
+          <td><a href="@datum.path">@datum.name</a></td>
+          <td>
+            <a class="btn" href="@routes.Artisan.editDatum(datum.id)">編集</a>
+            <form action="@routes.Artisan.deleteDatum(datum.id)" method="POST" class="inline">
+              <button class="btn btn-danger delete-submit">削除</button>
+            </form>
+          </td>
+        </tr>
+      }
+    </table>
+  }
+} {
+  <script type="text/javascript" src="@routes.Assets.at("js/deleteSubmit.js")"></script>
+}

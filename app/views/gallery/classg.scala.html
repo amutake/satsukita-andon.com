@@ -2,20 +2,19 @@
 
 @import andon.utils._
 
-@li(product: String, thumbnail: String) = {
+@li(fullsize: String, thumbnail: String) = {
   <li class="span4">
-    <a class="fresco" href="@routes.Assets.at(product)" data-fresco-group="gallery">
-      <img src="@routes.Assets.at(thumbnail)">
+    <a class="fresco" href="@fullsize" data-fresco-group="gallery">
+      <img src="@thumbnail">
     </a>
   </li>
 }
 
-@common("Gallery " + data.id.times + " " + data.id.grade + "-" + data.id.classn) {
+@common(data.id.toString + " " + data.title) {
   <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/gallery.css")">
 } {
   <ul class="thumbnails">
     @ps.map { p => @li(p._1, p._2) }
   </ul>
 } {
-  <h2>@data.id.times @data.id.grade-@Util.showClassN(data.id.classn) @data.title @data.prize.map(_.span)</h2>
 }

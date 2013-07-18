@@ -1,0 +1,60 @@
+@(acc: Account, form: Form[(String, String, Int, String)])
+
+@import andon.utils._
+
+@common("アカウントの作成") {
+} {
+  @breadcrumb(Seq(
+    (routes.Artisan.home, "Home")
+  ), "アカウント作成")
+
+  <h3>アカウントの作成</h3>
+
+  @helper.form(routes.Artisan.postCreateAccount) {
+
+    @form.globalError.map { error =>
+      <p class="error">
+        @error.message
+      </p>
+    }
+
+    @helper.inputText(
+      form("name"),
+      '_label -> "名前",
+      '_help -> ""
+    )
+
+    @helper.inputText(
+      form("username"),
+      '_label -> "ユーザー名(半角英数字のみ)",
+      '_help -> ""
+    )
+
+    @helper.select(
+      form("times"),
+      options = {
+        val all = TimesData.all
+        all.map(_.times.n.toString).zip(all.map(_.times.toString))
+      },
+      '_label -> "卒業期",
+      '_help -> ""
+    )
+
+    @helper.select(
+      form("level"),
+      options = {
+        val all = if (acc.level == Admin) {
+          Seq(Admin, Master, Writer)
+        } else {
+          Seq(Master, Writer)
+        }
+        all.map(_.toString).zip(all.map(_.toJapanese))
+      },
+      '_label -> "アカウントレベル",
+      '_help -> ""
+    )
+
+    <button class="btn" type="submit">送信</button>
+  }
+} {
+}

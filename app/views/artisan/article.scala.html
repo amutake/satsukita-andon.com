@@ -1,0 +1,35 @@
+@(article: Article)(implicit flash: Flash)
+
+@import andon.utils._
+
+@common(article.title) {
+} {
+  @breadcrumb(Seq(
+    (routes.Artisan.home, "Home"),
+    (routes.Artisan.articles, "記事一覧")
+  ), "記事詳細")
+
+  @flash.get("success").map { message =>
+    <p class="success">
+      @message
+    </p>
+  }
+
+  <div class="article">
+    @Conv.both(article.text)
+  </div>
+
+  <p class="author">Create: @Accounts.findNameById(article.createAccountId)  Date: @DateUtil.dateFormat(article.createDate)</p>
+  <p class="author">Last Update: @Accounts.findNameById(article.updateAccountId) Date: @DateUtil.dateFormat(article.updateDate)</p>
+
+  <a class="btn" href="@routes.Artisan.editArticle(article.id)">編集する</a>
+
+  @if(article.articleType == Info || article.articleType == Howto) {
+
+    <form method="post" action="@routes.Artisan.deleteArticle(article.id)">
+      <button class="btn btn-danger delete-submit">削除する</button>
+    </form>
+  }
+} {
+  <script type="text/javascript" src="@routes.Assets.at("js/deleteSubmit.js")"></script>
+}

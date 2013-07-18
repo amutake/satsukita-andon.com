@@ -1,0 +1,36 @@
+@(form: Form[(String, String)])(implicit flash: Flash)
+
+@common("ログイン") {
+} {
+  @helper.form(routes.Artisan.authenticate) {
+
+    <h3>ログイン</h3>
+
+    @form.globalError.map { error =>
+      <p class="error">
+        @error.message
+      </p>
+    }
+
+    @flash.get("success").map { message =>
+      <p class="success">
+        @message
+      </p>
+    }
+
+    @helper.inputText(
+      form("username"),
+      '_label -> "ユーザー名",
+      '_help -> ""
+    )
+
+    @helper.inputPassword(
+      form("password"),
+      '_label -> "パスワード",
+      '_help -> ""
+    )
+
+    <input type="submit" class="btn" value="ログイン">
+  }
+} {
+}

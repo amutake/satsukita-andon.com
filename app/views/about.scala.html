@@ -1,19 +1,15 @@
+@import andon.utils._
+
 @common("About") {
 } {
 
   <h3>このサイトについて</h3>
-  <p>
-    このサイトは札幌北高校の学校祭の行事である行灯行列の記録とその製作を支援するために、初代管理人の遊び人(51st)とその仲間たちによって作られたサイトです。<br>
-    二代目管理人 仕掛人(53rd)、三代目管理人 御家人(56th)、四代目管理人 案内人(58th)と続き、現在は五代目管理人の甲乙人(60th)がサイトの運営をしております。
-  </p>
-  <p>
-    <a href="http://old.satsukita-andon.com" target="_blank">2010年以前のサイト</a>
-  </p>
 
-  <h3>掲載画像について</h3>
-  <p>
-    掲載されている画像には、個人の顔が写っている写真もあります。不都合がある場合にはお知らせください。即刻削除致します。
-  </p>
+  <div class="article">
+    @Articles.findByType(About).map { article =>
+      @Conv.both(article.text)
+    }
+  </div>
+
 } {
-  <h2>About</h2>
 }

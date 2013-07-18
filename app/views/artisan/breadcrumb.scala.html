@@ -1,0 +1,19 @@
+@(linkTitlePairs: Seq[(Call, String)], title: String)
+
+<ul class="breadcrumb">
+  @linkTitlePairs.map { linkTitlePair =>
+    <li><a href="@linkTitlePair._1">@linkTitlePair._2</a> <span class="divider">/</span></li>
+  }
+  <li class="active">@title</li>
+  <div class="btn-group pull-right">
+    <button class="btn dropdown-toggle" data-toggle="dropdown">
+      アカウント
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li><a href="@routes.Artisan.myAccount">アカウント情報</a></li>
+      <li><a href="@routes.Artisan.editMyPassword">パスワードの変更</a></li>
+      <li><a href="@routes.Artisan.logout">ログアウト</a></li>
+    </ul>
+  </div>
+</ul>
