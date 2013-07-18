@@ -65,7 +65,7 @@ object Articles extends Table[Article]("ARTICLES") {
       // query.filter(_.id === id).update(after)
       // This does not work
       val q = for { a <- Articles if a.id === id } yield a
-      a.update(after)
+      q.update(after)
     }
   }
 
