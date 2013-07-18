@@ -27,7 +27,7 @@ object Articles extends Table[Article]("ARTICLES") {
 
   def ins = createAccountId ~ updateAccountId ~ title ~ text ~ createDate ~ updateDate ~ articleType ~ genre returning id
 
-  val query = Query(Articles)
+  val query = Query(Articles).sortBy(_.id.desc)
 
   def findById(id: Long) = db.withSession { implicit session: Session =>
     query.filter(_.id === id).firstOption
@@ -39,6 +39,10 @@ object Articles extends Table[Article]("ARTICLES") {
 
   def findByType(t: ArticleType) = db.withSession { implicit session: Session =>
     query.filter(_.articleType === t).sortBy(_.id.desc).list
+  }
+
+  def findInfoByPage(page: Int) = db.withSession { implicit session: Session =>
+    query.filter(_.articleType === (Info: ArticleType)).drop(page * 6).take(6).list
   }
 
   def findByGenre(g: String) = db.withSession { implicit session: Session =>

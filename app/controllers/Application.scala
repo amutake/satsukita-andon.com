@@ -12,8 +12,8 @@ object Application extends Controller {
     Ok(views.html.index())
   }
 
-  def info = Action {
-    Ok(views.html.info())
+  def info(page: Int) = Action {
+    Ok(views.html.info(page))
   }
 
   def gallery = Action {

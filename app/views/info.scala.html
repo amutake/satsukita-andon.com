@@ -1,3 +1,5 @@
+@(page: Int)
+
 @import andon.utils._
 
 @common("Information") {
@@ -12,9 +14,14 @@
     }
   </div>
 
-  <h3>管理人の一言</h3>
+  <ul class="pager">
+    <li class="previous"><a href="@routes.Application.info(page - 1)">&larr; 前へ</a></li>
+    <li class="next"><a href="@routes.Application.info(page + 1)">次へ &rarr;</a></li>
+  </ul>
 
-  @Articles.findByType(Info).map { article =>
+  <h3>管理人からのお知らせ</h3>
+
+  @Articles.findInfoByPage(page).map { article =>
     <div class="info-post article">
       <p class="date">@DateUtil.dateFormat(article.createDate)</p>
       <h1 class="title">@article.title</h1>
@@ -24,5 +31,10 @@
       <p class="author">Posted by @Accounts.findNameById(article.createAccountId)</p>
     </div>
   }
+
+  <ul class="pager">
+    <li class="previous"><a href="@routes.Application.info(page - 1)">&larr; 前へ</a></li>
+    <li class="next"><a href="@routes.Application.info(page + 1)">次へ &rarr;</a></li>
+  </ul>
 } {
 }

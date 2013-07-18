@@ -4,7 +4,7 @@
 
 # Home page
 GET     /                           controllers.Application.index
-GET     /info                       controllers.Application.info
+GET     /info                       controllers.Application.info(page: Int)
 GET     /gallery                    controllers.Application.gallery
 GET     /gallery/search             controllers.Application.search
 GET     /gallery/:t                 controllers.Application.timesGallery(t: andon.utils.OrdInt)
