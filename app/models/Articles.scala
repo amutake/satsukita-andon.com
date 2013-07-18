@@ -62,7 +62,10 @@ object Articles extends Table[Article]("ARTICLES") {
     findById(id).map { before =>
       val date = new Date()
       val after = before.copy(updateAccountId = accountId, title = title, text = text, updateDate = date, genre = genre)
-      query.filter(_.id === id).update(after)
+      // query.filter(_.id === id).update(after)
+      // This does not work
+      val q = for { a <- Articles if a.id === id } yield a
+      a.update(after)
     }
   }
 
