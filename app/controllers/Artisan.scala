@@ -3,6 +3,7 @@ package controllers
 import java.io.File
 import java.util.Date
 
+import scala.sys.process._
 import scala.util.Random
 
 import play.api._
@@ -10,6 +11,7 @@ import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
 import play.api.data.validation.Constraints._
+import play.api.libs.Files
 
 import models._
 import andon.utils._
@@ -317,4 +319,52 @@ object Artisan extends Controller with Authentication {
       "error" -> "その資料は既に削除されています。"
     ))
   }
+
+  val imageForm = Form(
+    tuple(
+      "times" -> number,
+      "grade" -> number,
+      "classn" -> number
+    )
+  )
+
+  def uploadImage = HasAuthority(Master) { acc => _ =>
+    Ok(views.html.artisan.uploadImage(imageForm))
+  }
+
+  def postUploadImage = IsValidAccountWithParser(parse.multipartFormData) { acc => implicit request =>
+    acc.level match {
+      case Admin | Master =>
+        imageForm.bindFromRequest().fold(
+          formWithErrors => BadRequest(views.html.artisan.uploadImage(formWithErrors)),
+          result => {
+            request.body.files.foreach { file =>
+              val classDir = OrdInt(result._1).toString + "/" + result._2 + "/" + result._3 + "/"
+              val fullsize = "/files/gallery/fullsize/" + classDir
+              val thumbnail = "/files/gallery/thumbnail/" + classDir
+              def valid(c: Char) = {
+                val r = """[\w\.]""".r
+                c.toString match {
+                  case r() => true
+                  case _ => false
+                }
+              }
+              val filename = new Date().getTime().toString + "-" + file.filename.filter(valid)
+
+              file.ref.moveTo(new File("." + fullsize + filename), true)
+              Files.copyFile(new File("." + fullsize + filename), new File("." + thumbnail + filename))
+
+              Process("mogrify -quality 50 ." + fullsize + filename) !
+
+              Process("mogrify -resize 320x -unsharp 2x1.2+0.5+0.5 -quality 75 ." + thumbnail + filename) !
+            }
+            Redirect(routes.Artisan.home).flashing(
+              "success" -> "画像をアップロードしました。"
+            )
+          }
+        )
+      case Writer => Forbidden(views.html.errors.forbidden())
+    }
+  }
+
 }

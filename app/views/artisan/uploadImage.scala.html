@@ -1,0 +1,43 @@
+@(form: Form[(Int, Int, Int)])
+
+@common("資料のアップロード") {
+} {
+  @breadcrumb(Seq(
+    (routes.Artisan.home, "Home")
+  ), "画像のアップロード")
+
+  <h3>画像のアップロード</h3>
+
+  @helper.form(routes.Artisan.postUploadImage, 'enctype -> "multipart/form-data") {
+
+    @form.globalError.map { error =>
+      <p class="error">
+      @error.message
+      </p>
+    }
+
+    @helper.inputText(
+      form("times"),
+      '_label -> "第n回",
+      '_help -> ""
+    )
+
+    @helper.inputText(
+      form("grade"),
+      '_label -> "学年",
+      '_help -> ""
+    )
+
+    @helper.inputText(
+      form("classn"),
+      '_label -> "クラス",
+      '_help -> ""
+    )
+
+    <input type="file" name="images" multiple>
+
+    <button class="btn" type="submit">送信</button>
+  }
+} {
+  <h2>画像のアップロード</h2>
+}
