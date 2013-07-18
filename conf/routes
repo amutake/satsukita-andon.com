@@ -51,6 +51,8 @@ GET     /artisan/gallery/upload     controllers.Artisan.uploadImage(id: Int)
 POST    /artisan/gallery/upload     controllers.Artisan.postUploadImage(id: Int)
 GET     /artisan/gallery/select     controllers.Artisan.selectTop(id: Int)
 POST    /artisan/gallery/select     controllers.Artisan.postSelectTop(id: Int)
+GET     /artisan/gallery/delete     controllers.Artisan.deleteImage(id: Int)
+POST    /artisan/gallery/delete     controllers.Artisan.postDeleteImage(id: Int)
 
 # API
 # TODO

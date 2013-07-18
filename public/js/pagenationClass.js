@@ -17,6 +17,10 @@ $(function() {
 				href: c.fullsize,
 				"data-fresco-group": c.times
 			}).append($img);
+
+			var $btn = function(href, text) {
+				return $("<a>").addClass("btn").attr("href", href).text(text);
+			};
 			$tr.append($("<td>").append($a))
 				.append(td(c.times))
 				.append(td(c.grade))
@@ -24,9 +28,11 @@ $(function() {
 				.append(td(c.title))
 				.append(td(c.prize))
 				.append($("<td>").append(
-					$("<a>").addClass("btn").attr("href", "/artisan/gallery/upload?id=" + c.id).text("画像のアップロード")
+					$btn("/artisan/gallery/upload?id=" + c.id, "画像のアップロード")
 				).append(
-					$("<a>").addClass("btn").attr("href", "/artisan/gallery/select?id=" + c.id).text("トップ画像の選択")
+					$btn("/artisan/gallery/select?id=" + c.id, "トップ画像の選択")
+				).append(
+					$btn("/artisan/gallery/delete?id=" + c.id, "画像の削除")
 				));
 			$table.append($tr);
 		});

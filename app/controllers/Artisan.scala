@@ -390,4 +390,38 @@ object Artisan extends Controller with Authentication {
       "error" -> "そのクラスは存在しません。"
     ))
   }
+
+  val deleteImageForm = Form(
+    single("filename" -> list(text))
+  )
+
+  def deleteImage(id: Int) = HasAuthority(Master) { acc => request =>
+    val classId = ClassId.fromId(id)
+    ClassData.findByClassId(classId).map { c =>
+      Ok(views.html.artisan.deleteImage(classId, deleteImageForm))
+    }.getOrElse(NotFound)
+  }
+
+  def postDeleteImage(id: Int) = HasAuthority(Master) { acc => implicit request =>
+    val classId = ClassId.fromId(id)
+    ClassData.findByClassId(classId).map { c =>
+      deleteImageForm.bindFromRequest.fold(
+        formWithErrors => BadRequest(views.html.artisan.deleteImage(classId, formWithErrors)),
+        filenames => {
+          filenames.map { filename =>
+            val fpath = Images.fullsizePath(classId, filename)
+            val tpath = Images.thumbnailPath(classId, filename)
+            new File(fpath).delete()
+            new File(tpath).delete()
+          }
+
+          Redirect(routes.Artisan.home).flashing(
+            "success" -> "画像を削除しました。"
+          )
+        }
+      )
+    }.getOrElse(Redirect(routes.Artisan.home).flashing(
+      "error" -> "そのクラスは存在しません。"
+    ))
+  }
 }

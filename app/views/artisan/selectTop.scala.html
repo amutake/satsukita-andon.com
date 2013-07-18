@@ -20,7 +20,7 @@
 
     <ul class="thumbnails">
       @Images.getClassImages(id).map { path =>
-        @defining(path.substring(("/files/gallery/fullsize/" + id.times.toString + "/" + id.grade + "/" + id.classn + "/").length)) { filename =>
+        @defining(Images.toFilename(path)) { filename =>
           <li class="span3">
             <input type="radio" name="top" value="@filename" id="@filename" @if(form("top").value == Some(filename)) { checked } >
             <label for="@filename">

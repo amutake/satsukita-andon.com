@@ -1,0 +1,39 @@
+@(id: andon.utils.ClassId, form: Form[List[String]])
+
+@import andon.utils._
+
+@common(id.toString + " 画像の削除") {
+} {
+  @breadcrumb(Seq(
+    (routes.Artisan.home, "Home"),
+    (routes.Artisan.classData, "クラス一覧")
+  ), "画像の削除")
+
+  <h3>@id.toString 画像の削除</h3>
+
+  @helper.form(routes.Artisan.postDeleteImage(id.toId)) {
+
+    @form.globalError.map { error =>
+      <p class="error">
+        @error.message
+      </p>
+    }
+
+    <ul class="thumbnails">
+      @Images.getClassImages(id).zipWithIndex.map { case (path, i) =>
+        @defining(Images.toFilename(path)) { filename =>
+          <li class="span3">
+            <input type="checkbox" name="filename[@i]" value="@filename" id="@filename">
+            <label for="@filename">
+              <img src="@Images.toThumbnail(path)">
+            </label>
+          </li>
+        }
+      }
+    </ul>
+
+    <button class="btn btn-danger delete-submit">削除</button>
+  }
+} {
+  <script type="text/javascript" src="@routes.Assets.at("js/deleteSubmit.js")"></script>
+}

@@ -22,6 +22,9 @@ object Images {
 
   def toThumbnail(path: String) = """/fullsize/""".r.replaceFirstIn(path, "/thumbnail/")
 
+  def toFilename(path: String) =
+    """\.?/files/gallery/(fullsize|thumbnail)/\d{2}(st|nd|rd|th)/\d/-?\d{1,2}/""".r.replaceFirstIn(path, "")
+
   def dirOption(id: ClassId) = {
     val dir = new File(productsDir(id.times, id.grade, id.classn))
     if (dir.isDirectory) {
