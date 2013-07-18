@@ -337,24 +337,27 @@ object Artisan extends Controller with Authentication {
       acc.level match {
         case Admin | Master => {
           request.body.files.foreach { file =>
-            val classDir = c.id.times + "/" + c.id.grade + "/" + c.id.classn + "/"
-            val fullsize = "/files/gallery/fullsize/" + classDir
-            val thumbnail = "/files/gallery/thumbnail/" + classDir
-            def valid(c: Char) = {
-              val r = """[\w\.]""".r
-              c.toString match {
-                case r() => true
-                case _ => false
+            if (file.contentType.map(_.take(5)) == Some("image")) {
+              val classDir = c.id.times + "/" + c.id.grade + "/" + c.id.classn + "/"
+              val fullsize = "/files/gallery/fullsize/" + classDir
+              val thumbnail = "/files/gallery/thumbnail/" + classDir
+              def valid(c: Char) = {
+                val r = """[\w\.]""".r
+                c.toString match {
+                  case r() => true
+                  case _ => false
+                }
               }
+              val filename = new Date().getTime().toString + "-" + file.filename.filter(valid)
+
+              file.ref.moveTo(new File("." + fullsize + filename), true)
+              Files.copyFile(new File("." + fullsize + filename), new File("." + thumbnail + filename))
+
+              Process("mogrify -quality 50 ." + fullsize + filename).!
+              Process("mogrify -resize 600x -unsharp 2x1.2+0.5+0.5 -quality 75 ." + thumbnail + filename).!
+            } else {
+              println("Not image. Abort.")
             }
-            val filename = new Date().getTime().toString + "-" + file.filename.filter(valid)
-
-            file.ref.moveTo(new File("." + fullsize + filename), true)
-            Files.copyFile(new File("." + fullsize + filename), new File("." + thumbnail + filename))
-
-            Process("mogrify -quality 50 ." + fullsize + filename) !
-
-            Process("mogrify -resize 600x -unsharp 2x1.2+0.5+0.5 -quality 75 ." + thumbnail + filename) !
           }
           Redirect(routes.Artisan.classData).flashing(
             "success" -> "画像をアップロードしました。"
