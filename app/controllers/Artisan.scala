@@ -356,7 +356,7 @@ object Artisan extends Controller with Authentication {
 
               Process("mogrify -quality 50 ." + fullsize + filename) !
 
-              Process("mogrify -resize 320x -unsharp 2x1.2+0.5+0.5 -quality 75 ." + thumbnail + filename) !
+              Process("mogrify -resize 600x -unsharp 2x1.2+0.5+0.5 -quality 75 ." + thumbnail + filename) !
             }
             Redirect(routes.Artisan.home).flashing(
               "success" -> "画像をアップロードしました。"

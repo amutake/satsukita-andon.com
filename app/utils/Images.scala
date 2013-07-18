@@ -43,7 +43,9 @@ object Images {
 
   def getTopImages(cs: Seq[ClassData]): Seq[(ClassData, String)] = {
     cs.map { c =>
-      val path = img(c.id.times, c.id.grade, c.id.classn, 1, thumbnailsDir)
+      val path = c.top.map { name =>
+        thumbnailsDir(c.id.times, c.id.grade, c.id.classn) + "/" + name
+      }.getOrElse(img(c.id.times, c.id.grade, c.id.classn, 1, thumbnailsDir))
       val file = new File(path)
       if (file.exists) {
         (c, file.getPath.substring(1))
