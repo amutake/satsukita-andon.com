@@ -14,12 +14,12 @@
     }
   </div>
 
+  <h3>管理人からのお知らせ</h3>
+
   <ul class="pager">
     <li class="previous"><a href="@routes.Application.info(page - 1)">&larr; 前へ</a></li>
     <li class="next"><a href="@routes.Application.info(page + 1)">次へ &rarr;</a></li>
   </ul>
-
-  <h3>管理人からのお知らせ</h3>
 
   @Articles.findInfoByPage(page).map { article =>
     <div class="info-post article">
