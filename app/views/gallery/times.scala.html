@@ -4,7 +4,7 @@
 
 @anchor(data: ClassData, path: String) = {
   <a href="@routes.Application.classGallery(data.id.times, data.id.grade, data.id.classn)">
-    <img src="@routes.Assets.at(path)">
+    <img src="@path">
     <div class="img-detail">
       <div class="prize">
         @data.prize.map(_.span)
