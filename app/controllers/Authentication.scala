@@ -91,4 +91,11 @@ trait Authentication {
       case _ => Results.Forbidden(views.html.errors.forbidden())
     }
   }
+
+  def AboutClass(id: Int)(f: => Account => ClassData => Request[AnyContent] => Result) = HasAuthority(Master) { acc => request =>
+    val classId = ClassId.fromId(id)
+    ClassData.findByClassId(classId).map { c =>
+      f(acc)(c)(request)
+    }.getOrElse(Results.NotFound(views.html.errors.notFound(request.path)))
+  }
 }

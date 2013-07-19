@@ -33,6 +33,8 @@ $(function() {
 					$btn("/artisan/gallery/select?id=" + c.id, "トップ画像の選択")
 				).append(
 					$btn("/artisan/gallery/delete?id=" + c.id, "画像の削除")
+				).append(
+					$btn("/artisan/classdata/edit?id=" + c.id, "クラス情報の編集")
 				));
 			$table.append($tr);
 		});

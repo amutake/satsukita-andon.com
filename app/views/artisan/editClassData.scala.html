@@ -1,0 +1,41 @@
+@(id: andon.utils.ClassId, form: Form[(String, String)])
+
+@import andon.utils._
+
+@common("クラスデータの編集") {
+} {
+  @breadcrumb(Seq(
+    (routes.Artisan.home, "Home"),
+    (routes.Artisan.classData, "クラス一覧")
+  ), "クラスデータの編集")
+
+  <h3>@id.toString クラスデータの編集</h3>
+
+  @helper.form(routes.Artisan.postEditClassData(id.toId)) {
+
+    @form.globalError.map { error =>
+      <p class="error">
+        @error.message
+      </p>
+    }
+
+    @helper.inputText(
+      form("title"),
+      '_label -> "タイトル",
+      '_help -> ""
+    )
+
+    @helper.select(
+      form("prize"),
+      options = {
+        val all = Seq(Grand, Gold, Silver, Bronze)
+        ("none", "なし") +: all.map(_.toString).zip(all.map(_.toJapanese))
+      },
+      '_label -> "賞",
+      '_help -> ""
+    )
+
+    <button class="btn" type="submit">送信</button>
+  }
+} {
+}

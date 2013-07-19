@@ -328,11 +328,33 @@ object Artisan extends Controller with Authentication {
     Ok(views.html.artisan.classData())
   }
 
-  def uploadImage(id: Int) = HasAuthority(Master) { _ => request =>
-    val classId = ClassId.fromId(id)
-    ClassData.findByClassId(classId).map { c =>
-      Ok(views.html.artisan.uploadImage(classId))
-    }.getOrElse(NotFound(views.html.errors.notFound(request.path)))
+  val classForm = Form(
+    tuple(
+      "title" -> text,
+      "prize" -> text
+    )
+  )
+
+  def editClassData(id: Int) = AboutClass(id) { _ => data => _ =>
+    val d = (data.title, data.prize.map(_.toString).getOrElse("none"))
+    Ok(views.html.artisan.editClassData(data.id, classForm.fill(d)))
+  }
+
+  def postEditClassData(id: Int) = AboutClass(id) { _ => data => implicit request =>
+    classForm.bindFromRequest.fold(
+      formWithErrors => BadRequest(views.html.artisan.editClassData(data.id, formWithErrors)),
+      result => {
+        val prize = Prize.fromString(result._2)
+        ClassData.update(data.id, result._1, prize)
+        Redirect(routes.Artisan.classData).flashing(
+          "success" -> "クラス情報を変更しました。"
+        )
+      }
+    )
+  }
+
+  def uploadImage(id: Int) = AboutClass(id) { _ => data => _ =>
+    Ok(views.html.artisan.uploadImage(data.id))
   }
 
   def postUploadImage(id: Int) = IsValidAccountWithParser(parse.multipartFormData) { acc => request =>
@@ -374,61 +396,45 @@ object Artisan extends Controller with Authentication {
 
   val topForm = Form(single("top" -> optional(text)))
 
-  def selectTop(id: Int) = HasAuthority(Master) { acc => request =>
-    val classId = ClassId.fromId(id)
-    ClassData.findByClassId(classId).map { c =>
-      Ok(views.html.artisan.selectTop(classId, topForm.fill(c.top)))
-    }.getOrElse(NotFound(views.html.errors.notFound(request.path)))
+  def selectTop(id: Int) = AboutClass(id) { acc => data => _ =>
+    Ok(views.html.artisan.selectTop(data.id, topForm.fill(data.top)))
   }
 
-  def postSelectTop(id: Int) = HasAuthority(Master) { acc => implicit request =>
-    val classId = ClassId.fromId(id)
-    ClassData.findByClassId(classId).map { c =>
-      topForm.bindFromRequest.fold(
-        formWithErrors => BadRequest(views.html.artisan.selectTop(classId, formWithErrors)),
-        top => {
-          ClassData.updateTop(classId, top)
-          Redirect(routes.Artisan.classData).flashing(
-            "success" -> "トップ画像を変更しました。"
-          )
-        }
-      )
-    }.getOrElse(Redirect(routes.Artisan.classData).flashing(
-      "error" -> "そのクラスは存在しません。"
-    ))
+  def postSelectTop(id: Int) = AboutClass(id) { acc => data => implicit request =>
+    topForm.bindFromRequest.fold(
+      formWithErrors => BadRequest(views.html.artisan.selectTop(data.id, formWithErrors)),
+      top => {
+        ClassData.updateTop(data.id, top)
+        Redirect(routes.Artisan.classData).flashing(
+          "success" -> "トップ画像を変更しました。"
+        )
+      }
+    )
   }
 
   val deleteImageForm = Form(
     single("filename" -> list(text))
   )
 
-  def deleteImage(id: Int) = HasAuthority(Master) { acc => request =>
-    val classId = ClassId.fromId(id)
-    ClassData.findByClassId(classId).map { c =>
-      Ok(views.html.artisan.deleteImage(classId, deleteImageForm))
-    }.getOrElse(NotFound)
+  def deleteImage(id: Int) = AboutClass(id) { acc => data => _ =>
+    Ok(views.html.artisan.deleteImage(data.id, deleteImageForm))
   }
 
-  def postDeleteImage(id: Int) = HasAuthority(Master) { acc => implicit request =>
-    val classId = ClassId.fromId(id)
-    ClassData.findByClassId(classId).map { c =>
-      deleteImageForm.bindFromRequest.fold(
-        formWithErrors => BadRequest(views.html.artisan.deleteImage(classId, formWithErrors)),
-        filenames => {
-          filenames.map { filename =>
-            val fpath = Images.fullsizePath(classId, filename)
-            val tpath = Images.thumbnailPath(classId, filename)
-            new File(fpath).delete()
-            new File(tpath).delete()
-          }
-
-          Redirect(routes.Artisan.classData).flashing(
-            "success" -> "画像を削除しました。"
-          )
+  def postDeleteImage(id: Int) = AboutClass(id) { acc => data => implicit request =>
+    deleteImageForm.bindFromRequest.fold(
+      formWithErrors => BadRequest(views.html.artisan.deleteImage(data.id, formWithErrors)),
+      filenames => {
+        filenames.map { filename =>
+          val fpath = Images.fullsizePath(data.id, filename)
+          val tpath = Images.thumbnailPath(data.id, filename)
+          new File(fpath).delete()
+          new File(tpath).delete()
         }
-      )
-    }.getOrElse(Redirect(routes.Artisan.classData).flashing(
-      "error" -> "そのクラスは存在しません。"
-    ))
+
+        Redirect(routes.Artisan.classData).flashing(
+          "success" -> "画像を削除しました。"
+        )
+      }
+    )
   }
 }

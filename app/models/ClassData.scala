@@ -82,6 +82,10 @@ object ClassData extends Table[ClassData]("CLASSDATA") {
     ClassData.insert(data)
   }
 
+  def update(id: ClassId, title: String, prize: Option[Prize]) = db.withSession { implicit session: Session =>
+    query.where(_.id === id).map(d => d.title ~ d.prize).update((title, prize.map(_.toString)))
+  }
+
   def updateTop(id: ClassId, top: Option[String]) = db.withSession { implicit session: Session =>
     query.where(_.id === id).map(_.top).update(top)
   }
