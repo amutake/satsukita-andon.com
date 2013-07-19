@@ -3,7 +3,7 @@
 @import models.Accounts._
 @import andon.utils._
 
-@howto.common(article.title)(findNameById(article.createAccountId))(DateUtil.dateFormat(article.updateDate)) {
+@howto.common(article.title)(article.optAuthor.getOrElse(findNameById(article.createAccountId)))(article.optDate.getOrElse(DateUtil.dateFormat(article.updateDate))) {
   <div class="article">
     @Conv.both(article.text)
   </div>

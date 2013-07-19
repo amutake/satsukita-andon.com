@@ -1,4 +1,7 @@
-@(types: List[andon.utils.ArticleType], form: Form[(String, String, String, String)])
+@(level: andon.utils.AccountLevel, types: List[andon.utils.ArticleType],
+  form: Form[(String, String, String, String, Option[String], Option[String])])
+
+@import andon.utils._
 
 @common("記事の作成") {
 } {
@@ -15,6 +18,28 @@
         <p class="error">
           @error.message
         </p>
+      }
+
+      @if(level != Writer) {
+
+        <input type="checkbox" id="option">
+        <label for="option">執筆者を別にする</label>
+
+        @helper.inputText(
+          form("optAuthor"),
+          '_label -> "執筆者(オプション)",
+          '_help -> "",
+          'disabled -> "disabled",
+          'id -> "option-author"
+        )
+
+        @helper.inputText(
+          form("optDate"),
+          '_label -> "日付(オプション)",
+          '_help -> "",
+          'disabled -> "disabled",
+          'id -> "option-date"
+        )
       }
 
       @helper.select(
@@ -57,4 +82,5 @@
   </div>
 } {
   <script type="text/javascript" src="@routes.Assets.at("js/insertImage.js")"></script>
+  <script type="text/javascript" src="@routes.Assets.at("js/optionAuthor.js")"></script>
 }

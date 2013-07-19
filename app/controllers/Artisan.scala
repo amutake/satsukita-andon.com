@@ -76,7 +76,9 @@ object Artisan extends Controller with Authentication {
       "title" -> text.verifying(notEmpty),
       "text" -> text.verifying(pattern("""[\s\S]+""".r, error = "本文を入力してください")),
       "type" -> text.verifying(notEmpty).verifying(pattern(ArticleType.all.mkString("|").r, error = "不正な入力です。")),
-      "genre" -> text
+      "genre" -> text,
+      "optAuthor" -> optional(text),
+      "optDate" -> optional(text)
     )
   )
 
@@ -86,14 +88,14 @@ object Artisan extends Controller with Authentication {
   }
 
   def createArticle = IsValidAccount { acc => _ =>
-    Ok(views.html.artisan.createArticle(editable(acc.level), articleForm))
+    Ok(views.html.artisan.createArticle(acc.level, editable(acc.level), articleForm))
   }
 
   def postCreateArticle = IsValidAccount { acc => implicit request =>
     articleForm.bindFromRequest.fold(
-      formWithErrors => BadRequest(views.html.artisan.createArticle(editable(acc.level), formWithErrors)),
+      formWithErrors => BadRequest(views.html.artisan.createArticle(acc.level, editable(acc.level), formWithErrors)),
       { article =>
-        val id = Articles.create(acc.id, article._1, article._2, ArticleType.fromString(article._3), article._4)
+        val id = Articles.create(acc.id, article._1, article._2, ArticleType.fromString(article._3), article._4, article._5, article._6)
         Redirect(routes.Artisan.article(id)).flashing(
           "success" -> "記事を作成しました。"
         )
@@ -102,15 +104,15 @@ object Artisan extends Controller with Authentication {
   }
 
   def editArticle(id: Long) = IsEditableArticle(id) { acc => art => _ =>
-    val data = (art.title, art.text, art.articleType.toString, art.genre)
-    Ok(views.html.artisan.editArticle(id, articleForm.fill(data)))
+    val data = (art.title, art.text, art.articleType.toString, art.genre, art.optAuthor, art.optDate)
+    Ok(views.html.artisan.editArticle(acc.level, id, articleForm.fill(data)))
   }
 
   def postEditArticle(id: Long) = IsEditableArticle(id) { acc => art => implicit request =>
     articleForm.bindFromRequest.fold(
-      formWithErrors => BadRequest(views.html.artisan.editArticle(id, formWithErrors)),
+      formWithErrors => BadRequest(views.html.artisan.editArticle(acc.level, id, formWithErrors)),
       article => {
-        Articles.update(id, acc.id, article._1, article._2, article._4)
+        Articles.update(id, acc.id, article._1, article._2, article._4, article._5, article._6)
         Redirect(routes.Artisan.article(id)).flashing(
           "success" -> "記事を編集しました。"
         )
