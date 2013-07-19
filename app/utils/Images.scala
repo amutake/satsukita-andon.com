@@ -62,7 +62,7 @@ object Images {
     }
   }
 
-  def getTimesImage(t: OrdInt) = "img/grands/" + t + ".jpg"
+  def getTimesImage(t: OrdInt) = "/files/grands/" + t + ".jpg"
 
   def findImage(c: ClassData): Option[File] = {
     // 1. top some

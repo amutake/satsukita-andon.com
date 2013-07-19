@@ -456,7 +456,7 @@ object Artisan extends Controller with Authentication {
         request.body.asMultipartFormData.flatMap { fd =>
           fd.file("top").map { file =>
             // TODO: check file extension
-            val path = "./public/img/grands/" + data.times + ".jpg"
+            val path = "./files/grands/" + data.times + ".jpg"
             file.ref.moveTo(new File(path), true)
 
             Process("mogrify -resize 320x -unsharp 2x1.2+0.5+0.5 -quality 75 " + path).!

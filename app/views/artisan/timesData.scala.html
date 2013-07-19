@@ -32,7 +32,7 @@
 
     @TimesData.all.map { t =>
       <tr>
-        <td><img src="@routes.Assets.at(Images.getTimesImage(t.times))" width="200"></td>
+        <td><img src="@Images.getTimesImage(t.times)" width="200"></td>
         <td>@t.times</td>
         <td>@t.title</td>
         <td>
