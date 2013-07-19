@@ -1,4 +1,4 @@
-@(form: Form[(String, String)])
+@(form: Form[(String, String, Option[String], Option[String])])
 
 @common("資料のアップロード") {
 } {
@@ -18,6 +18,27 @@
 
     <input type="file" name="file">
 
+    <label class="checkbox">
+      <input type="checkbox" id="option">
+      作者を別にする
+    </label>
+
+    @helper.inputText(
+      form("optAuthor"),
+      '_label -> "作者(オプション)",
+      '_help -> "",
+      'disabled -> "disabled",
+      'id -> "option-author"
+    )
+
+    @helper.inputText(
+      form("optDate"),
+      '_label -> "日付(オプション)",
+      '_help -> "",
+      'disabled -> "disabled",
+      'id -> "option-date"
+    )
+
     @helper.inputText(
       form("name"),
       '_label -> "資料名",
@@ -33,4 +54,5 @@
     <button class="btn" type="submit">送信</button>
   }
 } {
+  <script type="text/javascript" src="@routes.Assets.at("js/optionAuthor.js")"></script>
 }

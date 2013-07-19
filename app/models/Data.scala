@@ -7,7 +7,7 @@ import java.util.Date
 import andon.utils._
 import andon.utils.DateUtil.dateTypeMapper
 
-case class Datum(id: Int, name: String, accountId: Int, date: Date, path: String, genre: String)
+case class Datum(id: Int, name: String, accountId: Int, date: Date, path: String, genre: String, optAuthor: Option[String], optDate: Option[String])
 
 object Data extends Table[Datum]("DATA") {
 
@@ -19,13 +19,15 @@ object Data extends Table[Datum]("DATA") {
   def date = column[Date]("DATE", O.NotNull)
   def path = column[String]("PATH", O.NotNull)
   def genre = column[String]("GENRE", O.NotNull)
+  def optAuthor = column[Option[String]]("OPT_AUTHOR")
+  def optDate = column[Option[String]]("OPT_DATE")
 
-  def * = id ~ name ~ accountId ~ date ~ path ~ genre <> (
+  def * = id ~ name ~ accountId ~ date ~ path ~ genre ~ optAuthor ~ optDate <> (
     Datum.apply _,
     Datum.unapply _
   )
 
-  def ins = name ~ accountId ~ date ~ path ~ genre returning id
+  def ins = name ~ accountId ~ date ~ path ~ genre ~ optAuthor ~ optDate returning id
 
   val query = Query(Data)
 
@@ -41,13 +43,13 @@ object Data extends Table[Datum]("DATA") {
     query.where(_.genre === g).list
   }
 
-  def create(name: String, accountId: Int, path: String, genre: String) = db.withSession { implicit session: Session =>
+  def create(name: String, accountId: Int, path: String, genre: String, optAuthor: Option[String], optDate: Option[String]) = db.withSession { implicit session: Session =>
     val date = new Date()
-    Data.ins.insert(name, accountId, date, path, genre)
+    Data.ins.insert(name, accountId, date, path, genre, optAuthor, optDate)
   }
 
-  def update(id: Int, name: String, genre: String) = db.withSession { implicit session: Session =>
-    query.where(_.id === id).map(d => d.name ~ d.genre).update((name, genre))
+  def update(id: Int, name: String, genre: String, optAuthor: Option[String], optDate: Option[String]) = db.withSession { implicit session: Session =>
+    query.where(_.id === id).map(d => d.name ~ d.genre ~ d.optAuthor ~ d.optDate).update((name, genre, optAuthor, optDate))
   }
 
   def delete(id: Int) = db.withSession { implicit session: Session =>

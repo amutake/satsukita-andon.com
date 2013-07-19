@@ -122,7 +122,10 @@
       @files._2.map { file =>
         <li>
           <a href="@file.path"><i class="icon-download icon-white"></i>@file.name</a>
-          Uploaded by @Accounts.findNameById(file.accountId), Date @DateUtil.dateFormat(file.date)
+          Uploaded by
+          @file.optAuthor.getOrElse(Accounts.findNameById(file.accountId)),
+          Date
+          @file.optDate.getOrElse(DateUtil.dateFormat(file.date))
         </li>
       }
     </ul>

@@ -260,7 +260,9 @@ object Artisan extends Controller with Authentication {
   val datumForm = Form(
     tuple(
       "name" -> text.verifying(notEmpty),
-      "genre" -> text.verifying(notEmpty)
+      "genre" -> text.verifying(notEmpty),
+      "optAuthor" -> optional(text),
+      "optDate" -> optional(text)
     )
   )
 
@@ -278,7 +280,7 @@ object Artisan extends Controller with Authentication {
               val now = new Date()
               val path = "/files/data/" + now.getTime().toString + "-" + file.filename.filter(_ != ' ')
               file.ref.moveTo(new File("." + path), true)
-              Data.create(result._1, acc.id, path, result._2)
+              Data.create(result._1, acc.id, path, result._2, result._3, result._4)
               Redirect(routes.Artisan.home).flashing(
                 "success" -> "資料をアップロードしました。"
               )
@@ -293,7 +295,7 @@ object Artisan extends Controller with Authentication {
 
   def editDatum(id: Int) = HasAuthority(Master) { acc => request =>
     Data.findById(id).map { datum =>
-      val data = (datum.name, datum.genre)
+      val data = (datum.name, datum.genre, datum.optAuthor, datum.optDate)
       Ok(views.html.artisan.editDatum(id, datumForm.fill(data)))
     }.getOrElse(NotFound(views.html.errors.notFound(request.path)))
   }
@@ -302,7 +304,7 @@ object Artisan extends Controller with Authentication {
     datumForm.bindFromRequest().fold(
       formWithErrors => BadRequest(views.html.artisan.editDatum(id, formWithErrors)),
       result => {
-        Data.update(id, result._1, result._2)
+        Data.update(id, result._1, result._2, result._3, result._4)
         Redirect(routes.Artisan.home).flashing(
           "success" -> "資料情報を編集しました。"
         )
