@@ -22,8 +22,10 @@
 
       @if(level != Writer) {
 
-        <input type="checkbox" id="option">
-        <label for="option">執筆者を別にする</label>
+        <label class="checkbox">
+          <input type="checkbox" id="option">
+          執筆者を別にする
+        </label>
 
         @helper.inputText(
           form("optAuthor"),
