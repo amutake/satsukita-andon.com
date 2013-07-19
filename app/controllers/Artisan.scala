@@ -437,4 +437,8 @@ object Artisan extends Controller with Authentication {
       }
     )
   }
+
+  def timesData = HasAuthority(Master) { _ => implicit request =>
+    Ok(views.html.artisan.timesData())
+  }
 }

@@ -1,0 +1,44 @@
+@()(implicit flash: Flash)
+
+@import andon.utils._
+
+@common("回一覧") {
+} {
+  @breadcrumb(Seq(
+    (routes.Artisan.home, "Home")
+  ), "回一覧")
+
+  <h3>回一覧</h3>
+
+  @flash.get("success").map { message =>
+    <p class="success">
+      @message
+    </p>
+  }
+
+  @flash.get("error").map { message =>
+    <p class="error">
+      @message
+    </p>
+  }
+
+  <table class="table">
+    <tr>
+      <th>写真</th>
+      <th>回</th>
+      <th>タイトル</th>
+      <th>操作</th>
+    </tr>
+
+    @TimesData.all.map { t =>
+      <tr>
+        <td><img src="@routes.Assets.at(Images.getTimesImage(t.times))" width="200"></td>
+        <td>@t.times</td>
+        <td>@t.title</td>
+        <td></td>
+      <tr>
+    }
+
+  </table>
+} {
+}

@@ -50,17 +50,19 @@ object Images {
 
   def getClassImages(id: ClassId) = list(id).map(toPath _)
 
-  def getTimesImages(t: OrdInt): Seq[(ClassData, String)] = {
+  def getClassTopImages(t: OrdInt): Seq[(ClassData, String)] = {
     val cs = ClassData.findByTimes(t)
     getTopImages(cs)
   }
 
-  def getGrandImages: Seq[(TimesData, String)] = {
+  def getTimesImages: Seq[(TimesData, String)] = {
     val ts = TimesData.all
     ts.map { t =>
-      (t, "img/grands/" + t.times + ".jpg")
+      (t, getTimesImage(t.times))
     }
   }
+
+  def getTimesImage(t: OrdInt) = "img/grands/" + t + ".jpg"
 
   def findImage(c: ClassData): Option[File] = {
     // 1. top some

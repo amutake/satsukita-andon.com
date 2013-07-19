@@ -20,7 +20,7 @@ object Application extends Controller {
   }
 
   def gallery = Action {
-    val ts = Images.getGrandImages
+    val ts = Images.getTimesImages
     Ok(views.html.gallery.top(ts))
   }
 
@@ -35,7 +35,7 @@ object Application extends Controller {
   def timesGallery(t: OrdInt) = Action {
     val times = TimesData.findByTimes(t)
     if (times.isDefined) {
-      val ps = Images.getTimesImages(t)
+      val ps = Images.getClassTopImages(t)
       Ok(views.html.gallery.times(t.toString(), ps))
     } else {
       NotFound(views.html.errors.notFound("/gallery/" + t))
