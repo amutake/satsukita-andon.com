@@ -58,7 +58,7 @@ object Articles extends Table[Article]("ARTICLES") {
 
   // return = 0, 1, 2 ...
   def countPageByType(t: ArticleType, num: Int) = db.withSession { implicit session: Session =>
-    val count = query.where(_.articleType === t).map(_.id.count).first
+    val count = Query(query.where(_.articleType === t).length).first
     if (count == 0) {
       0
     } else if (count % num == 0) {
