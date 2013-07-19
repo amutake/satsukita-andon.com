@@ -13,7 +13,10 @@ object Application extends Controller {
   }
 
   def info(page: Int) = Action {
-    Ok(views.html.info(page))
+    val count = 6
+    val infos = Articles.findInfoByPage(page, count)
+    val max = Articles.countPageByType(Info, count)
+    Ok(views.html.info(infos, page, max))
   }
 
   def gallery = Action {

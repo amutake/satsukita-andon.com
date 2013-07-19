@@ -1,6 +1,21 @@
-@(page: Int)
+@(infos: Seq[Article], page: Int, max: Int)
 
 @import andon.utils._
+
+@pager = {
+  <ul class="pager">
+    @if(page <= 0) {
+      <li class="previous disabled"><a href="#">&larr; 前へ</a></li>
+    } else {
+      <li class="previous"><a href="@routes.Application.info(page - 1)">&larr; 前へ</a></li>
+    }
+    @if(page >= max) {
+      <li class="next disabled"><a href="#">次へ &rarr;</a></li>
+    } else {
+      <li class="next"><a href="@routes.Application.info(page + 1)">次へ &rarr;</a></li>
+    }
+  </ul>
+}
 
 @common("Information") {
   <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/info.css")">
@@ -16,12 +31,9 @@
 
   <h3>管理人からのお知らせ</h3>
 
-  <ul class="pager">
-    <li class="previous"><a href="@routes.Application.info(page - 1)">&larr; 前へ</a></li>
-    <li class="next"><a href="@routes.Application.info(page + 1)">次へ &rarr;</a></li>
-  </ul>
+  @pager
 
-  @Articles.findInfoByPage(page).map { article =>
+  @infos.map { article =>
     <div class="info-post article">
       <p class="date">@DateUtil.dateFormat(article.createDate)</p>
       <h1 class="title">@article.title</h1>
@@ -32,9 +44,7 @@
     </div>
   }
 
-  <ul class="pager">
-    <li class="previous"><a href="@routes.Application.info(page - 1)">&larr; 前へ</a></li>
-    <li class="next"><a href="@routes.Application.info(page + 1)">次へ &rarr;</a></li>
-  </ul>
+  @pager
 } {
+  <script type="text/javascript" src="@routes.Assets.at("js/disabledAnchor.js")"></script>
 }

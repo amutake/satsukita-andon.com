@@ -41,8 +41,9 @@ object Articles extends Table[Article]("ARTICLES") {
     query.filter(_.articleType === t).sortBy(_.id.desc).list
   }
 
-  def findInfoByPage(page: Int) = db.withSession { implicit session: Session =>
-    query.filter(_.articleType === (Info: ArticleType)).drop(page * 6).take(6).list
+  // page = 0, 1, 2 ...
+  def findInfoByPage(page: Int, num: Int) = db.withSession { implicit session: Session =>
+    query.filter(_.articleType === (Info: ArticleType)).drop(page * num).take(num).list
   }
 
   def findByGenre(g: String) = db.withSession { implicit session: Session =>
@@ -51,6 +52,18 @@ object Articles extends Table[Article]("ARTICLES") {
 
   def all = db.withSession { implicit session: Session =>
     query.list
+  }
+
+  // return = 0, 1, 2 ...
+  def countPageByType(t: ArticleType, num: Int) = db.withSession { implicit session: Session =>
+    val count = Articles.where(_.articleType === t).map(_.id.count).first
+    if (count == 0) {
+      0
+    } else if (count % num == 0) {
+      count / num - 1
+    } else {
+      count / num
+    }
   }
 
   def create(accountId: Int, title: String, text: String, articleType: ArticleType, genre: String) = db.withSession { implicit session: Session =>
