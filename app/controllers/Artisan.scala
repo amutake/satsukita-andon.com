@@ -60,7 +60,7 @@ object Artisan extends Controller with Authentication {
     Ok(views.html.artisan.myAccount(acc))
   }
 
-  def articles = IsValidAccount { account => _ =>
+  def articles = IsValidAccount { account => implicit request =>
     account.level match {
       case Admin | Master => Ok(views.html.artisan.articles(Articles.all))
       case Writer => Ok(views.html.artisan.articles(Articles.findByCreateAccountId(account.id)))
@@ -120,7 +120,7 @@ object Artisan extends Controller with Authentication {
 
   def deleteArticle(id: Long) = IsEditableArticle(id) { _ => _ => _ =>
     Articles.delete(id)
-    Redirect(routes.Artisan.home).flashing(
+    Redirect(routes.Artisan.articles).flashing(
       "success" -> "記事を削除しました"
     )
   }

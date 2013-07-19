@@ -1,4 +1,4 @@
-@(articles: Seq[Article])
+@(articles: Seq[Article])(implicit flash: Flash)
 
 @import andon.utils._
 
@@ -10,6 +10,12 @@
 
   <h3>編集可能な記事一覧</h3>
 
+  @flash.get("success").map { message =>
+    <p class="success">
+      @message
+    </p>
+  }
+
   @articles.groupBy(_.articleType).map { articles =>
     <h4>@articles._1</h4>
     <table class="table">
@@ -20,6 +26,7 @@
         <th>最終更新者</th>
         <th>作成日時</th>
         <th>最終更新日時</th>
+        <th>操作</th>
       </tr>
       @articles._2.map { article =>
         <tr>
@@ -29,10 +36,19 @@
           <td>@Accounts.findNameById(article.updateAccountId)</td>
           <td>@DateUtil.dateFormat(article.createDate)</td>
           <td>@DateUtil.dateFormat(article.updateDate)</td>
+          <td>
+            <a class="btn" href="@routes.Artisan.editArticle(article.id)">編集する</a>
+            @if(article.articleType == Info || article.articleType == Howto) {
+              <form class="inline" method="post" action="@routes.Artisan.deleteArticle(article.id)">
+                <button class="btn btn-danger delete-submit">削除する</button>
+              </form>
+            }
+          </td>
         </tr>
       }
     </table>
   }
 
 } {
+  <script type="text/javascript" src="@routes.Assets.at("js/deleteSubmit.js")"></script>
 }
