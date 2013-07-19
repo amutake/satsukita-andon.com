@@ -35,7 +35,9 @@
         <td><img src="@routes.Assets.at(Images.getTimesImage(t.times))" width="200"></td>
         <td>@t.times</td>
         <td>@t.title</td>
-        <td></td>
+        <td>
+          <a class="btn" href="@routes.Artisan.editTimesData(t.times.n)">編集</a>
+        </td>
       <tr>
     }
 

@@ -441,4 +441,33 @@ object Artisan extends Controller with Authentication {
   def timesData = HasAuthority(Master) { _ => implicit request =>
     Ok(views.html.artisan.timesData())
   }
+
+  val timesForm = Form(single("title" -> text))
+
+  def editTimesData(id: Int) = AboutTimes(id) { _ => data => _ =>
+    Ok(views.html.artisan.editTimesData(data.times, timesForm.fill(data.title)))
+  }
+
+  def postEditTimesData(id: Int) = AboutTimes(id) { _ => data => implicit request =>
+    timesForm.bindFromRequest.fold(
+      formWithErrors => BadRequest(views.html.artisan.editTimesData(data.times, formWithErrors)),
+      title => {
+        TimesData.update(data.times, title)
+        request.body.asMultipartFormData.flatMap { fd =>
+          fd.file("top").map { file =>
+            // TODO: check file extension
+            val path = "./public/img/grands/" + data.times + ".jpg"
+            file.ref.moveTo(new File(path), true)
+
+            Process("mogrify -resize 320x -unsharp 2x1.2+0.5+0.5 -quality 75 " + path).!
+            Redirect(routes.Artisan.timesData).flashing(
+              "success" -> "編集しました"
+            )
+          }
+        }.getOrElse(Redirect(routes.Artisan.timesData).flashing(
+          "success" -> "編集しました"
+        ))
+      }
+    )
+  }
 }

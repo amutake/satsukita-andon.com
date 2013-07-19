@@ -98,4 +98,10 @@ trait Authentication {
       f(acc)(c)(request)
     }.getOrElse(Results.NotFound(views.html.errors.notFound(request.path)))
   }
+
+  def AboutTimes(id: Int)(f: => Account => TimesData => Request[AnyContent] => Result) = HasAuthority(Master) { acc => request =>
+    TimesData.findByTimes(OrdInt(id)).map { t =>
+      f(acc)(t)(request)
+    }.getOrElse(Results.NotFound(views.html.errors.notFound(request.path)))
+  }
 }

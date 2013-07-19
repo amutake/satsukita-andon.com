@@ -31,4 +31,8 @@ object TimesData extends Table[TimesData]("TIMESDATA") {
   def create(data: TimesData) = db.withSession { implicit session: Session =>
     TimesData.insert(data)
   }
+
+  def update(t: OrdInt, title: String) = db.withSession { implicit session: Session =>
+    query.where(_.times === t.n).map(_.title).update(title)
+  }
 }

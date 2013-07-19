@@ -1,0 +1,34 @@
+@(times: andon.utils.OrdInt, form: Form[String])
+
+@import andon.utils._
+
+@common("回の編集") {
+} {
+  @breadcrumb(Seq(
+    (routes.Artisan.home, "Home"),
+    (routes.Artisan.accounts, "回一覧")
+  ), "回の編集")
+
+  <h3>回の編集</h3>
+
+  @helper.form(routes.Artisan.postEditTimesData(times.n), 'enctype -> "multipart/form-data") {
+
+    @form.globalError.map { error =>
+      <p class="error">
+        @error.message
+      </p>
+    }
+
+    @helper.inputText(
+      form("title"),
+      '_label -> "タイトル",
+      '_help -> ""
+    )
+
+    <img class="block" src="@routes.Assets.at(Images.getTimesImage(times))" width="320">
+    <input class="block" type="file" name="top">
+
+    <button class="btn">送信</button>
+  }
+} {
+}
