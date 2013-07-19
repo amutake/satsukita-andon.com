@@ -26,5 +26,8 @@ resize.sh
 deploy.sh
 defreeze.sh
 
-db/
 files/
+
+*.sql
+*.db
+*.jar
