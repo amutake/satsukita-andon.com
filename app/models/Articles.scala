@@ -27,36 +27,38 @@ object Articles extends Table[Article]("ARTICLES") {
 
   def ins = createAccountId ~ updateAccountId ~ title ~ text ~ createDate ~ updateDate ~ articleType ~ genre returning id
 
-  val query = Query(Articles).sortBy(_.id.desc)
+  val query = Query(Articles)
+
+  val desc = query.sortBy(_.id.desc)
 
   def findById(id: Long) = db.withSession { implicit session: Session =>
-    query.filter(_.id === id).firstOption
+    query.where(_.id === id).firstOption
   }
 
   def findByCreateAccountId(aId: Int) = db.withSession { implicit session: Session =>
-    query.filter(_.createAccountId === aId).list
+    desc.where(_.createAccountId === aId).list
   }
 
   def findByType(t: ArticleType) = db.withSession { implicit session: Session =>
-    query.filter(_.articleType === t).sortBy(_.id.desc).list
+    desc.where(_.articleType === t).list
   }
 
   // page = 0, 1, 2 ...
   def findInfoByPage(page: Int, num: Int) = db.withSession { implicit session: Session =>
-    query.filter(_.articleType === (Info: ArticleType)).drop(page * num).take(num).list
+    desc.where(_.articleType === (Info: ArticleType)).drop(page * num).take(num).list
   }
 
   def findByGenre(g: String) = db.withSession { implicit session: Session =>
-    query.filter(_.genre === g).list
+    desc.where(_.genre === g).list
   }
 
   def all = db.withSession { implicit session: Session =>
-    query.list
+    desc.list
   }
 
   // return = 0, 1, 2 ...
   def countPageByType(t: ArticleType, num: Int) = db.withSession { implicit session: Session =>
-    val count = Articles.where(_.articleType === t).map(_.id.count).first
+    val count = query.where(_.articleType === t).map(_.id.count).first
     if (count == 0) {
       0
     } else if (count % num == 0) {
@@ -75,14 +77,11 @@ object Articles extends Table[Article]("ARTICLES") {
     findById(id).map { before =>
       val date = new Date()
       val after = before.copy(updateAccountId = accountId, title = title, text = text, updateDate = date, genre = genre)
-      // query.filter(_.id === id).update(after)
-      // This does not work
-      val q = for { a <- Articles if a.id === id } yield a
-      q.update(after)
+      query.where(_.id === id).update(after)
     }
   }
 
   def delete(id: Long) = db.withSession { implicit session: Session =>
-    query.filter(_.id === id).delete
+    query.where(_.id === id).delete
   }
 }

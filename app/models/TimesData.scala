@@ -18,12 +18,14 @@ object TimesData extends Table[TimesData]("TIMESDATA") {
     data => Some(data.times.n, data.title)
   )
 
+  val query = Query(TimesData)
+
   def findByTimes(t: OrdInt) = db.withSession { implicit session: Session =>
-    Query(TimesData).filter(_.times === t.n).firstOption
+    query.where(_.times === t.n).firstOption
   }
 
   def all = db.withSession { implicit session: Session =>
-    Query(TimesData).sortBy(_.times.desc).list
+    query.sortBy(_.times.desc).list
   }
 
   def create(data: TimesData) = db.withSession { implicit session: Session =>

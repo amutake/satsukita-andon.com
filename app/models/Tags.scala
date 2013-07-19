@@ -15,16 +15,18 @@ object Tags extends Table[Tag]("TAGS") {
 
   def * = classId ~ tag <> (Tag.apply _, Tag.unapply _)
 
+  val query = Query(Tags)
+
   def findByClassId(c: ClassId) = db.withSession { implicit session: Session =>
-    Query(Tags).filter(_.classId === c).list
+    query.where(_.classId === c).list
   }
 
   def all = db.withSession { implicit session: Session =>
-    Query(Tags).list
+    query.list
   }
 
   def findClassIdByTag(tag: String) = db.withSession { implicit session: Session =>
-    Query(Tags).filter(_.tag === tag).list
+    query.where(_.tag === tag).list
   }
 
   def create(tag: Tag) = db.withSession { implicit session: Session =>

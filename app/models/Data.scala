@@ -30,7 +30,7 @@ object Data extends Table[Datum]("DATA") {
   val query = Query(Data)
 
   def findById(id: Int): Option[Datum] = db.withSession { implicit session: Session =>
-    query.filter(_.id === id).firstOption
+    query.where(_.id === id).firstOption
   }
 
   def all = db.withSession { implicit session: Session =>
@@ -38,7 +38,7 @@ object Data extends Table[Datum]("DATA") {
   }
 
   def findByGenre(g: String) = db.withSession { implicit session: Session =>
-    query.filter(_.genre === g).list
+    query.where(_.genre === g).list
   }
 
   def create(name: String, accountId: Int, path: String, genre: String) = db.withSession { implicit session: Session =>
@@ -47,12 +47,10 @@ object Data extends Table[Datum]("DATA") {
   }
 
   def update(id: Int, name: String, genre: String) = db.withSession { implicit session: Session =>
-    val target = query.filter(_.id === id)
-    target.map(_.name).update(name)
-    target.map(_.genre).update(genre)
+    query.where(_.id === id).map(d => d.name ~ d.genre).update((name, genre))
   }
 
   def delete(id: Int) = db.withSession { implicit session: Session =>
-    query.filter(_.id === id).delete
+    query.where(_.id === id).delete
   }
 }

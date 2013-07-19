@@ -23,14 +23,16 @@ object ClassData extends Table[ClassData]("CLASSDATA") {
     data => Some((data.id, data.id.times.n, data.id.grade, data.id.classn, data.title, data.prize.map(_.toString), data.top))
   )
 
-  val query = Query(ClassData).sortBy(_.times.desc)
+  val query = Query(ClassData)
+
+  val desc = query.sortBy(_.times.desc)
 
   def findByClassId(c: ClassId): Option[ClassData] = db.withSession { implicit session: Session =>
     query.filter(_.id === c).firstOption
   }
 
   def all = db.withSession { implicit session: Session =>
-    query.list
+    desc.list
   }
 
   def findByTimes(t: OrdInt) = db.withSession { implicit session: Session =>
@@ -40,23 +42,23 @@ object ClassData extends Table[ClassData]("CLASSDATA") {
   def search(times: String, prize: String, grade: String, tag: String) = db.withSession { implicit session: Session =>
 
     val q = if (times == "all") {
-      query
+      desc
     } else {
-      query.filter(_.times === times.toInt)
+      desc.where(_.times === times.toInt)
     }
 
     val q1 = if (prize == "all") {
       q
     } else if (prize == "none") {
-      q.filter(_.prize.isNull)
+      q.where(_.prize.isNull)
     } else {
-      q.filter(_.prize === prize)
+      q.where(_.prize === prize)
     }
 
     val q2 = if (grade == "all") {
       q1
     } else {
-      q1.filter(_.grade === grade.toInt)
+      q1.where(_.grade === grade.toInt)
     }
 
     val q3 = if (tag == "all") {
@@ -81,9 +83,6 @@ object ClassData extends Table[ClassData]("CLASSDATA") {
   }
 
   def updateTop(id: ClassId, top: Option[String]) = db.withSession { implicit session: Session =>
-    // query.filter(_.id === id).map(_.top).update(top)
-    // This does not work
-    val q = for { c <- ClassData if c.id === id } yield c.top
-    q.update(top)
+    query.where(_.id === id).map(_.top).update(top)
   }
 }
