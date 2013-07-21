@@ -1,0 +1,50 @@
+@(form: Form[(Int, Int, Int)])
+
+@import andon.utils._
+
+@common("クラスの作成") {
+} {
+  @breadcrumb(Seq(
+    (routes.Artisan.home, "Home")
+  ), "クラスの作成")
+
+  <h3>クラスの作成</h3>
+
+  @helper.form(routes.Artisan.postCreateClass) {
+
+    @form.globalError.map { error =>
+      <p class="error">
+        @error.message
+      </p>
+    }
+
+    @helper.select(
+      form("times"),
+      options = {
+        val all = TimesData.all
+        all.map(_.times.n.toString).zip(all.map(_.times.toString))
+      },
+      '_label -> "回",
+      '_help -> ""
+    )
+
+    @helper.select(
+      form("grade"),
+      options = {
+        val all = Seq(1, 2, 3)
+        all.map(_.toString).zip(all.map(_.toString))
+      },
+      '_label -> "学年",
+      '_help -> ""
+    )
+
+    @helper.inputText(
+      form("classn"),
+      '_label -> "組",
+      '_help -> ""
+    )
+
+    <input type="submit" class="btn" value="送信">
+  }
+} {
+}

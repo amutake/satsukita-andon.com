@@ -330,6 +330,37 @@ object Artisan extends Controller with Authentication {
     Ok(views.html.artisan.classData(times))
   }
 
+  val classIdForm = Form(
+    tuple(
+      "times" -> number(min = 1),
+      "grade" -> number(min = 1, max = 3),
+      "classn" -> number(min = -20, max = 20)
+    )
+  )
+
+  def createClass = HasAuthority(Master) { _ => _ =>
+    Ok(views.html.artisan.createClass(classIdForm))
+  }
+
+  def postCreateClass = HasAuthority(Master) { _ => implicit request =>
+    classIdForm.bindFromRequest.fold(
+      formWithErrors => BadRequest(views.html.artisan.createClass(formWithErrors)),
+      result => {
+        val classId = ClassId(OrdInt(result._1), result._2, result._3)
+        ClassData.findByClassId(classId).map { _ =>
+          BadRequest(views.html.artisan.createClass(
+            classIdForm.fill(result).withGlobalError("そのクラスは存在しています。")
+          ))
+        }.getOrElse {
+          ClassData.createByClassId(classId)
+          Redirect(routes.Artisan.classData(Some(classId.times.n))).flashing(
+            "success" -> "クラスを作成しました。"
+          )
+        }
+      }
+    )
+  }
+
   val classForm = Form(
     tuple(
       "title" -> text,

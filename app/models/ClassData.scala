@@ -25,7 +25,7 @@ object ClassData extends Table[ClassData]("CLASSDATA") {
 
   val query = Query(ClassData)
 
-  val desc = query.sortBy(_.times.desc)
+  val desc = query.sortBy(_.classn.asc).sortBy(_.grade.asc).sortBy(_.times.desc)
 
   def findByClassId(c: ClassId): Option[ClassData] = db.withSession { implicit session: Session =>
     query.filter(_.id === c).firstOption
@@ -80,6 +80,10 @@ object ClassData extends Table[ClassData]("CLASSDATA") {
 
   def create(data: ClassData) = db.withSession { implicit session: Session =>
     ClassData.insert(data)
+  }
+
+  def createByClassId(id: ClassId) = db.withSession { implicit session: Session =>
+    ClassData.insert(ClassData(id, "", None, None))
   }
 
   def update(id: ClassId, title: String, prize: Option[Prize]) = db.withSession { implicit session: Session =>

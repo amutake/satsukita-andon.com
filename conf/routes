@@ -53,6 +53,8 @@ GET     /artisan/classdata/tags     controllers.Artisan.editTags(id: Int)
 POST    /artisan/classdata/tags     controllers.Artisan.postEditTags(id: Int)
 GET     /artisan/classdata/review   controllers.Artisan.editReview(id: Int)
 POST    /artisan/classdata/review   controllers.Artisan.postEditReview(id: Int)
+GET     /artisan/classdata/create   controllers.Artisan.createClass
+POST    /artisan/classdata/create   controllers.Artisan.postCreateClass
 GET     /artisan/gallery/upload     controllers.Artisan.uploadImage(id: Int)
 POST    /artisan/gallery/upload     controllers.Artisan.postUploadImage(id: Int)
 GET     /artisan/gallery/select     controllers.Artisan.selectTop(id: Int)
