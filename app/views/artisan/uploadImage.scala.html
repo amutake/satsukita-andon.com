@@ -4,7 +4,7 @@
 } {
   @breadcrumb(Seq(
     (routes.Artisan.home, "Home"),
-    (routes.Artisan.classData, "クラス一覧")
+    (routes.Artisan.classData(Some(id.times.n)), "クラス一覧")
   ), "画像のアップロード")
 
   <h3>@id.times @id.grade-@id.classn 画像のアップロード</h3>

@@ -5,7 +5,8 @@
 @common("トップ画像の選択") {
 } {
   @breadcrumb(Seq(
-    (routes.Artisan.home, "Home")
+    (routes.Artisan.home, "Home"),
+    (routes.Artisan.classData(Some(id.times.n)), "クラス一覧")
   ), "トップ画像の選択")
 
   <h3>トップ画像の選択</h3>

@@ -326,8 +326,8 @@ object Artisan extends Controller with Authentication {
     ))
   }
 
-  def classData = HasAuthority(Master) { _ => implicit request =>
-    Ok(views.html.artisan.classData())
+  def classData(times: Option[Int]) = HasAuthority(Master) { _ => implicit request =>
+    Ok(views.html.artisan.classData(times))
   }
 
   val classForm = Form(
@@ -348,7 +348,7 @@ object Artisan extends Controller with Authentication {
       result => {
         val prize = Prize.fromString(result._2)
         ClassData.update(data.id, result._1, prize)
-        Redirect(routes.Artisan.classData).flashing(
+        Redirect(routes.Artisan.classData(Some(ClassId.fromId(id).times.n))).flashing(
           "success" -> "クラス情報を変更しました。"
         )
       }
@@ -371,11 +371,9 @@ object Artisan extends Controller with Authentication {
 
   def postEditTags(id: Int) = AboutClass(id) { _ => data => implicit request =>
     tagsForm.bindFromRequest.fold(
-      formWithErrors => {
-        println(formWithErrors)
-        Redirect(routes.Artisan.classData).flashing(
+      formWithErrors => Redirect(routes.Artisan.classData(Some(ClassId.fromId(id).times.n))).flashing(
         "error" -> "エラー"
-      )},
+      ),
       tags => {
         tags.map { tag =>
           if (tag._2 == "add") {
@@ -384,7 +382,7 @@ object Artisan extends Controller with Authentication {
             Tags.delete(tag._1)
           }
         }
-        Redirect(routes.Artisan.classData).flashing(
+        Redirect(routes.Artisan.classData(Some(ClassId.fromId(id).times.n))).flashing(
           "success" -> "タグを編集しました。"
         )
       }
@@ -423,7 +421,7 @@ object Artisan extends Controller with Authentication {
               println("Not image. Abort.")
             }
           }
-          Redirect(routes.Artisan.classData).flashing(
+          Redirect(routes.Artisan.classData(Some(ClassId.fromId(id).times.n))).flashing(
             "success" -> "画像をアップロードしました。"
           )
         }
@@ -443,7 +441,7 @@ object Artisan extends Controller with Authentication {
       formWithErrors => BadRequest(views.html.artisan.selectTop(data.id, formWithErrors)),
       top => {
         ClassData.updateTop(data.id, top)
-        Redirect(routes.Artisan.classData).flashing(
+        Redirect(routes.Artisan.classData(Some(ClassId.fromId(id).times.n))).flashing(
           "success" -> "トップ画像を変更しました。"
         )
       }
@@ -469,7 +467,7 @@ object Artisan extends Controller with Authentication {
           new File(tpath).delete()
         }
 
-        Redirect(routes.Artisan.classData).flashing(
+        Redirect(routes.Artisan.classData(Some(ClassId.fromId(id).times.n))).flashing(
           "success" -> "画像を削除しました。"
         )
       }

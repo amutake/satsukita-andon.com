@@ -1,4 +1,4 @@
-@()(implicit flash: Flash)
+@(times: Option[Int])(implicit flash: Flash)
 
 @common("クラス一覧") {
 } {
@@ -22,7 +22,9 @@
 
   <select id="select-times" name="times">
     @TimesData.all.map { t =>
-      <option value="@t.times.n.toString">@t.times.toString</option>
+      <option value="@t.times.n.toString" @if(times == Some(t.times.n)) { selected }>
+        @t.times.toString
+      </option>
     }
   </select>
 

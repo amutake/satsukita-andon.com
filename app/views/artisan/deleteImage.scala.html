@@ -6,7 +6,7 @@
 } {
   @breadcrumb(Seq(
     (routes.Artisan.home, "Home"),
-    (routes.Artisan.classData, "クラス一覧")
+    (routes.Artisan.classData(Some(id.times.n)), "クラス一覧")
   ), "画像の削除")
 
   <h3>@id.toString 画像の削除</h3>

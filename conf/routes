@@ -46,7 +46,7 @@ POST    /artisan/data/upload        controllers.Artisan.postUploadDatum
 GET     /artisan/data/edit          controllers.Artisan.editDatum(id: Int)
 POST    /artisan/data/edit          controllers.Artisan.postEditDatum(id: Int)
 POST    /artisan/data/delete        controllers.Artisan.deleteDatum(id: Int)
-GET     /artisan/classdata          controllers.Artisan.classData
+GET     /artisan/classdata          controllers.Artisan.classData(times: Option[Int])
 GET     /artisan/classdata/edit     controllers.Artisan.editClassData(id: Int)
 POST    /artisan/classdata/edit     controllers.Artisan.postEditClassData(id: Int)
 GET     /artisan/classdata/tags     controllers.Artisan.editTags(id: Int)
