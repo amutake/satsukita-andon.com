@@ -25,6 +25,10 @@ object Reviews extends Table[Review]("REVIEWS") {
     query.where(_.id === id).firstOption
   }
 
+  def findByClassId(c: ClassId) = db.withSession { implicit session: Session =>
+    query.where(_.classId === c).list
+  }
+
   def findByClassIdAccountId(c: ClassId, a: Int) = db.withSession { implicit session: Session =>
     query.where(_.classId === c).where(_.accountId === a).firstOption
   }

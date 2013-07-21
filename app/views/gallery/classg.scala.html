@@ -30,17 +30,25 @@
         <dd>@Util.showClassN(data.id.classn)組</dd>
 
         <dt>タイトル</dt>
-        <dd>@data.title&nbsp;</dd>
+        <dd>@data.title</dd>
 
         <dt>賞</dt>
         <dd>@data.prize.map(_.toJapanese).getOrElse { なし }</dd>
 
         <dt>タグ</dt>
         <dd>
+          <ul class="tags">
           @Tags.findByClassId(data.id).map { tag =>
-            @tag.tag&nbsp;
+            <li>@tag.tag</li>
           }
-          &nbsp;
+          </ul>
+        </dd>
+
+        <dt>講評</dt>
+        <dd>
+          @Reviews.findByClassId(data.id).map { review =>
+            <p>@review.text by @Accounts.findNameById(review.accountId)</p>
+          }
         </dd>
       </dl>
     </div>

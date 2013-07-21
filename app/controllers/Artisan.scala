@@ -413,8 +413,6 @@ object Artisan extends Controller with Authentication {
         )
         def bad(err: FormError) = BadRequest(views.html.artisan.editReview(data.id, reviewForm.fill(result).withError(err)))
 
-        println(result)
-
         result._2.map { text =>
           if (result._3) {
             bad(FormError("delete", "不正な入力です。"))
