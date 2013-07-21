@@ -33,7 +33,7 @@
         <dd>@data.title</dd>
 
         <dt>賞</dt>
-        <dd>@data.prize.map(_.toJapanese).getOrElse { なし }</dd>
+        <dd>@data.prize.map(_.span).getOrElse { なし }</dd>
 
         <dt>タグ</dt>
         <dd>
