@@ -389,6 +389,58 @@ object Artisan extends Controller with Authentication {
     )
   }
 
+  val reviewForm = Form(
+    tuple(
+      "rid" -> optional(longNumber), // "id" don't work. play's bug?
+      "text" -> optional(text),
+      "delete" -> boolean
+    )
+  )
+
+  def editReview(id: Int) = AboutClass(id) { acc => data => _ =>
+    val form = Reviews.findByClassIdAccountId(data.id, acc.id).map { review =>
+      reviewForm.fill((Some(review.id), Some(review.text), false))
+    }.getOrElse(reviewForm)
+    Ok(views.html.artisan.editReview(data.id, form))
+  }
+
+  def postEditReview(id: Int) = AboutClass(id) { acc => data => implicit request =>
+    reviewForm.bindFromRequest.fold(
+      formWithErrors => BadRequest(views.html.artisan.editReview(data.id, formWithErrors)),
+      result => {
+        def redirect(str: String) = Redirect(routes.Artisan.classData(Some(data.id.times.n))).flashing(
+          "success" -> str
+        )
+        def bad(err: FormError) = BadRequest(views.html.artisan.editReview(data.id, reviewForm.fill(result).withError(err)))
+
+        println(result)
+
+        result._2.map { text =>
+          if (result._3) {
+            bad(FormError("delete", "不正な入力です。"))
+          } else {
+            result._1.map { n =>
+              Reviews.update(n, text)
+              redirect("講評を更新しました。")
+            }.getOrElse {
+              Reviews.create(data.id, acc.id, text)
+              redirect("講評を作成しました。")
+            }
+          }
+        }.getOrElse {
+          if (result._3) {
+            result._1.map { n =>
+              Reviews.delete(n)
+              redirect("講評を削除しました。")
+            }.getOrElse(redirect("講評はありません。"))
+          } else {
+            bad(FormError("text", "値を入力してください。"))
+          }
+        }
+      }
+    )
+  }
+
   def uploadImage(id: Int) = AboutClass(id) { _ => data => _ =>
     Ok(views.html.artisan.uploadImage(data.id))
   }

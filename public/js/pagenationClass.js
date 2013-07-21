@@ -37,6 +37,8 @@ $(function() {
 					$btn("/artisan/classdata/edit?id=" + c.id, "クラス情報の編集")
 				).append(
 					$btn("/artisan/classdata/tags?id=" + c.id, "タグの編集")
+				).append(
+					$btn("/artisan/classdata/review?id=" + c.id, "講評を書く")
 				));
 			$table.append($tr);
 		});
