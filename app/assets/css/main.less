@@ -69,7 +69,10 @@ body {
     position: fixed;
     left: 0; bottom: 14px;
     width: 100%; height: @headerHeight;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.3);
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.7);
+    }
     #footer-wrapper {
         width: @mainWidth; height: 100%;
         margin: 0 auto;
@@ -85,14 +88,15 @@ body {
             float: right;
             width: 200px;
             padding: 14px 20px 4px 0;
-            font-size: 12px;
-            line-height: 8px;
+            line-height: 10px;
             color: #666666;
             a {
                 color: #666699;
+                font-size: 12px;
             }
             p {
                 text-align: center;
+                font-size: 10px;
             }
         }
     }
