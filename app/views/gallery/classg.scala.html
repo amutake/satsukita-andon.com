@@ -13,6 +13,40 @@
 @common(data.id.toString + " " + data.title) {
   <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/gallery.css")">
 } {
+  @Images.findImagePath(data).map { path =>
+    <div class="top-wrapper">
+      <a class="fresco top-image" href="@Images.toFullsize(path)" data-fresco-group="gallery">
+        <img src="@Images.toFullsize(path)">
+      </a>
+
+      <dl class="dl">
+        <dt>回</dt>
+        <dd>@data.id.times</dd>
+
+        <dt>学年</dt>
+        <dd>@data.id.grade年</dd>
+
+        <dt>組</dt>
+        <dd>@Util.showClassN(data.id.classn)組</dd>
+
+        <dt>タイトル</dt>
+        <dd>@data.title&nbsp;</dd>
+
+        <dt>賞</dt>
+        <dd>@data.prize.map(_.toJapanese).getOrElse { なし }</dd>
+
+        <dt>タグ</dt>
+        <dd>
+          @Tags.findByClassId(data.id).map { tag =>
+            @tag.tag&nbsp;
+          }
+          &nbsp;
+        </dd>
+      </dl>
+    </div>
+  }.getOrElse {
+  }
+
   <ul class="thumbnails">
     @ps.map { p => @li(p._1, p._2) }
   </ul>
