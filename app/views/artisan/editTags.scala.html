@@ -1,0 +1,42 @@
+@(data: ClassData, tags: Seq[Tag], names: Seq[String])
+
+@import andon.utils._
+
+@common("タグの編集") {
+  <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/tags.css")">
+} {
+  @breadcrumb(Seq(
+    (routes.Artisan.home, "Home"),
+    (routes.Artisan.classData, "クラス一覧")
+  ), "タグの編集")
+
+  <h3>タグの編集</h3>
+
+  @Images.findImagePath(data).map { path =>
+    <img src="@path" width="400">
+  }
+
+  <p>タグ名を入力してEnterを押してください。</p>
+
+  <input class="input-tag" type="text">
+
+  <ul class="tags current-tags">
+    @tags.map { tag =>
+      <li><span class="delete-tag" tag-id="@tag.id">&times;</span> @tag.tag</li>
+    }
+  </ul>
+
+  @helper.form(routes.Artisan.postEditTags(data.id.toId), 'id -> "tags-form") {
+    <button class="btn">確定</button>
+  }
+
+  <h4>他のタグ</h4>
+
+  <ul class="tags other-tags">
+    @names.map { name =>
+      <li>@name</li>
+    }
+  </ul>
+} {
+  <script type="text/javascript" src="@routes.Assets.at("js/tags.js")"></script>
+}

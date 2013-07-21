@@ -12,6 +12,8 @@ import play.api.data._
 import play.api.data.Forms._
 import play.api.data.validation.Constraints._
 import play.api.libs.Files
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
 
 import models._
 import andon.utils._
@@ -348,6 +350,42 @@ object Artisan extends Controller with Authentication {
         ClassData.update(data.id, result._1, prize)
         Redirect(routes.Artisan.classData).flashing(
           "success" -> "クラス情報を変更しました。"
+        )
+      }
+    )
+  }
+
+  val tagsForm = Form(
+    single("tags" -> list(tuple(
+      "id" -> number,
+      "type" -> text,
+      "name" -> text
+    )))
+  )
+
+  def editTags(id: Int) = AboutClass(id) { _ => data => implicit request =>
+    val names = Tags.all.map(_.tag).distinct
+    val tags = Tags.findByClassId(data.id)
+    Ok(views.html.artisan.editTags(data, tags, names))
+  }
+
+  def postEditTags(id: Int) = AboutClass(id) { _ => data => implicit request =>
+    tagsForm.bindFromRequest.fold(
+      formWithErrors => {
+        println(formWithErrors)
+        Redirect(routes.Artisan.classData).flashing(
+        "error" -> "エラー"
+      )},
+      tags => {
+        tags.map { tag =>
+          if (tag._2 == "add") {
+            Tags.create(data.id, tag._3)
+          } else if (tag._2 == "delete") {
+            Tags.delete(tag._1)
+          }
+        }
+        Redirect(routes.Artisan.classData).flashing(
+          "success" -> "タグを編集しました。"
         )
       }
     )

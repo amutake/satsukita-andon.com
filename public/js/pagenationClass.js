@@ -35,6 +35,8 @@ $(function() {
 					$btn("/artisan/gallery/delete?id=" + c.id, "画像の削除")
 				).append(
 					$btn("/artisan/classdata/edit?id=" + c.id, "クラス情報の編集")
+				).append(
+					$btn("/artisan/classdata/tags?id=" + c.id, "タグの編集")
 				));
 			$table.append($tr);
 		});

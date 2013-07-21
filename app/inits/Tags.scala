@@ -8,7 +8,7 @@ object Tags {
 
     def tag(name: String, cs: Seq[(Int, Int, Int)]) = {
       cs.map { case (t, g, c) =>
-        models.Tag(ClassId(OrdInt(t), g, c), name)
+        models.Tags.create(ClassId(OrdInt(t), g, c), name)
       }
     }
 
@@ -93,7 +93,7 @@ object Tags {
         (52, 3, 3),
         (51, 3, 2),
         (50, 3, 1)
-      ))).foreach(models.Tags.create)
+      )))
     }
   }
 }
