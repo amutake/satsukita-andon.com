@@ -587,4 +587,31 @@ object Artisan extends Controller with Authentication {
       }
     )
   }
+
+  val timesBaseForm = Form(single(
+    "times" -> number(min = 1)
+  ))
+
+  def createTimes = HasAuthority(Master) { _ => _ =>
+    Ok(views.html.artisan.createTimes(timesBaseForm))
+  }
+
+  def postCreateTimes = HasAuthority(Master) { _ => implicit request =>
+    timesBaseForm.bindFromRequest.fold(
+      formWithErrors => BadRequest(views.html.artisan.createTimes(formWithErrors)),
+      n => {
+        val times = OrdInt(n)
+        TimesData.findByTimes(times).map { _ =>
+          BadRequest(views.html.artisan.createTimes(
+            timesBaseForm.fill(n).withGlobalError("その回は存在しています。")
+          ))
+        }.getOrElse {
+          TimesData.createByTimes(times)
+          Redirect(routes.Artisan.timesData).flashing(
+            "success" -> "回を作成しました。"
+          )
+        }
+      }
+    )
+  }
 }

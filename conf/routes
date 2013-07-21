@@ -64,6 +64,8 @@ POST    /artisan/gallery/delete     controllers.Artisan.postDeleteImage(id: Int)
 GET     /artisan/timesdata          controllers.Artisan.timesData
 GET     /artisan/timesdata/edit     controllers.Artisan.editTimesData(id: Int)
 POST    /artisan/timesdata/edit     controllers.Artisan.postEditTimesData(id: Int)
+GET     /artisan/timesdata/create   controllers.Artisan.createTimes
+POST    /artisan/timesdata/create   controllers.Artisan.postCreateTimes
 
 # API
 # TODO

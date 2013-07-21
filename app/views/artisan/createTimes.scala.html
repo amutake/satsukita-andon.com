@@ -1,0 +1,30 @@
+@(form: Form[Int])
+
+@import andon.utils._
+
+@common("回の作成") {
+} {
+  @breadcrumb(Seq(
+    (routes.Artisan.home, "Home")
+  ), "回の作成")
+
+  <h3>回の作成</h3>
+
+  @helper.form(routes.Artisan.postCreateTimes) {
+
+    @form.globalError.map { error =>
+      <p class="error">
+        @error.message
+      </p>
+    }
+
+    @helper.inputText(
+      form("times"),
+      '_label -> "回",
+      '_help -> ""
+    )
+
+    <input type="submit" class="btn" value="送信">
+  }
+} {
+}
