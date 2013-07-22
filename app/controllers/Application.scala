@@ -34,7 +34,7 @@ object Application extends Controller {
 
   def tags(tag: String) = Action {
     val ids = Tags.findClassIdByTag(tag)
-    val cs = Images.getTopImages(ids.map { id =>
+    val cs = Images.getTopImages(ids.sorted.map { id =>
       ClassData.findByClassId(id)
     }.flatten)
     Ok(views.html.gallery.tags(tag, cs))

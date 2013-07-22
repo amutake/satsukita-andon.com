@@ -26,4 +26,22 @@ object ClassId {
     { c => c.toId },    // map ClassId to Int
     { i => fromId(i) } // map Int to ClassId
   )
+
+  implicit val classIdOrdering = new Ordering[ClassId] {
+    def compare(a: ClassId, b: ClassId) = {
+      val classc = a.classn compare b.classn
+      val gradec = if (a.grade == b.grade) {
+        classc
+      } else {
+        a.grade compare b.grade
+      }
+      val timesc = if (a.times.n == b.times.n) {
+        gradec
+      } else {
+        b.times.n compare a.times.n
+      }
+
+      timesc
+    }
+  }
 }
