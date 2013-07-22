@@ -58,7 +58,7 @@ $(function() {
 			$imgs.map(function($img) {
 				$img.img.css(next($img.img.css("top"), $img.speed));
 			})
-		}, 100);
+		}, 200);
 	};
 
 	go($imgs);
