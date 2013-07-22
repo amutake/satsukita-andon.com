@@ -25,14 +25,14 @@ object ClassData extends Table[ClassData]("CLASSDATA") {
 
   val query = Query(ClassData)
 
-  val desc = query.sortBy(_.classn.asc).sortBy(_.grade.asc).sortBy(_.times.desc)
+  val sorted = query.sortBy(_.classn.asc).sortBy(_.grade.asc).sortBy(_.times.desc)
 
   def findByClassId(c: ClassId): Option[ClassData] = db.withSession { implicit session: Session =>
     query.filter(_.id === c).firstOption
   }
 
   def all = db.withSession { implicit session: Session =>
-    desc.list
+    sorted.list
   }
 
   def findByTimes(t: OrdInt) = db.withSession { implicit session: Session =>
@@ -42,9 +42,9 @@ object ClassData extends Table[ClassData]("CLASSDATA") {
   def search(times: String, prize: String, grade: String, tag: String) = db.withSession { implicit session: Session =>
 
     val q = if (times == "all") {
-      desc
+      sorted
     } else {
-      desc.where(_.times === times.toInt)
+      sorted.where(_.times === times.toInt)
     }
 
     val q1 = if (prize == "all") {
@@ -69,8 +69,8 @@ object ClassData extends Table[ClassData]("CLASSDATA") {
       } yield t.classId
 
       for {
-        id <- tagId
         data <- q2
+        id <- tagId
         if data.id === id
       } yield data
     }
