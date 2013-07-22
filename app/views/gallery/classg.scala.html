@@ -39,7 +39,7 @@
         <dd>
           <ul class="tags">
           @Tags.findByClassId(data.id).map { tag =>
-            <li>@tag.tag</li>
+            <li><a href="@routes.Application.tags(tag.tag)">@tag.tag</a></li>
           }
           </ul>
         </dd>

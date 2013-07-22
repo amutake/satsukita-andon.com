@@ -1,0 +1,22 @@
+@(tag: String, cs: Seq[(ClassData, String)])
+
+@common("タグ - " + tag) {
+  <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/gallery.css")">
+} {
+
+  <h3>タグ "@tag" 一覧</h3>
+
+  <ul class="thumbnails">
+    @cs.map { case (c, path) =>
+      <li class="span4">
+        <a href="@routes.Application.classGallery(c.id.times, c.id.grade, c.id.classn)">
+          <img src="@path">
+          <div class="img-detail">
+            @c.id.toString @c.title
+          </div>
+        </a>
+      </li>
+    }
+  </ul>
+} {
+}

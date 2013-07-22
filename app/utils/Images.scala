@@ -85,19 +85,9 @@ object Images {
   def findImagePath(c: ClassData) = findImage(c).map(toPath _)
 
   def getTopImages(cs: Seq[ClassData]): Seq[(ClassData, String)] = {
-
-    def flatOptions[A](options: Seq[Option[A]]): Seq[A] = {
-      options.flatMap(_ match {
-        case Some(a) => Seq(a)
-        case None => Seq()
-      })
-    }
-
-    val options: Seq[Option[(ClassData, String)]] = cs.map { c =>
+    cs.map { c =>
       findImagePath(c).map((c, _))
-    }
-
-    flatOptions(options)
+    }.flatten
   }
 
   def getTopImagesOption(cs: Seq[ClassData]): Seq[(ClassData, Option[String])] = {

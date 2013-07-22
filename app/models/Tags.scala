@@ -33,7 +33,7 @@ object Tags extends Table[Tag]("TAGS") {
   }
 
   def findClassIdByTag(tag: String) = db.withSession { implicit session: Session =>
-    query.where(_.tag === tag).list
+    query.where(_.tag === tag).map(_.classId).list
   }
 
   def create(classId: ClassId, tag: String) = db.withSession { implicit session: Session =>

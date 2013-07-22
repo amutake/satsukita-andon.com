@@ -32,6 +32,14 @@ object Application extends Controller {
     Ok(views.html.gallery.search(times, tags))
   }
 
+  def tags(tag: String) = Action {
+    val ids = Tags.findClassIdByTag(tag)
+    val cs = Images.getTopImages(ids.map { id =>
+      ClassData.findByClassId(id)
+    }.flatten)
+    Ok(views.html.gallery.tags(tag, cs))
+  }
+
   def timesGallery(t: OrdInt) = Action {
     val times = TimesData.findByTimes(t)
     if (times.isDefined) {
