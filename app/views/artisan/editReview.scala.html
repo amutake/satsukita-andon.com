@@ -17,7 +17,7 @@
     </p>
   }
 
-  @helper.form(routes.Artisan.postEditReview(id.toId)) {
+  @helper.form(routes.Artisan.postEditReview(id.toInt)) {
 
     @form("rid").value.map { n =>
       <input name="rid" type="hidden" value="@n">

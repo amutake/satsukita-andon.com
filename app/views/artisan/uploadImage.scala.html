@@ -9,7 +9,7 @@
 
   <h3>@id.times @id.grade-@id.classn 画像のアップロード</h3>
 
-  @helper.form(routes.Artisan.postUploadImage(id.toId), 'enctype -> "multipart/form-data") {
+  @helper.form(routes.Artisan.postUploadImage(id.toInt), 'enctype -> "multipart/form-data") {
 
     <input type="file" name="images" multiple>
 

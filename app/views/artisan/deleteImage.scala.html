@@ -11,7 +11,7 @@
 
   <h3>@id.toString 画像の削除</h3>
 
-  @helper.form(routes.Artisan.postDeleteImage(id.toId)) {
+  @helper.form(routes.Artisan.postDeleteImage(id.toInt)) {
 
     @form.globalError.map { error =>
       <p class="error">

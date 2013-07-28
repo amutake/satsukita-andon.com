@@ -11,7 +11,7 @@
 
   <h3>トップ画像の選択</h3>
 
-  @helper.form(routes.Artisan.postSelectTop(id.toId)) {
+  @helper.form(routes.Artisan.postSelectTop(id.toInt)) {
 
     @form.globalError.map { error =>
       <p class="error">

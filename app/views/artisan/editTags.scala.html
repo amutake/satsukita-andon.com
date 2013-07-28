@@ -26,7 +26,7 @@
     }
   </ul>
 
-  @helper.form(routes.Artisan.postEditTags(data.id.toId), 'id -> "tags-form") {
+  @helper.form(routes.Artisan.postEditTags(data.id.toInt), 'id -> "tags-form") {
     <button class="btn">確定</button>
   }
 

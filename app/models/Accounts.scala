@@ -66,10 +66,7 @@ object Accounts extends Table[Account]("ACCOUNTS") {
   }
 
   def update(id: Int, name: String, username: String, times: OrdInt, level: AccountLevel) = db.withSession { implicit session: Session =>
-    findById(id).map { before =>
-      val after = Account(id, name, username, before.password, times, level)
-      query.where(_.id === id).update(after)
-    }
+    query.where(_.id === id).map(a => a.name ~ a.username ~ a.times ~ a.level).update((name, username, times, level))
   }
 
   def updatePassword(id: Int, password: String) = db.withSession { implicit session: Session =>

@@ -24,7 +24,7 @@ object API extends Controller with Authentication {
       cps.map { cp =>
         Json.toJson(
           Map(
-            "id" -> Json.toJson(cp._1.id.toId),
+            "id" -> Json.toJson(cp._1.id.toInt),
             "times" -> Json.toJson(cp._1.id.times.toString),
             "grade" -> Json.toJson(cp._1.id.grade),
             "classn" -> Json.toJson(cp._1.id.classn),
@@ -45,7 +45,7 @@ object API extends Controller with Authentication {
       cps.map { cp =>
         Json.toJson(
           Map(
-            "id" -> Json.toJson(cp._1.id.toId),
+            "id" -> Json.toJson(cp._1.id.toInt),
             "times" -> Json.toJson(cp._1.id.times.toString),
             "grade" -> Json.toJson(cp._1.id.grade),
             "classn" -> Json.toJson(cp._1.id.classn),

@@ -11,7 +11,7 @@
 
   <h3>@id.toString クラスデータの編集</h3>
 
-  @helper.form(routes.Artisan.postEditClassData(id.toId)) {
+  @helper.form(routes.Artisan.postEditClassData(id.toInt)) {
 
     @form.globalError.map { error =>
       <p class="error">
