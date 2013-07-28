@@ -47,8 +47,10 @@ object Prize {
   }
   def fromString(s: String) = fromEnglish(s)
 
-  implicit val prizeTypeMapper = MappedTypeMapper.base[Option[Prize], Option[String]](
-    { p => p.map(_.toString) },
-    { s => s.flatMap(fromString) }
+  def partialFromString(s: String): Prize = fromEnglish(s).get
+
+  implicit val prizeTypeMapper = MappedTypeMapper.base[Prize, String](
+    { p => p.toString },
+    { s => partialFromString(s) }
   )
 }

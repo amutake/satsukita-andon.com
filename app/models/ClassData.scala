@@ -15,12 +15,12 @@ object ClassData extends Table[ClassData]("CLASSDATA") {
   def grade = column[Int]("GRADE", O.NotNull)
   def classn = column[Int]("CLASSN", O.NotNull)
   def title = column[String]("TITLE", O.NotNull)
-  def prize = column[Option[String]]("PRIZE")
+  def prize = column[Option[Prize]]("PRIZE")
   def top = column[Option[String]]("TOP")
 
   def * = id ~ times ~ grade ~ classn ~ title ~ prize ~ top <> (
-    (id, times, grade, classn, title, prize, top) => ClassData(id, title, prize.flatMap(Prize.fromString), top),
-    data => Some((data.id, data.id.times, data.id.grade, data.id.classn, data.title, data.prize.map(_.toString), data.top))
+    (id, _, _, _, title, prize, top) => ClassData(id, title, prize, top),
+    d => Some((d.id, d.id.times, d.id.grade, d.id.classn, d.title, d.prize, d.top))
   )
 
   val query = Query(ClassData)
@@ -52,7 +52,7 @@ object ClassData extends Table[ClassData]("CLASSDATA") {
     } else if (prize == "none") {
       q.where(_.prize.isNull)
     } else {
-      q.where(_.prize === prize)
+      q.where(_.prize === Prize.fromString(prize))
     }
 
     val q2 = if (grade == "all") {
@@ -87,7 +87,7 @@ object ClassData extends Table[ClassData]("CLASSDATA") {
   }
 
   def update(id: ClassId, title: String, prize: Option[Prize]) = db.withSession { implicit session: Session =>
-    query.where(_.id === id).map(d => d.title ~ d.prize).update((title, prize.map(_.toString)))
+    query.where(_.id === id).map(d => d.title ~ d.prize).update((title, prize))
   }
 
   def updateTop(id: ClassId, top: Option[String]) = db.withSession { implicit session: Session =>
