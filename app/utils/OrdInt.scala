@@ -2,6 +2,8 @@ package andon.utils
 
 import play.api.mvc._
 
+import scala.slick.lifted.MappedTypeMapper
+
 case class OrdInt(n: Int) {
 
   override def toString = (n % 10) match {
@@ -52,4 +54,9 @@ object OrdInt {
       ordInt.toString()
     }
   }
+
+  implicit val ordIntTypeMapper = MappedTypeMapper.base[OrdInt, Int](
+    { o => o.n },
+    { i => OrdInt(i) }
+  )
 }

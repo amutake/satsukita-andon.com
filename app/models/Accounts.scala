@@ -18,12 +18,12 @@ object Accounts extends Table[Account]("ACCOUNTS") {
   def name = column[String]("NAME", O.NotNull)
   def username = column[String]("USERNAME", O.NotNull)
   def password = column[String]("PASSWORD", O.NotNull)
-  def times = column[Int]("TIMES", O.NotNull)
+  def times = column[OrdInt]("TIMES", O.NotNull)
   def level = column[AccountLevel]("LEVEL", O.NotNull)
 
   def * = id ~ name ~ username ~ password ~ times ~ level <> (
-    (id, name, username, password, times, level) => Account(id, name, username, password, OrdInt(times), level),
-    account => Some((account.id, account.name, account.username, account.password, account.times.n, account.level))
+    Account.apply _,
+    Account.unapply _
   )
 
   def ins = name ~ username ~ password ~ times ~ level returning id
@@ -62,7 +62,7 @@ object Accounts extends Table[Account]("ACCOUNTS") {
   }
 
   def create(name: String, username: String, password: String, times: OrdInt, level: AccountLevel) = db.withSession { implicit session: Session =>
-    Accounts.ins.insert(name, username, sha1(password), times.n, level)
+    Accounts.ins.insert(name, username, sha1(password), times, level)
   }
 
   def update(id: Int, name: String, username: String, times: OrdInt, level: AccountLevel) = db.withSession { implicit session: Session =>

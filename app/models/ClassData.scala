@@ -11,7 +11,7 @@ object ClassData extends Table[ClassData]("CLASSDATA") {
   val db = DB.db
 
   def id = column[ClassId]("ID", O.NotNull, O.PrimaryKey)
-  def times = column[Int]("TIMES", O.NotNull)
+  def times = column[OrdInt]("TIMES", O.NotNull)
   def grade = column[Int]("GRADE", O.NotNull)
   def classn = column[Int]("CLASSN", O.NotNull)
   def title = column[String]("TITLE", O.NotNull)
@@ -20,7 +20,7 @@ object ClassData extends Table[ClassData]("CLASSDATA") {
 
   def * = id ~ times ~ grade ~ classn ~ title ~ prize ~ top <> (
     (id, times, grade, classn, title, prize, top) => ClassData(id, title, prize.flatMap(Prize.fromString), top),
-    data => Some((data.id, data.id.times.n, data.id.grade, data.id.classn, data.title, data.prize.map(_.toString), data.top))
+    data => Some((data.id, data.id.times, data.id.grade, data.id.classn, data.title, data.prize.map(_.toString), data.top))
   )
 
   val query = Query(ClassData)
@@ -36,7 +36,7 @@ object ClassData extends Table[ClassData]("CLASSDATA") {
   }
 
   def findByTimes(t: OrdInt) = db.withSession { implicit session: Session =>
-    query.filter(_.times === t.n).list
+    query.filter(_.times === t).list
   }
 
   def search(times: String, prize: String, grade: String, tag: String) = db.withSession { implicit session: Session =>
@@ -44,7 +44,7 @@ object ClassData extends Table[ClassData]("CLASSDATA") {
     val q = if (times == "all") {
       sorted
     } else {
-      sorted.where(_.times === times.toInt)
+      sorted.where(_.times === OrdInt(times.toInt))
     }
 
     val q1 = if (prize == "all") {

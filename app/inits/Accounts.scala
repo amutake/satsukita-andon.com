@@ -12,7 +12,7 @@ object Accounts {
       DB.db.withSession { implicit session: Session =>
 
         models.Accounts.ins.insertAll(
-          ("甲乙人", "kohotsunin", "9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684", 60, Admin)
+          ("甲乙人", "kohotsunin", "9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684", OrdInt(60), Admin)
         )
       }
     }

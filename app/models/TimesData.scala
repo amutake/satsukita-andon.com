@@ -10,18 +10,18 @@ object TimesData extends Table[TimesData]("TIMESDATA") {
 
   val db = DB.db
 
-  def times = column[Int]("TIMES", O.NotNull, O.PrimaryKey)
+  def times = column[OrdInt]("TIMES", O.NotNull, O.PrimaryKey)
   def title = column[String]("TITLE", O.NotNull)
 
   def * = times ~ title <> (
-    tt => TimesData(OrdInt(tt._1), tt._2),
-    data => Some(data.times.n, data.title)
+    TimesData.apply _,
+    TimesData.unapply _
   )
 
   val query = Query(TimesData)
 
   def findByTimes(t: OrdInt) = db.withSession { implicit session: Session =>
-    query.where(_.times === t.n).firstOption
+    query.where(_.times === t).firstOption
   }
 
   def all = db.withSession { implicit session: Session =>
@@ -37,6 +37,6 @@ object TimesData extends Table[TimesData]("TIMESDATA") {
   }
 
   def update(t: OrdInt, title: String) = db.withSession { implicit session: Session =>
-    query.where(_.times === t.n).map(_.title).update(title)
+    query.where(_.times === t).map(_.title).update(title)
   }
 }
