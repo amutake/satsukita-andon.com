@@ -62,6 +62,9 @@ object InitialData {
     if (!tableMap.contains("REVIEWS")) {
       Reviews.ddl.create
     }
+    if (!tableMap.contains("COMMENTS")) {
+      Comments.ddl.create
+    }
   }
 
   def insert = {

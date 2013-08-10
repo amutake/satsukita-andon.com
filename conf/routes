@@ -15,6 +15,7 @@ GET     /howto/article              controllers.Application.howtoArticle(id: Lon
 GET     /howto/:page                controllers.Application.eachHowto(page: String)
 GET     /about                      controllers.Application.about
 GET     /contact                    controllers.Application.contact
+POST    /comment                    controllers.Application.postComment(id: Long)
 
 # Artisan page
 GET     /artisan/login              controllers.Artisan.login

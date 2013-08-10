@@ -2,11 +2,14 @@ package controllers
 
 import play.api._
 import play.api.mvc._
+import play.api.data._
+import play.api.data.Forms._
+import play.api.data.validation.Constraints._
 
 import models._
 import andon.utils._
 
-object Application extends Controller {
+object Application extends Controller with Authentication {
 
   def index = Action {
     Ok(views.html.index())
@@ -84,9 +87,9 @@ object Application extends Controller {
     }
   }
 
-  def howtoArticle(id: Long) = Action { request =>
+  def howtoArticle(id: Long) = Action { implicit request =>
     Articles.findById(id).map { article =>
-      Ok(views.html.howto.article(article))
+      Ok(views.html.howto.article(article, commentForm, myAccount))
     }.getOrElse(NotFound(views.html.errors.notFound(request.path)))
   }
 
@@ -96,5 +99,58 @@ object Application extends Controller {
 
   def contact = Action {
     Ok(views.html.contact())
+  }
+
+  val commentForm = Form(
+    tuple(
+      "accountId" -> optional(number),
+      "name" -> text.verifying(nonEmpty),
+      "text" -> text.verifying(nonEmpty),
+      "password" -> optional(text)
+    )
+  )
+
+  def postComment(id: Long) = Action { implicit request =>
+    Articles.findById(id).map { article =>
+
+      def success = article.articleType match {
+        case Info => Redirect(routes.Application.info(0))
+        case Howto => Redirect(routes.Application.howtoArticle(id))
+        case _ => Redirect(routes.Application.index())
+      }
+
+      def error(form: Form[(Option[Int], String, String, Option[String])]) = {
+        article.articleType match {
+          case Info => Redirect(routes.Application.info(0))
+          case Howto => BadRequest(views.html.howto.article(article, form, myAccount))
+          case _ => BadRequest(views.html.errors.badRequest("その記事にはコメントを付けられません"))
+        }
+      }
+
+      commentForm.bindFromRequest.fold(
+        error,
+        result => result match {
+          case (account, name, text, password) => {
+            myAccount.map { acc =>
+              if (account == Some(acc.id)) {
+                Comments.create(article.id, account, acc.name, text, None)
+                success
+              } else {
+                error(commentForm.fill(result).withGlobalError("送信されたアカウント情報が間違っています"))
+              }
+            }.getOrElse {
+              account.map { _ =>
+                error(commentForm.fill(result).withGlobalError("ログインしてください"))
+              }.getOrElse {
+                Comments.create(article.id, None, name, text, password)
+                success
+              }
+            }
+          }
+        }
+      )
+    }.getOrElse {
+      BadRequest(views.html.errors.badRequest("その記事は存在しません"))
+    }
   }
 }

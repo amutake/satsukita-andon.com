@@ -1,10 +1,82 @@
-@(article: Article)
+@(article: Article, form: Form[(Option[Int], String, String, Option[String])], accOpt: Option[Account])
 
+@import models._
 @import models.Accounts._
 @import andon.utils._
 
-@howto.common(article.title)(article.optAuthor.getOrElse(findNameById(article.createAccountId)))(article.optDate.getOrElse(DateUtil.dateFormat(article.updateDate))) {
+@author() = @{ article.optAuthor.getOrElse(findNameById(article.createAccountId)) }
+@date() = @{ article.optDate.getOrElse(DateUtil.dateFormat(article.updateDate)) }
+
+@howto.common(article.title)(author)(date) {
+
   <div class="article">
     @Conv.both(article.text)
+  </div>
+
+  <p id="author">Author: @author  Date: @date</p>
+
+  <div class="comments">
+    <h4>コメント一覧</h4>
+
+    <ul>
+      @Comments.findByArticleId(article.id).map { comment =>
+        <li>
+          <p class="comment-header">
+            <span class="comment-name">
+            @comment.accountId.map { id =>
+              <i class="icon-ok-sign icon-white"></i> @findNameById(id)
+            }.getOrElse {
+              @comment.name
+            }
+            </span>
+            <span class="comment-date pull-right">@DateUtil.dateFormat(comment.updateDate)</span>
+          </p>
+          <p class="comment-text">@comment.text<p>
+        </li>
+      }
+    </ul>
+  </div>
+
+  <div class="comment-form">
+    <h4>コメントを書く</h4>
+    @helper.form(routes.Application.postComment(article.id)) {
+      @form.globalError.map { error =>
+        <p class="error">
+          @error.message
+        </p>
+      }
+
+      @accOpt.map { acc =>
+
+        <input type="hidden" name="accountId" value="@acc.id">
+        <input type="hidden" name="name" value="@acc.name">
+
+        <p><i class="icon-ok-sign icon-white"></i> @acc.name</p>
+      }.getOrElse {
+        @helper.inputText(
+          form("name"),
+          '_label -> "お名前(必須)",
+          '_help -> ""
+        )
+      }
+
+      @helper.textarea(
+        form("text"),
+        '_label -> "本文(必須)",
+        '_help -> "",
+        'class -> "wide",
+        'rows -> 5
+      )
+
+      @* @if(accOpt.isEmpty) {
+        @helper.inputPassword(
+          form("password"),
+          '_label -> "パスワード",
+          '_help -> "編集・削除のときに必要です"
+        )
+      } *@
+
+      <button class="btn" type="submit">送信</button>
+    }
   </div>
 }

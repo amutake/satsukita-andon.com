@@ -11,6 +11,12 @@ trait Authentication {
 
   private def onUnauthorized(request: RequestHeader) = Results.Redirect(routes.Artisan.login)
 
+  def myAccount(implicit request: RequestHeader): Option[Account] = {
+    userid(request).flatMap { id =>
+      Accounts.findById(id.toInt)
+    }
+  }
+
   def IsAuthenticated(f: => Int => Request[AnyContent] => Result) =
     Security.Authenticated(userid, onUnauthorized) { id =>
       Action(request => f(id.toInt)(request))
