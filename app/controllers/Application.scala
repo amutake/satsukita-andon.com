@@ -145,4 +145,8 @@ object Application extends Controller with Authentication {
       BadRequest(views.html.errors.badRequest("その記事は存在しません"))
     }
   }
+
+  def comments = Action {
+    Ok(views.html.allComments())
+  }
 }

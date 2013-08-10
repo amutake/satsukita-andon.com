@@ -1,0 +1,30 @@
+@import models._
+@import andon.utils._
+
+@common("すべてのコメント") {
+} {
+  <table class="table">
+    <tr>
+      <th>記事タイトル</th>
+      <th>名前</th>
+      <th>本文</th>
+      <th>投稿日時</th>
+    <tr>
+
+    @Comments.all.map { comment =>
+      @Articles.findById(comment.articleId).map { article =>
+        <tr>
+          <td>
+            <a href="@routes.Application.article(article.id)#comment-@comment.id">
+              @article.title
+            </a>
+          </td>
+          <td>@comment.name</td>
+          <td>@comment.text</td>
+          <td>@DateUtil.dateFormat(comment.createDate)</td>
+        </tr>
+      }
+    }
+  </table>
+} {
+}

@@ -31,17 +31,31 @@
 
   <h3>新着コメント</h3>
 
-  <ul class="new-comments">
+  <table class="table">
+    <tr>
+      <th>記事タイトル</th>
+      <th>名前</th>
+      <th>本文</th>
+      <th>投稿日時</th>
+    <tr>
+
     @Comments.take(5).map { comment =>
       @Articles.findById(comment.articleId).map { article =>
-        <li>
-          <a href="@routes.Application.article(article.id)#comment-@comment.id">
-            @comment.name - @article.title
-          </a>
-        </li>
+        <tr>
+          <td>
+            <a href="@routes.Application.article(article.id)#comment-@comment.id">
+              @article.title
+            </a>
+          </td>
+          <td>@comment.name</td>
+          <td>@comment.text</td>
+          <td>@DateUtil.dateFormat(comment.createDate)</td>
+        </tr>
       }
     }
-  <ul>
+  </table>
+
+  <a href="@routes.Application.comments">すべてのコメントを見る</a>
 
   <h3>管理人からのお知らせ</h3>
 

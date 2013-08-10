@@ -16,6 +16,7 @@ GET     /about                      controllers.Application.about
 GET     /contact                    controllers.Application.contact
 GET     /article                    controllers.Application.article(id: Long)
 POST    /comment                    controllers.Application.postComment(id: Long)
+GET     /comments                   controllers.Application.comments
 
 # Artisan page
 GET     /artisan/login              controllers.Artisan.login
