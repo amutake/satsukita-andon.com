@@ -27,6 +27,7 @@ deploy.sh
 defreeze.sh
 
 files/
+memo/
 
 *.sql
 *.db
