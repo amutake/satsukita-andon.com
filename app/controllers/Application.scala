@@ -15,7 +15,7 @@ object Application extends Controller with Authentication {
     Ok(views.html.index())
   }
 
-  def info(page: Int) = Action {
+  def info(page: Int) = Action { implicit request =>
     val count = 6
     val infos = Articles.findInfoByPage(page, count)
     val max = Articles.countPageByType(Info, count)
@@ -87,12 +87,6 @@ object Application extends Controller with Authentication {
     }
   }
 
-  def howtoArticle(id: Long) = Action { implicit request =>
-    Articles.findById(id).map { article =>
-      Ok(views.html.howto.article(article, commentForm, myAccount))
-    }.getOrElse(NotFound(views.html.errors.notFound(request.path)))
-  }
-
   def about = Action {
     Ok(views.html.about())
   }
@@ -110,21 +104,19 @@ object Application extends Controller with Authentication {
     )
   )
 
+  def article(id: Long) = Action { implicit request =>
+    Articles.findById(id).map { article =>
+      Ok(views.html.article(article, commentForm, myAccount))
+    }.getOrElse(NotFound(views.html.errors.notFound(request.path)))
+  }
+
   def postComment(id: Long) = Action { implicit request =>
     Articles.findById(id).map { article =>
 
-      def success = article.articleType match {
-        case Info => Redirect(routes.Application.info(0))
-        case Howto => Redirect(routes.Application.howtoArticle(id))
-        case _ => Redirect(routes.Application.index())
-      }
+      def success = Redirect(routes.Application.article(id))
 
       def error(form: Form[(Option[Int], String, String, Option[String])]) = {
-        article.articleType match {
-          case Info => Redirect(routes.Application.info(0))
-          case Howto => BadRequest(views.html.howto.article(article, form, myAccount))
-          case _ => BadRequest(views.html.errors.badRequest("その記事にはコメントを付けられません"))
-        }
+        BadRequest(views.html.article(article, form, myAccount))
       }
 
       commentForm.bindFromRequest.fold(

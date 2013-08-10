@@ -1,0 +1,21 @@
+@(article: Article, form: Form[(Option[Int], String, String, Option[String])], accOpt: Option[Account])
+
+@import models.Accounts._
+@import andon.utils._
+
+@title() = @{ article.articleType.toString + " - " + article.title }
+@author() = @{ article.optAuthor.getOrElse(findNameById(article.createAccountId)) }
+@date() = @{ article.optDate.getOrElse(DateUtil.dateFormat(article.updateDate)) }
+
+@common(title) {
+} {
+
+  <div class="article">
+    @Conv.both(article.text)
+  </div>
+
+  <p id="author">Author: @author  Date: @date</p>
+
+  @comments(article.id, form, accOpt)
+} {
+}

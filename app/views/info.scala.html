@@ -34,13 +34,16 @@
   @pager
 
   @infos.map { article =>
-    <div class="info-post article">
-      <p class="date">@DateUtil.dateFormat(article.createDate)</p>
-      <h1 class="title">@article.title</h1>
-      <div class="info-text">
-        @Conv.both(article.text)
+    <div class="info-post">
+      <div class="article">
+        <p class="date">@DateUtil.dateFormat(article.createDate)</p>
+        <h1 class="title">@article.title</h1>
+        <div class="info-text">
+          @Conv.both(article.text)
+        </div>
+        <p class="author">Posted by @Accounts.findNameById(article.createAccountId)</p>
       </div>
-      <p class="author">Posted by @Accounts.findNameById(article.createAccountId)</p>
+      <a href="@routes.Application.article(article.id)">コメントを見る</a>
     </div>
   }
 

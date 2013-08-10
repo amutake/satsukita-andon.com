@@ -103,7 +103,7 @@
     <ul>
     @articles._2.map { article =>
       <li>
-        <a href="@routes.Application.howtoArticle(article.id)"><i class="icon-file icon-white"></i>@article.title</a>
+        <a href="@routes.Application.article(article.id)"><i class="icon-file icon-white"></i>@article.title</a>
         @if(article.optAuthor == None) {
           Created by @Accounts.findNameById(article.createAccountId), Updated by @Accounts.findNameById(article.updateAccountId)
           Create: @DateUtil.dateFormat(article.createDate), Last Update: @DateUtil.dateFormat(article.updateDate)
