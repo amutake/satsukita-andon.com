@@ -16,7 +16,7 @@ object Application extends Controller with Authentication {
   }
 
   def info(page: Int) = Action { implicit request =>
-    val count = 6
+    val count = 10
     val infos = Articles.findInfoByPage(page, count)
     val max = Articles.countPageByType(Info, count)
     Ok(views.html.info(infos, page, max))

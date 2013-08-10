@@ -39,11 +39,11 @@
         <p class="date">@DateUtil.dateFormat(article.createDate)</p>
         <h1 class="title">@article.title</h1>
         <div class="info-text">
-          @Conv.both(article.text)
+          @Conv.both("""\A.*""".r.findFirstIn(article.text).getOrElse(""))
+          <a href="@routes.Application.article(article.id)">続きを読む</a>
         </div>
         <p class="author">Posted by @Accounts.findNameById(article.createAccountId)</p>
       </div>
-      <a href="@routes.Application.article(article.id)">コメントを見る</a>
     </div>
   }
 
