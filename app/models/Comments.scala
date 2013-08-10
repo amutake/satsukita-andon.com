@@ -38,6 +38,14 @@ object Comments extends Table[Comment]("COMMENTS") {
     query.where(_.articleId === a).list
   }
 
+  def all = db.withSession { implicit session: Session =>
+    query.sortBy(_.id.desc).list
+  }
+
+  def take(n: Int) = db.withSession { implicit session: Session =>
+    query.sortBy(_.id.desc).take(n).list
+  }
+
   def authenticate(id: Long, password: Option[String]) = db.withSession { implicit session: Session =>
     query.where(_.id === id).where(_.password === password.map(sha1(_))).firstOption
   }

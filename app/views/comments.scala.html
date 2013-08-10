@@ -8,7 +8,7 @@
 
   <ul>
     @Comments.findByArticleId(id).map { comment =>
-      <li>
+      <li id="comment-@comment.id">
         <p class="comment-header">
           <span class="comment-name">
             @comment.accountId.map { id =>

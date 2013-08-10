@@ -29,6 +29,20 @@
     }
   </div>
 
+  <h3>新着コメント</h3>
+
+  <ul class="new-comments">
+    @Comments.take(5).map { comment =>
+      @Articles.findById(comment.articleId).map { article =>
+        <li>
+          <a href="@routes.Application.article(article.id)#comment-@comment.id">
+            @comment.name - @article.title
+          </a>
+        </li>
+      }
+    }
+  <ul>
+
   <h3>管理人からのお知らせ</h3>
 
   @pager
