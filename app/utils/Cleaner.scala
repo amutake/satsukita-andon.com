@@ -9,6 +9,7 @@ object Cleaner {
   def clean = {
     println("Cleaning!")
     cleanNotUsingImage
+    cleanComments
     println("Done.")
   }
 
@@ -32,6 +33,15 @@ object Cleaner {
     val notUsing = paths &~ appeared
     notUsing.map { path =>
       new File(path).delete()
+    }
+  }
+
+  def cleanComments = {
+    Comments.all.map { comment =>
+      val article = Articles.findById(comment.articleId)
+      if (article.isEmpty) {
+        Comments.delete(comment.id)
+      }
     }
   }
 }
