@@ -20,7 +20,7 @@ function numberOfLumber() {
 function makeInputField(num) {
 	var fld = document.getElementById('inputField');
 	for (var i = 0; i < num; i++) {
-		fld.innerHTML += '名前:<input type="text" id="name_' + i + '" size="10"> 長さ:<input type="number" min="1" max="3650" id="length_' + i + '" size="10">mm<br>';
+		fld.innerHTML += '名前 : <input type="text" id="name_' + i + '" size="10"> 長さ : <input type="number" min="1" max="3650" id="length_' + i + '" size="10">mm<br>';
 		// 本数:<input type="text" id="num_' + i + '" value="1" size="2">
 	}
 	fld.innerHTML += '<input type="button" value="送信" onClick="checkResult()">';
