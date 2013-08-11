@@ -66,7 +66,7 @@ object API extends Controller with Authentication {
         val fullsize = "/files/images/fullsize/"
         val thumbnail = "/files/images/thumbnail/"
         def valid(c: Char) = {
-          val r = """[\w\.]""".r
+          val r = """[a-zA-Z0-9\.-]""".r
           c.toString match {
             case r() => true
             case _ => false
