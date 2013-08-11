@@ -64,27 +64,7 @@ object Application extends Controller with Authentication {
   }
 
   def howto = Action {
-    Ok(views.html.howto.top())
-  }
-
-  def eachHowto(page: String) = Action {
-    page match {
-      case "intro" => Ok(views.html.howto.intro())
-      case "offseason" => Ok(views.html.howto.offseason())
-      case "organize" => Ok(views.html.howto.organize())
-      case "scheduling" => Ok(views.html.howto.scheduling())
-      case "face" => Ok(views.html.howto.face())
-      case "harigane" => Ok(views.html.howto.harigane())
-      case "manual_d_choki" => Ok(views.html.howto.manual_d_choki())
-      case "kamihari" => Ok(views.html.howto.kamihari())
-      case "daizai" => Ok(views.html.howto.daizai())
-      case "susume" => Ok(views.html.howto.susume())
-      case "howtomake" => Ok(views.html.howto.howtomake())
-      case "tools" => Ok(views.html.howto.tools())
-      case "lumber" => Ok(views.html.howto.lumber())
-      case "sketchup" => Ok(views.html.howto.sketchup())
-      case _ => NotFound(views.html.errors.notFound("/howto/" + page))
-    }
+    Ok(views.html.howto())
   }
 
   def about = Action {
