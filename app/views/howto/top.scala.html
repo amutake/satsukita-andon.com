@@ -6,32 +6,13 @@
   </a>Author: @author, Date: @date</li>
 }
 
-@file(url: String, title: String, author: String, date: String) = {
-  <li><a href="@routes.Assets.at(url)">
-    <i class="icon-download icon-white"></i>@title
-  </a>Author: @author, Date: @date</li>
-}
-
 @views.html.common("How to") {
 } {
-  <ul>
-    @page("intro", "How toについて", "甲乙人(60期)", "2013/6/28")
-  </ul>
 
-  <h3>作業の進め方</h3>
-
-  <ul>
-    @file("file/manual/schedule_62nd.pdf", "準備作業日程(62nd)", "62nd実行委員会", "?")
-    @page("offseason", "オフ期間にすべきこと", "甲乙人(60期)", "2011/2/27")
-    @page("organize", "組織を作る", "甲乙人(60期)", "2011/4/2")
-    @page("scheduling", "スケジュールを書く", "甲乙人(60期)", "2011/4/4")
-  </ul>
-
-  <h3>行灯の作り方</h3>
+  <h3>記事</h3>
 
   <h4>総合</h4>
   <ul>
-    @file("file/manual/official_62nd.pdf", "実行委員会公式行灯マニュアル(62nd)", "62nd実行委員会", "?")
     @page("susume", "行灯大賞のすすめ", "御家人", "2006?")
     @page("howtomake", "行灯の作り方", "51期の方々", "2002/7/14")
   </ul>
@@ -43,17 +24,12 @@
 
   <h4>道具</h4>
   <ul>
-    @file("file/manual/estimate_62nd.pdf", "学校祭物品見積書(62nd)", "62nd実行委員会", "?")
     @page("tools", "道具を集める・買う", "甲乙人(60期)", "2011/5/2")
-    @file("file/manual/materials_official_59th.pdf", "実行委員会公式材料マニュアル(59th)", "59th実行委員会", "?")
   </ul>
 
   <h4>土台・支柱</h4>
   <ul>
-    @file("file/manual/dodai_61st.pdf", "土台講習会マニュアル[土台](61st)", "?(61期)", "?")
-    @file("file/manual/sityu_61st.pdf", "土台講習会マニュアル[支柱](61st)", "?(61期)", "?")
     @page("lumber", "木材の最小発注量を計算", "甲乙人(60期)", "2011/5/2")
-    @file("file/manual/dodai_56th.pdf", "土台講習会マニュアル(56th)", "muro(55期)", "?")
   </ul>
 
   <h4>針金</h4>
@@ -63,17 +39,7 @@
 
   <h4>電飾</h4>
   <ul>
-    @file("file/manual/densyoku_62nd.pdf", "電飾講習会マニュアル(62nd)", "黒猫(62期)", "2011/6/4")
-    @file("file/manual/densyoku_62nd-2.pdf", "電飾講習会マニュアル(62nd)補足", "黒猫(62期)", "2011/6/4")
-    @file("file/manual/densyoku_61st.pdf", "電飾講習会マニュアル(61st)", "sao(61期)", "2010/5/14")
-    @file("file/manual/densyoku_59th.pdf", "電飾講習会マニュアル(59th)", "あきら(59期)", "?")
-    @file("file/manual/densyoku_official_59th.pdf", "実行委員会公式電飾マニュアル(59th)", "59th実行委員会", "2008/5/10")
     @page("manual_d_choki", "電飾マニュアル", "ちょき", "2007/8/1")
-  </ul>
-
-  <h4>色塗り</h4>
-  <ul>
-    @file("file/manual/ironuri_62nd.pdf", "色塗り・紙貼り講習会マニュアル(62nd)", "?", "?")
   </ul>
 
   <h4>紙貼り</h4>
@@ -86,16 +52,17 @@
     @page("face", "顔を作る", "甲乙人(60期)", "2013/7/1")
   </ul>
 
-  <h3>その他の資料</h3>
-
   <h4>SketchUp Make(旧Google SketchUp)</h4>
   <ul>
-    @file("file/sketchup/about_gs.pdf", "Google SketchUpについて", "裏猫(62期)", "?")
     @page("sketchup", "SketchUpについて", "甲乙人(60期)", "2013/7/1")
-    @file("file/sketchup/base_gs.skp", "Google SketchUp用土台ファイル", "K-TEC.", "?")
-    @file("file/sketchup/61st2-5_gs.skp", "SketchUpファイル(61st2-5)", "裏猫(62期)", "?")
-    @file("file/sketchup/6th3-9_gs.skp", "SketchUpファイル(60th3-9)", "甲乙人(60期)", "?")
-    @file("file/sketchup/58th3-3_gs.skp", "SketchUpファイル(58th3-3)", "?(58期)", "?")
+  </ul>
+
+  <h4>その他</h4>
+  <ul>
+    @page("intro", "How toについて", "甲乙人(60期)", "2013/6/28")
+    @page("offseason", "オフ期間にすべきこと", "甲乙人(60期)", "2011/2/27")
+    @page("organize", "組織を作る", "甲乙人(60期)", "2011/4/2")
+    @page("scheduling", "スケジュールを書く", "甲乙人(60期)", "2011/4/4")
   </ul>
 
   @Articles.findByType(Howto).groupBy(_.genre).map { articles =>
@@ -115,6 +82,8 @@
     }
     </ul>
   }
+
+  <h3>資料</h3>
 
   @Data.all.groupBy(_.genre).map { files =>
     <h4>@files._1</h4>
