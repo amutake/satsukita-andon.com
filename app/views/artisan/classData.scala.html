@@ -1,5 +1,37 @@
 @(times: Option[Int])(implicit flash: Flash)
 
+@import andon.utils.Images._
+@import andon.utils._
+
+@tr(t: OrdInt) = {
+  @getTopImagesOption(ClassData.findByTimes(t)).map { cp =>
+    @defining(cp._1.id) { id =>
+      <tr>
+        <td>
+          <a href="@cp._2.map(toFullsize _).getOrElse("#")" data-fresco-group="@cp._1.id.times">
+            <img src="@cp._2.getOrElse("")" width="200px">
+          </a>
+        </td>
+        <td>@id.times</td>
+        <td>@id.grade</td>
+        <td>@id.classn</td>
+        <td>@cp._1.title</td>
+        <td>@cp._1.prize.map(_.toJapanese)</td>
+        <td>
+          <ul>
+            <li><a href="@routes.Artisan.editClassData(id.toInt)">情報の編集</a></li>
+            <li><a href="@routes.Artisan.uploadImage(id.toInt)">画像のアップロード</a></li>
+            <li><a href="@routes.Artisan.selectTop(id.toInt)">トップ画像の選択</a></li>
+            <li><a href="@routes.Artisan.deleteImage(id.toInt)">画像の削除</a></li>
+            <li><a href="@routes.Artisan.editTags(id.toInt)">タグの編集</a></li>
+            <li><a href="@routes.Artisan.editReview(id.toInt)">講評の編集</a></li>
+          </ul>
+        <td>
+      </tr>
+    }
+  }
+}
+
 @common("クラス一覧") {
 } {
   @breadcrumb(Seq(
@@ -38,6 +70,13 @@
       <th>賞</th>
       <th>操作</th>
     </tr>
+    @times.map { t =>
+      @tr(OrdInt(t))
+    }.getOrElse {
+      @TimesData.latest.map { tdata =>
+        @tr(tdata.times)
+      }
+    }
   </table>
 } {
   <script type="text/javascript" src="@routes.Assets.at("js/pagenationClass.js")"></script>

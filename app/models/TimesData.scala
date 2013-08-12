@@ -28,6 +28,10 @@ object TimesData extends Table[TimesData]("TIMESDATA") {
     query.sortBy(_.times.desc).list
   }
 
+  def latest = db.withSession { implicit sessioin: Session =>
+    query.sortBy(_.times.desc).firstOption
+  }
+
   def create(data: TimesData) = db.withSession { implicit session: Session =>
     TimesData.insert(data)
   }
