@@ -64,13 +64,23 @@
   @infos.map { article =>
     <div class="info-post">
       <div class="article">
-        <p class="date">@DateUtil.dateFormat(article.createDate)</p>
+        <p class="date">
+          @DateUtil.dateFormat(article.createDate)
+          @if(article.createDate != article.updateDate) {
+            (Last Update: @DateUtil.dateFormat(article.updateDate))
+          }
+        </p>
         <h1 class="title">@article.title</h1>
         <div class="info-text">
           @Conv.both("""\A.*""".r.findFirstIn(article.text).getOrElse(""))
           <a href="@routes.Application.article(article.id)">続きを読む</a>
         </div>
-        <p class="author">Posted by @Accounts.findNameById(article.createAccountId)</p>
+        <p class="author">
+          Posted by @Accounts.findNameById(article.createAccountId)
+          @if(article.createAccountId != article.updateAccountId) {
+            (Updated by @Accounts.findNameById(article.updateAccountId))
+          }
+        </p>
       </div>
     </div>
   }

@@ -1,5 +1,7 @@
 @(article: Article)(implicit flash: Flash)
 
+@import models.Accounts._
+@import andon.utils.DateUtil._
 @import andon.utils._
 
 @common(article.title) {
@@ -15,12 +17,24 @@
     </p>
   }
 
+  <a class="btn" href="@routes.Artisan.editArticle(article.id)">編集する</a>
+
   <div class="article">
     @Conv.both(article.text)
   </div>
 
-  <p class="author">Create: @Accounts.findNameById(article.createAccountId)  Date: @DateUtil.dateFormat(article.createDate)</p>
-  <p class="author">Last Update: @Accounts.findNameById(article.updateAccountId) Date: @DateUtil.dateFormat(article.updateDate)</p>
+  <p id="author">
+    @article.optAuthor.map { author =>
+      作成: @author
+    }.getOrElse {
+      作成: @findNameById(article.createAccountId), 最終更新: @findNameById(article.updateAccountId)
+    }
+    @article.optDate.map { date =>
+      作成日時: @date
+    }.getOrElse {
+      作成日時: @dateFormat(article.createDate), 最終更新日時: @dateFormat(article.updateDate)
+    }
+  </p>
 
   <a class="btn" href="@routes.Artisan.editArticle(article.id)">編集する</a>
 

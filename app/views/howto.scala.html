@@ -86,13 +86,16 @@
                 <a href="@routes.Application.article(article.id)">@article.title</a>
               </td>
               <td>
+                @article.genre
+              </td>
+              <td>
                 @article.optAuthor.getOrElse {
                   @Accounts.findNameById(article.createAccountId)
                 }
               </td>
               <td>
                 @article.optDate.getOrElse {
-                  @DateUtil.dateFormat(article.createDate)
+                  @DateUtil.dateFormat(article.updateDate)
                 }
               </td>
             </tr>
@@ -105,6 +108,9 @@
               <td>
                 <i class="icon-download icon-white"></i>
                 <a href="@file.path">@file.name</a>
+              </td>
+              <td>
+                @file.genre
               </td>
               <td>
                 @file.optAuthor.getOrElse {
