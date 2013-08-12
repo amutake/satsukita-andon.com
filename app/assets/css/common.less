@@ -66,7 +66,7 @@ blockquote{
     }
 }
 
-.dl {
+dl.dl {
     margin: 0 0 15px;
     padding: 0 10px 10px;
 
@@ -88,6 +88,14 @@ blockquote{
     dd:nth-child(2) {
         border-top: 1px #cccccc solid;
     }
+}
+
+table.dl {
+    td:first-child {
+        width: 160px;
+        font-weight: bold;
+    }
+    border-bottom: 1px solid #dfdfdf;
 }
 
 .checkbox {
@@ -195,6 +203,15 @@ blockquote{
         tbody>tr:nth-child(odd)>td,
         tbody>tr:nth-child(odd)>th {
             background-color: transparent;
+        }
+    }
+
+    dl {
+        dt {
+            margin: 12px 0 6px;
+        }
+        dd {
+            margin-left: 30px;
         }
     }
 }

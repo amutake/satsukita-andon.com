@@ -19,38 +19,38 @@
         <img src="@Images.toFullsize(path)">
       </a>
 
-      <dl class="dl">
-        <dt>回</dt>
-        <dd>@data.id.times</dd>
-
-        <dt>学年</dt>
-        <dd>@data.id.grade年</dd>
-
-        <dt>組</dt>
-        <dd>@Util.showClassN(data.id.classn)組</dd>
-
-        <dt>タイトル</dt>
-        <dd>@data.title</dd>
-
-        <dt>賞</dt>
-        <dd>@data.prize.map(_.span).getOrElse { なし }</dd>
-
-        <dt>タグ</dt>
-        <dd>
-          <ul class="tags">
-          @Tags.findByClassId(data.id).map { tag =>
-            <li><a href="@routes.Application.tags(tag.tag)">@tag.tag</a></li>
-          }
-          </ul>
-        </dd>
-
-        <dt>講評</dt>
-        <dd>
-          @Reviews.findByClassId(data.id).map { review =>
-            <p>@review.text by @Accounts.findNameById(review.accountId)</p>
-          }
-        </dd>
-      </dl>
+      <table class="table dl">
+        <tr>
+          <td>クラス</td>
+          <td>@data.id.toJapanese</dd>
+        </tr>
+        <tr>
+          <td>タイトル</td>
+          <td>@data.title</dd>
+        </tr>
+        <tr>
+          <td>賞</td>
+          <td>@data.prize.map(_.span).getOrElse { なし }</td>
+        </tr>
+        <tr>
+          <td>タグ</td>
+          <td>
+            <ul class="tags">
+              @Tags.findByClassId(data.id).map { tag =>
+                <li><a href="@routes.Application.tags(tag.tag)">@tag.tag</a></li>
+              }
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>講評</td>
+          <td>
+            @Reviews.findByClassId(data.id).map { review =>
+              <p>@review.text by @Accounts.findNameById(review.accountId)</p>
+            }
+          </td>
+        </tr>
+      </table>
     </div>
   }.getOrElse {
   }

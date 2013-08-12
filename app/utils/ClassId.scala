@@ -12,6 +12,8 @@ case class ClassId(times: OrdInt, grade: Int, classn: Int) {
   def toInt: Int = (times.n * 1000) + (grade * 100) + (classn + 10)
 
   override def toString = times.toString + " " + grade + "-" + Util.showClassN(classn)
+
+  def toJapanese = times.toString + " " + grade + "年" + Util.showClassN(classn) + "組"
 }
 
 object ClassId {
