@@ -133,4 +133,44 @@ object Application extends Controller with Authentication {
   def comments = Action {
     Ok(views.html.allComments())
   }
+
+  def deleteComment(id: Long) = Action { implicit request =>
+
+    Comments.findById(id).map { comment =>
+
+      val form = Form(
+        single("password" -> text)
+      )
+      val redirect = Redirect(routes.Application.article(comment.articleId))
+      def del = {
+        Comments.delete(id)
+        redirect.flashing(
+          "success" -> "コメントを削除しました。"
+        )
+      }
+
+      form.bindFromRequest.fold(
+        _ => redirect.flashing(
+          "error" -> "入力エラー"
+        ),
+        password => {
+          if (comment.accountId.isDefined && comment.accountId == myAccount.map(_.id)) {
+            del
+          } else if (comment.accountId.isEmpty && myAccount.map(_.level).getOrElse(Writer) != Writer) {
+            del
+          } else {
+            if (Comments.authenticate(id, Some(password)).isDefined) {
+              del
+            } else {
+              redirect.flashing(
+                "error" -> "パスワードが違います。"
+              )
+            }
+          }
+        }
+      )
+    }.getOrElse {
+      NotFound(views.html.errors.notFound("コメントが見つかりません"))
+    }
+  }
 }

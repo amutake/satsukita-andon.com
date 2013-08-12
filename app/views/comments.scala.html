@@ -3,6 +3,35 @@
 @import models._
 @import andon.utils._
 
+@del(comment: Comment) = {
+  <form action="@routes.Application.deleteComment(comment.id)" method="POST" class="inline">
+    <input type="hidden" name="password" value="">
+    <a href="#" class="btn btn-danger delete-submit pull-right">削除</a>
+  </form>
+}
+
+@modal(comment: Comment) = {
+  @if(comment.accountId != None) {
+    @if(comment.accountId == accOpt.map(_.id)) {
+      @del(comment)
+    }
+  } else {
+    @if(accOpt.map(_.level) == Some(Master) || accOpt.map(_.level) == Some(Admin)) {
+      @del(comment)
+    } else {
+      <a href="#" class="btn btn-danger pull-right" href="#delete-comment-@comment.id" data-toggle="modal">削除</a>
+      <div id="delete-comment-@comment.id" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="コメントの削除" aria-hidden="true">
+        <div class="modal-body">
+          <form action="@routes.Application.deleteComment(comment.id)" method="POST" class="inline">
+            <p>パスワード: <input type="password" name="password"></p>
+            <a href="#" class="btn btn-danger delete-submit">削除</a>
+          </form>
+        </div>
+      </div>
+    }
+  }
+}
+
 <div class="comments">
   <h4>コメント一覧</h4>
 
@@ -18,6 +47,7 @@
             }
           </span>
           <span class="comment-date pull-right">@DateUtil.dateFormat(comment.updateDate)</span>
+          @modal(comment)
         </p>
         <p class="comment-text">@comment.text<p>
       </li>
@@ -56,13 +86,13 @@
       'rows -> 5
     )
 
-    @* @if(accOpt.isEmpty) {
+    @if(accOpt.isEmpty) {
       @helper.inputPassword(
         form("password"),
         '_label -> "パスワード",
         '_help -> "編集・削除のときに必要です"
       )
-    } *@
+    }
 
     <button class="btn" type="submit">送信</button>
   }

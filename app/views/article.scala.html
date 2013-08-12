@@ -1,4 +1,4 @@
-@(article: Article, form: Form[(Option[Int], String, String, Option[String])], accOpt: Option[Account])
+@(article: Article, form: Form[(Option[Int], String, String, Option[String])], accOpt: Option[Account])(implicit flash: Flash)
 
 @import models.Accounts._
 @import andon.utils.DateUtil._
@@ -8,6 +8,18 @@
 
 @common(title) {
 } {
+
+  @flash.get("success").map { message =>
+    <p class="success">
+      @message
+    </p>
+  }
+
+  @flash.get("error").map { message =>
+    <p class="error">
+      @message
+    </p>
+  }
 
   <div class="article-wrapper">
     <p class="article-date">
@@ -41,4 +53,5 @@
 
   @comments(article.id, form, accOpt)
 } {
+  <script type="text/javascript" src="@routes.Assets.at("js/deleteSubmit.js")"></script>
 }

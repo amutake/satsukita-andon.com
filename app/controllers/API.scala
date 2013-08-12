@@ -92,4 +92,13 @@ object API extends Controller with Authentication {
       BadRequest(Json.toJson(Map("status" -> "error", "message" -> "ファイルを送信出来ませんでした。")))
     }
   }
+
+  def deleteComment(id: Long, password: String) = Action {
+    if (Comments.authenticate(id, Some(password)).isDefined) {
+      Comments.delete(id)
+      Ok("true")
+    } else {
+      Ok("false")
+    }
+  }
 }
