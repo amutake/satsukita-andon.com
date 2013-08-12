@@ -1,43 +1,126 @@
+@(htype: String, genre: String)
+
 @import andon.utils._
 
-@views.html.common("How to") {
-} {
-
-  <h3>記事</h3>
-
-  @Articles.findByType(Howto).groupBy(_.genre).map { articles =>
-    <h4>@articles._1</h4>
-    <ul>
-    @articles._2.map { article =>
+@link(genres: Seq[String], ht: String) = {
+  @genres.filter(_ != "").map { g =>
+    @if(htype == ht && genre == g) {
+      <li class="active">
+    } else {
       <li>
-        <a href="@routes.Application.article(article.id)"><i class="icon-file icon-white"></i>@article.title</a>
-        @if(article.optAuthor == None) {
-          Created by @Accounts.findNameById(article.createAccountId), Updated by @Accounts.findNameById(article.updateAccountId)
-          Create: @DateUtil.dateFormat(article.createDate), Last Update: @DateUtil.dateFormat(article.updateDate)
-        } else {
-          Created by @article.optAuthor,
-          Date @article.optDate
-        }
-      </li>
     }
-    </ul>
+    <a href="@routes.Application.category(ht, g)">@g</a></li>
   }
+}
 
-  <h3>資料</h3>
+@views.html.common("How to") {
+  <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/howto.css")">
+} {
+  <div class="span3">
+    <ul class="nav nav-list">
+      <li class="nav-header">記事・資料</li>
+      <li><a href="@routes.Application.howto()">すべての記事・資料</a></li>
+      <li class="nav-header">記事</li>
+      @link(Articles.findByType(Howto).map(_.genre).distinct, "article")
+      <li class="nav-header">資料</li>
+      @link(Data.all.map(_.genre).distinct, "data")
+    </ul>
+  </div>
 
-  @Data.all.groupBy(_.genre).map { files =>
-    <h4>@files._1</h4>
-    <ul>
-      @files._2.map { file =>
-        <li>
-          <a href="@file.path"><i class="icon-download icon-white"></i>@file.name</a>
-          Uploaded by
-          @file.optAuthor.getOrElse(Accounts.findNameById(file.accountId)),
-          Date
-          @file.optDate.getOrElse(DateUtil.dateFormat(file.date))
-        </li>
+  <div class="span9">
+    @htype match {
+      case "article" => {
+        <h4>記事 - @genre</h4>
+        <table class="table">
+          @Articles.findHowtoByGenre(genre).map { article =>
+            <tr>
+              <td>
+                <i class="icon-file icon-white"></i>
+                <a href="@routes.Application.article(article.id)">@article.title</a>
+              </td>
+              <td>
+                @article.optAuthor.getOrElse {
+                  @Accounts.findNameById(article.createAccountId)
+                }
+              </td>
+              <td>
+                @article.optDate.getOrElse {
+                  @DateUtil.dateFormat(article.createDate)
+                }
+              </td>
+            </tr>
+          }
+        </table>
       }
-    </ul>
-  }
+      case "data" => {
+        <h4>資料 - @genre</h4>
+        <table class="table">
+          @Data.findByGenre(genre).map { file =>
+            <tr>
+              <td>
+                <i class="icon-download icon-white"></i>
+                <a href="@file.path">@file.name</a>
+              </td>
+              <td>
+                @file.optAuthor.getOrElse {
+                  @Accounts.findNameById(file.accountId)
+                }
+              </td>
+              <td>
+                @file.optDate.getOrElse {
+                  @DateUtil.dateFormat(file.date)
+                }
+              </td>
+            </tr>
+          }
+        </table>
+      }
+      case _ => {
+        <h4>すべて</h4>
+        <h5>記事</h5>
+        <table class="table">
+          @Articles.findByType(Howto).map { article =>
+            <tr>
+              <td>
+                <i class="icon-file icon-white"></i>
+                <a href="@routes.Application.article(article.id)">@article.title</a>
+              </td>
+              <td>
+                @article.optAuthor.getOrElse {
+                  @Accounts.findNameById(article.createAccountId)
+                }
+              </td>
+              <td>
+                @article.optDate.getOrElse {
+                  @DateUtil.dateFormat(article.createDate)
+                }
+              </td>
+            </tr>
+          }
+        </table>
+        <h5>資料</h5>
+        <table class="table">
+          @Data.all.map { file =>
+            <tr>
+              <td>
+                <i class="icon-download icon-white"></i>
+                <a href="@file.path">@file.name</a>
+              </td>
+              <td>
+                @file.optAuthor.getOrElse {
+                  @Accounts.findNameById(file.accountId)
+                }
+              </td>
+              <td>
+                @file.optDate.getOrElse {
+                  @DateUtil.dateFormat(file.date)
+                }
+              </td>
+            </tr>
+          }
+        </table>
+      }
+    }
+  </div>
 } {
 }

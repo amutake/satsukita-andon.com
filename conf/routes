@@ -11,6 +11,7 @@ GET     /gallery/tags/:tag          controllers.Application.tags(tag: String)
 GET     /gallery/:t                 controllers.Application.timesGallery(t: andon.utils.OrdInt)
 GET     /gallery/:t/:g/:c           controllers.Application.classGallery(t: andon.utils.OrdInt, g: Int, c: Int)
 GET     /howto                      controllers.Application.howto
+GET     /howto/:type/:genre         controllers.Application.category(type: String, genre: String)
 GET     /about                      controllers.Application.about
 GET     /contact                    controllers.Application.contact
 GET     /article                    controllers.Application.article(id: Long)

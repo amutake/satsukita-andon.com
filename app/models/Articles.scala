@@ -69,6 +69,10 @@ object Articles extends Table[Article]("ARTICLES") {
     desc.where(_.genre === g).list
   }
 
+  def findHowtoByGenre(g: String) = db.withSession { implicit session: Session =>
+    desc.where(_.articleType === (Howto: ArticleType)).where(_.genre === g).list
+  }
+
   def all = db.withSession { implicit session: Session =>
     desc.list
   }
