@@ -1,3 +1,5 @@
+@(data: Seq[Datum])
+
 @common("資料一覧") {
 } {
   @breadcrumb(Seq(
@@ -6,7 +8,7 @@
 
   <h3>資料一覧</h3>
 
-  @Data.all.groupBy(_.genre).map { data =>
+  @data.groupBy(_.genre).map { data =>
     <h4>@data._1</h4>
     <table class="table">
       <tr>

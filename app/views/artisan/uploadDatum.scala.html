@@ -1,4 +1,6 @@
-@(form: Form[(String, String, Option[String], Option[String])])
+@(level: andon.utils.AccountLevel, form: Form[(String, String, Option[String], Option[String])])
+
+@import andon.utils._
 
 @common("資料のアップロード") {
 } {
@@ -18,26 +20,29 @@
 
     <input type="file" name="file">
 
-    <label class="checkbox">
-      <input type="checkbox" id="option">
-      作者を別にする
-    </label>
+    @if(level != Writer) {
 
-    @helper.inputText(
-      form("optAuthor"),
-      '_label -> "作者(オプション)",
-      '_help -> "",
-      'disabled -> "disabled",
-      'id -> "option-author"
-    )
+      <label class="checkbox">
+        <input type="checkbox" id="option">
+        作者を別にする
+      </label>
 
-    @helper.inputText(
-      form("optDate"),
-      '_label -> "日付(オプション)",
-      '_help -> "",
-      'disabled -> "disabled",
-      'id -> "option-date"
-    )
+      @helper.inputText(
+        form("optAuthor"),
+        '_label -> "作者(オプション)",
+        '_help -> "",
+        'disabled -> "disabled",
+        'id -> "option-author"
+      )
+
+      @helper.inputText(
+        form("optDate"),
+        '_label -> "日付(オプション)",
+        '_help -> "",
+        'disabled -> "disabled",
+        'id -> "option-date"
+      )
+    }
 
     @helper.inputText(
       form("name"),

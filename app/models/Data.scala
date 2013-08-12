@@ -43,6 +43,10 @@ object Data extends Table[Datum]("DATA") {
     query.where(_.genre === g).list
   }
 
+  def findByAccountId(a: Int) = db.withSession { implicit session: Session =>
+    query.where(_.accountId === a).list
+  }
+
   def create(name: String, accountId: Int, path: String, genre: String, optAuthor: Option[String], optDate: Option[String]) = db.withSession { implicit session: Session =>
     val date = new Date()
     Data.ins.insert(name, accountId, date, path, genre, optAuthor, optDate)

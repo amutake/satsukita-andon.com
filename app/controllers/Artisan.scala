@@ -255,8 +255,11 @@ object Artisan extends Controller with Authentication {
     )
   }
 
-  def data = HasAuthority(Master) { acc => _ =>
-    Ok(views.html.artisan.data())
+  def data = IsValidAccount { acc => _ =>
+    acc.level match {
+      case Admin | Master => Ok(views.html.artisan.data(Data.all))
+      case Writer => Ok(views.html.artisan.data(Data.findByAccountId(acc.id)))
+    }
   }
 
   val datumForm = Form(
@@ -268,43 +271,37 @@ object Artisan extends Controller with Authentication {
     )
   )
 
-  def uploadDatum = HasAuthority(Master) { acc => _ =>
-    Ok(views.html.artisan.uploadDatum(datumForm))
+  def uploadDatum = IsValidAccount { acc => _ =>
+    Ok(views.html.artisan.uploadDatum(acc.level, datumForm))
   }
 
   def postUploadDatum = IsValidAccountWithParser(parse.multipartFormData) { acc => implicit request =>
-    acc.level match {
-      case Admin | Master =>
-        request.body.file("file").map { file =>
-          datumForm.bindFromRequest().fold(
-            formWithErrors => BadRequest(views.html.artisan.uploadDatum(formWithErrors)),
-            result => {
-              val now = new Date()
-              val path = "/files/data/" + now.getTime().toString + "-" + file.filename.filter(_ != ' ')
-              file.ref.moveTo(new File("." + path), true)
-              Data.create(result._1, acc.id, path, result._2, result._3, result._4)
-              Redirect(routes.Artisan.home).flashing(
-                "success" -> "資料をアップロードしました。"
-              )
-            }
+    request.body.file("file").map { file =>
+      datumForm.bindFromRequest().fold(
+        formWithErrors => BadRequest(views.html.artisan.uploadDatum(acc.level, formWithErrors)),
+        result => {
+          val now = new Date()
+          val path = "/files/data/" + now.getTime().toString + "-" + file.filename.filter(_ != ' ')
+          file.ref.moveTo(new File("." + path), true)
+          Data.create(result._1, acc.id, path, result._2, result._3, result._4)
+          Redirect(routes.Artisan.home).flashing(
+            "success" -> "資料をアップロードしました。"
           )
-        }.getOrElse {
-          BadRequest(views.html.artisan.uploadDatum(datumForm.withGlobalError("ファイルのアップロードに失敗しました。")))
         }
-      case Writer => Forbidden(views.html.errors.forbidden())
+      )
+    }.getOrElse {
+      BadRequest(views.html.artisan.uploadDatum(acc.level, datumForm.withGlobalError("ファイルのアップロードに失敗しました。")))
     }
   }
 
-  def editDatum(id: Int) = HasAuthority(Master) { acc => request =>
-    Data.findById(id).map { datum =>
-      val data = (datum.name, datum.genre, datum.optAuthor, datum.optDate)
-      Ok(views.html.artisan.editDatum(id, datumForm.fill(data)))
-    }.getOrElse(NotFound(views.html.errors.notFound(request.path)))
+  def editDatum(id: Int) = IsEditableDatum(id) { acc => datum => request =>
+    val data = (datum.name, datum.genre, datum.optAuthor, datum.optDate)
+    Ok(views.html.artisan.editDatum(id, acc.level, datumForm.fill(data)))
   }
 
-  def postEditDatum(id: Int) = HasAuthority(Master) { acc => implicit request =>
+  def postEditDatum(id: Int) = IsEditableDatum(id) { acc => _ => implicit request =>
     datumForm.bindFromRequest().fold(
-      formWithErrors => BadRequest(views.html.artisan.editDatum(id, formWithErrors)),
+      formWithErrors => BadRequest(views.html.artisan.editDatum(id, acc.level, formWithErrors)),
       result => {
         Data.update(id, result._1, result._2, result._3, result._4)
         Redirect(routes.Artisan.home).flashing(
@@ -314,20 +311,16 @@ object Artisan extends Controller with Authentication {
     )
   }
 
-  def deleteDatum(id: Int) = HasAuthority(Master) { acc => _ =>
-    Data.findById(id).map { datum =>
-      Data.delete(id)
-      new File("." + datum.path).delete()
-      Redirect(routes.Artisan.home).flashing(
-        "success" -> "資料を削除しました。"
-      )
-    }.getOrElse(Redirect(routes.Artisan.home).flashing(
-      "error" -> "その資料は既に削除されています。"
-    ))
+  def deleteDatum(id: Int) = IsEditableDatum(id) { acc => datum => _ =>
+    Data.delete(id)
+    new File("." + datum.path).delete()
+    Redirect(routes.Artisan.home).flashing(
+      "success" -> "資料を削除しました。"
+    )
   }
 
-  def classData(times: Option[Int]) = HasAuthority(Master) { _ => implicit request =>
-    Ok(views.html.artisan.classData(times))
+  def classData(times: Option[Int]) = IsValidAccount { acc => implicit request =>
+    Ok(views.html.artisan.classData(times, acc.level))
   }
 
   val classIdForm = Form(
@@ -368,12 +361,12 @@ object Artisan extends Controller with Authentication {
     )
   )
 
-  def editClassData(id: Int) = AboutClass(id) { _ => data => _ =>
+  def editClassData(id: Int) = AboutClass(id, Master) { _ => data => _ =>
     val d = (data.title, data.prize.map(_.toString).getOrElse("none"))
     Ok(views.html.artisan.editClassData(data.id, classForm.fill(d)))
   }
 
-  def postEditClassData(id: Int) = AboutClass(id) { _ => data => implicit request =>
+  def postEditClassData(id: Int) = AboutClass(id, Master) { _ => data => implicit request =>
     classForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.artisan.editClassData(data.id, formWithErrors)),
       result => {
@@ -394,13 +387,13 @@ object Artisan extends Controller with Authentication {
     )))
   )
 
-  def editTags(id: Int) = AboutClass(id) { _ => data => implicit request =>
+  def editTags(id: Int) = AboutClass(id, Writer) { _ => data => implicit request =>
     val names = Tags.all.map(_.tag).distinct
     val tags = Tags.findByClassId(data.id)
     Ok(views.html.artisan.editTags(data, tags, names))
   }
 
-  def postEditTags(id: Int) = AboutClass(id) { _ => data => implicit request =>
+  def postEditTags(id: Int) = AboutClass(id, Writer) { _ => data => implicit request =>
     tagsForm.bindFromRequest.fold(
       formWithErrors => Redirect(routes.Artisan.classData(Some(new ClassId(id).times.n))).flashing(
         "error" -> "エラー"
@@ -428,14 +421,14 @@ object Artisan extends Controller with Authentication {
     )
   )
 
-  def editReview(id: Int) = AboutClass(id) { acc => data => _ =>
+  def editReview(id: Int) = AboutClass(id, Writer) { acc => data => _ =>
     val form = Reviews.findByClassIdAccountId(data.id, acc.id).map { review =>
       reviewForm.fill((Some(review.id), Some(review.text), false))
     }.getOrElse(reviewForm)
     Ok(views.html.artisan.editReview(data.id, form))
   }
 
-  def postEditReview(id: Int) = AboutClass(id) { acc => data => implicit request =>
+  def postEditReview(id: Int) = AboutClass(id, Writer) { acc => data => implicit request =>
     reviewForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.artisan.editReview(data.id, formWithErrors)),
       result => {
@@ -470,54 +463,49 @@ object Artisan extends Controller with Authentication {
     )
   }
 
-  def uploadImage(id: Int) = AboutClass(id) { _ => data => _ =>
+  def uploadImage(id: Int) = AboutClass(id, Writer) { _ => data => _ =>
     Ok(views.html.artisan.uploadImage(data.id))
   }
 
   def postUploadImage(id: Int) = IsValidAccountWithParser(parse.multipartFormData) { acc => request =>
     val classId = new ClassId(id)
     ClassData.findByClassId(classId).map { c =>
-      acc.level match {
-        case Admin | Master => {
-          request.body.files.foreach { file =>
-            if (file.contentType.map(_.take(5)) == Some("image")) {
-              val classDir = c.id.times + "/" + c.id.grade + "/" + c.id.classn + "/"
-              val fullsize = "/files/gallery/fullsize/" + classDir
-              val thumbnail = "/files/gallery/thumbnail/" + classDir
-              def valid(c: Char) = {
-                val r = """[\w\.]""".r
-                c.toString match {
-                  case r() => true
-                  case _ => false
-                }
-              }
-              val filename = new Date().getTime().toString + "-" + file.filename.filter(valid)
-
-              file.ref.moveTo(new File("." + fullsize + filename), true)
-              Files.copyFile(new File("." + fullsize + filename), new File("." + thumbnail + filename))
-
-              Process("mogrify -quality 50 ." + fullsize + filename).!
-              Process("mogrify -resize 600x -unsharp 2x1.2+0.5+0.5 -quality 75 ." + thumbnail + filename).!
-            } else {
-              println("Not image. Abort.")
+      request.body.files.foreach { file =>
+        if (file.contentType.map(_.take(5)) == Some("image")) {
+          val classDir = c.id.times + "/" + c.id.grade + "/" + c.id.classn + "/"
+          val fullsize = "/files/gallery/fullsize/" + classDir
+          val thumbnail = "/files/gallery/thumbnail/" + classDir
+          def valid(c: Char) = {
+            val r = """[\w\.]""".r
+            c.toString match {
+              case r() => true
+              case _ => false
             }
           }
-          Redirect(routes.Artisan.classData(Some(new ClassId(id).times.n))).flashing(
-            "success" -> "画像をアップロードしました。"
-          )
+          val filename = new Date().getTime().toString + "-" + file.filename.filter(valid)
+
+          file.ref.moveTo(new File("." + fullsize + filename), true)
+          Files.copyFile(new File("." + fullsize + filename), new File("." + thumbnail + filename))
+
+          Process("mogrify -quality 50 ." + fullsize + filename).!
+            Process("mogrify -resize 600x -unsharp 2x1.2+0.5+0.5 -quality 75 ." + thumbnail + filename).!
+        } else {
+          println("Not image. Abort.")
         }
-        case Writer => Forbidden(views.html.errors.forbidden())
       }
+      Redirect(routes.Artisan.classData(Some(new ClassId(id).times.n))).flashing(
+        "success" -> "画像をアップロードしました。"
+      )
     }.getOrElse(BadRequest)
   }
 
   val topForm = Form(single("top" -> optional(text)))
 
-  def selectTop(id: Int) = AboutClass(id) { acc => data => _ =>
+  def selectTop(id: Int) = AboutClass(id, Master) { acc => data => _ =>
     Ok(views.html.artisan.selectTop(data.id, topForm.fill(data.top)))
   }
 
-  def postSelectTop(id: Int) = AboutClass(id) { acc => data => implicit request =>
+  def postSelectTop(id: Int) = AboutClass(id, Master) { acc => data => implicit request =>
     topForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.artisan.selectTop(data.id, formWithErrors)),
       top => {
@@ -533,11 +521,11 @@ object Artisan extends Controller with Authentication {
     single("filename" -> list(text))
   )
 
-  def deleteImage(id: Int) = AboutClass(id) { acc => data => _ =>
+  def deleteImage(id: Int) = AboutClass(id, Master) { acc => data => _ =>
     Ok(views.html.artisan.deleteImage(data.id, deleteImageForm))
   }
 
-  def postDeleteImage(id: Int) = AboutClass(id) { acc => data => implicit request =>
+  def postDeleteImage(id: Int) = AboutClass(id, Master) { acc => data => implicit request =>
     deleteImageForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.artisan.deleteImage(data.id, formWithErrors)),
       filenames => {

@@ -42,24 +42,26 @@
     @tr(routes.Artisan.createAccount, "アカウントの作成",
       "新しいアカウントを作成出来ます。(管理人のみ)")
 
-    @tr(routes.Artisan.data, "資料一覧",
-      "アップロードされた資料一覧です。(管理人のみ)")
-
-    @tr(routes.Artisan.uploadDatum, "資料のアップロード",
-      "資料をアップロードできます。ここにアップロードされた資料はHowtoページからダウンロード出来るようになります。(管理人のみ)")
-
-    @tr(routes.Artisan.classData(None), "クラス一覧",
-      "クラス情報の閲覧と、クラスに関する様々な操作ができます。(管理人のみ)")
-
-    @tr(routes.Artisan.createClass, "クラスの作成",
-      "クラスの作成ができます。(管理人のみ)")
-
     @tr(routes.Artisan.timesData, "回一覧",
       "各回の情報と、トップ画像のアップロード等ができます。(管理人のみ)")
 
     @tr(routes.Artisan.createTimes, "回の作成",
       "回の作成ができます。(管理人のみ)")
   }
+
+  @tr(routes.Artisan.classData(None), "クラス一覧",
+    "クラス情報の閲覧と、クラスに関する様々な操作ができます。")
+
+  @if(acc.level != Writer) {
+    @tr(routes.Artisan.createClass, "クラスの作成",
+      "クラスの作成ができます。(管理人のみ)")
+  }
+
+  @tr(routes.Artisan.data, "資料一覧",
+    "アップロードされた資料一覧です。")
+
+  @tr(routes.Artisan.uploadDatum, "資料のアップロード",
+    "資料をアップロードできます。ここにアップロードされた資料はHowtoページからダウンロード出来るようになります。")
 
   @tr(routes.Artisan.articles, "記事一覧",
     "あなたが編集できる記事一覧です。")

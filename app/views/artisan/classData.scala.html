@@ -1,4 +1,4 @@
-@(times: Option[Int])(implicit flash: Flash)
+@(times: Option[Int], level: andon.utils.AccountLevel)(implicit flash: Flash)
 
 @import andon.utils.Images._
 @import andon.utils._
@@ -8,7 +8,7 @@
     @defining(cp._1.id) { id =>
       <tr>
         <td>
-          <a href="@cp._2.map(toFullsize _).getOrElse("#")" data-fresco-group="@cp._1.id.times">
+          <a class="fresco" href="@cp._2.map(toFullsize _).getOrElse("#")" data-fresco-group="@cp._1.id.times">
             <img src="@cp._2.getOrElse("")" width="200px">
           </a>
         </td>
@@ -19,10 +19,14 @@
         <td>@cp._1.prize.map(_.toJapanese)</td>
         <td>
           <ul>
-            <li><a href="@routes.Artisan.editClassData(id.toInt)">情報の編集</a></li>
+            @if(level != Writer) {
+              <li><a href="@routes.Artisan.editClassData(id.toInt)">情報の編集</a></li>
+            }
             <li><a href="@routes.Artisan.uploadImage(id.toInt)">画像のアップロード</a></li>
-            <li><a href="@routes.Artisan.selectTop(id.toInt)">トップ画像の選択</a></li>
-            <li><a href="@routes.Artisan.deleteImage(id.toInt)">画像の削除</a></li>
+            @if(level != Writer) {
+              <li><a href="@routes.Artisan.selectTop(id.toInt)">トップ画像の選択</a></li>
+              <li><a href="@routes.Artisan.deleteImage(id.toInt)">画像の削除</a></li>
+            }
             <li><a href="@routes.Artisan.editTags(id.toInt)">タグの編集</a></li>
             <li><a href="@routes.Artisan.editReview(id.toInt)">講評の編集</a></li>
           </ul>

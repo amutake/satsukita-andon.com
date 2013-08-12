@@ -1,4 +1,6 @@
-@(id: Int, form: Form[(String, String, Option[String], Option[String])])
+@(id: Int, level: andon.utils.AccountLevel, form: Form[(String, String, Option[String], Option[String])])
+
+@import andon.utils._
 
 @common("資料情報の編集") {
 } {
@@ -17,26 +19,28 @@
       </p>
     }
 
-    <label class="checkbox">
-      <input type="checkbox" id="option" @if(form("optAuthor").value.isDefined) { checked }>
-      作者を別にする
-    </label>
+    @if(level != Writer) {
+      <label class="checkbox">
+        <input type="checkbox" id="option" @if(form("optAuthor").value.isDefined) { checked }>
+        作者を別にする
+      </label>
 
-    @helper.inputText(
-      form("optAuthor"),
-      '_label -> "作者(オプション)",
-      '_help -> "",
-      'disabled -> "disabled",
-      'id -> "option-author"
-    )
+      @helper.inputText(
+        form("optAuthor"),
+        '_label -> "作者(オプション)",
+        '_help -> "",
+        'disabled -> "disabled",
+        'id -> "option-author"
+      )
 
-    @helper.inputText(
-      form("optDate"),
-      '_label -> "日付(オプション)",
-      '_help -> "",
-      'disabled -> "disabled",
-      'id -> "option-date"
-    )
+      @helper.inputText(
+        form("optDate"),
+        '_label -> "日付(オプション)",
+        '_help -> "",
+        'disabled -> "disabled",
+        'id -> "option-date"
+      )
+    }
 
     @helper.inputText(
       form("name"),

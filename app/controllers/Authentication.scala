@@ -81,7 +81,24 @@ trait Authentication {
         case Admin if mine || l != Admin => f(me)(account)(request)
         case _ => Results.Forbidden(views.html.errors.forbidden())
       }
-    }.getOrElse(Results.NotFound(views.html.errors.notFound("/artisan/account/edit?id=" + id.toString)))
+    }.getOrElse(Results.NotFound(views.html.errors.notFound(request.path)))
+  }
+
+  def IsEditableDatum(id: Int)(f: => Account => Datum => Request[AnyContent] => Result) = IsValidAccount { account => request =>
+    val datum = Data.findById(id)
+    val result = account.level match {
+      case Admin | Master => datum.map { d =>
+        f(account)(d)(request)
+      }
+      case Writer => datum.map { d =>
+        if (d.accountId == account.id) {
+          f(account)(d)(request)
+        } else {
+          Results.Forbidden(views.html.errors.forbidden())
+        }
+      }
+    }
+    result.getOrElse(Results.NotFound(views.html.errors.notFound(request.path)))
   }
 
   def AboutAccount(id: Int)(f: => Account => Account => Request[AnyContent] => Result) = IsValidAccount { me => request =>
@@ -98,7 +115,7 @@ trait Authentication {
     }
   }
 
-  def AboutClass(id: Int)(f: => Account => ClassData => Request[AnyContent] => Result) = HasAuthority(Master) { acc => request =>
+  def AboutClass(id: Int, level: AccountLevel)(f: => Account => ClassData => Request[AnyContent] => Result) = HasAuthority(level) { acc => request =>
     val classId = new ClassId(id)
     ClassData.findByClassId(classId).map { c =>
       f(acc)(c)(request)
