@@ -9,17 +9,35 @@
     <a href="#" class="btn btn-danger delete-submit pull-right">削除</a>
   </form>
 }
+@edit(comment: Comment, requirePass: Boolean) = {
+  <a class="btn pull-right" href="#edit-comment-@comment.id" data-toggle="modal">編集</a>
+
+  <div id="edit-comment-@comment.id" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="コメントの編集" aria-hidden="true">
+    <div class="modal-body">
+      <form action="@routes.Application.editComment(comment.id)" method="POST">
+        <p>本文: <textarea name="text" class="wide" rows="6">@comment.text</textarea></p>
+        @if(requirePass) {
+          <p>パスワード: <input type="password" name="password"></p>
+        } else {
+          <input type="hidden" name="password" value="">
+        }
+        <input type="submit" class="btn" value="送信">
+      </form>
+    </div>
+  </div>
+}
 
 @modal(comment: Comment) = {
   @if(comment.accountId != None) {
     @if(comment.accountId == accOpt.map(_.id)) {
       @del(comment)
+      @edit(comment, false)
     }
   } else {
     @if(accOpt.map(_.level) == Some(Master) || accOpt.map(_.level) == Some(Admin)) {
       @del(comment)
     } else {
-      <a href="#" class="btn btn-danger pull-right" href="#delete-comment-@comment.id" data-toggle="modal">削除</a>
+      <a class="btn btn-danger pull-right" href="#delete-comment-@comment.id" data-toggle="modal">削除</a>
       <div id="delete-comment-@comment.id" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="コメントの削除" aria-hidden="true">
         <div class="modal-body">
           <form action="@routes.Application.deleteComment(comment.id)" method="POST" class="inline">
@@ -28,6 +46,7 @@
           </form>
         </div>
       </div>
+      @edit(comment, true)
     }
   }
 }

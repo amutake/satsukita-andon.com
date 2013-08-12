@@ -173,4 +173,45 @@ object Application extends Controller with Authentication {
       NotFound(views.html.errors.notFound("コメントが見つかりません"))
     }
   }
+
+  def editComment(id: Long) = Action { implicit request =>
+
+    Comments.findById(id).map { comment =>
+
+      val form = Form(
+        tuple(
+          "text" -> text,
+          "password" -> text
+        )
+      )
+      val redirect = Redirect(routes.Application.article(comment.articleId))
+      def edit(text: String) = {
+        Comments.update(id, text)
+        redirect.flashing(
+          "success" -> "コメントを編集しました。"
+        )
+      }
+
+      form.bindFromRequest.fold(
+        _ => redirect.flashing(
+          "error" -> "入力エラー"
+        ),
+        result => {
+          if (comment.accountId.isDefined && comment.accountId == myAccount.map(_.id)) {
+            edit(result._1)
+          } else {
+            if (Comments.authenticate(id, Some(result._2)).isDefined) {
+              edit(result._1)
+            } else {
+              redirect.flashing(
+                "error" -> "パスワードが違います。"
+              )
+            }
+          }
+        }
+      )
+    }.getOrElse {
+      NotFound(views.html.errors.notFound("コメントが見つかりません"))
+    }
+  }
 }

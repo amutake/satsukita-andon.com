@@ -18,6 +18,7 @@ GET     /article                    controllers.Application.article(id: Long)
 POST    /comment                    controllers.Application.postComment(id: Long)
 GET     /comments                   controllers.Application.comments
 POST    /comments/delete            controllers.Application.deleteComment(id: Long)
+POST    /comments/edit              controllers.Application.editComment(id: Long)
 
 # Artisan page
 GET     /artisan/login              controllers.Artisan.login
