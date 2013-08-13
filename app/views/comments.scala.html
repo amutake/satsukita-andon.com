@@ -27,7 +27,7 @@
   } else {
     <form action="@routes.Application.deleteComment(comment.id)" method="POST" class="inline">
       <input type="hidden" name="password" value="">
-      <a href="#" class="btn btn-danger delete-submit pull-right">削除</a>
+      <a href="#" class="flat-btn delete-submit">削除</a>
     </form>
   }
 }
@@ -48,15 +48,15 @@
 @control(comment: Comment) = {
   @if(comment.accountId != None) {
     @if(comment.accountId == accOpt.map(_.id)) {
-      @del(comment, false)
       @edit(comment, false)
+      @del(comment, false)
     }
   } else {
     @if(accOpt.map(_.level) == Some(Master) || accOpt.map(_.level) == Some(Admin)) {
       @del(comment, false)
     } else {
-      @del(comment, true)
       @edit(comment, true)
+      @del(comment, true)
     }
   }
 }
@@ -67,7 +67,7 @@
   <ul>
     @Comments.findByArticleId(id).map { comment =>
       <li id="comment-@comment.id">
-        <p class="comment-header">
+        <div class="comment-header">
           <span class="comment-name">
             @comment.accountId.map { id =>
               <i class="icon-ok-sign icon-white"></i> @Accounts.findNameById(id)
@@ -75,8 +75,11 @@
               @comment.name
             }
           </span>
-          <span class="comment-date pull-right">@DateUtil.dateFormat(comment.updateDate)</span>
-        </p>
+          <span class="comment-date pull-right">
+            @DateUtil.dateFormat(comment.updateDate)
+            @control(comment)
+          </span>
+        </div>
         <p class="comment-text">@comment.text<p>
       </li>
     }
@@ -98,7 +101,7 @@
         <input type="hidden" name="accountId" value="@acc.id">
         <input type="hidden" name="name" value="@acc.name">
 
-        <p><i class="icon-ok-sign icon-white"></i> @acc.name</p>
+        <p><i class="icon-ok-sign"></i> @acc.name</p>
       }.getOrElse {
         @helper.inputText(
           form("name"),
