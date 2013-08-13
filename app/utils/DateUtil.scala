@@ -7,7 +7,7 @@ import scala.slick.lifted.MappedTypeMapper
 
 object DateUtil {
 
-  def dateFormat(date: Date) = new SimpleDateFormat("yyyy/MM/dd").format(date)
+  def dateFormat(date: Date) = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(date)
 
   implicit val dateTypeMapper = MappedTypeMapper.base[Date, Long](
     { d => d.getTime() },

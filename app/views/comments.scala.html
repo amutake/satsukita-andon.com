@@ -76,7 +76,10 @@
             }
           </span>
           <span class="comment-date pull-right">
-            @DateUtil.dateFormat(comment.updateDate)
+            @DateUtil.dateFormat(comment.createDate)
+            @if(comment.createDate != comment.updateDate) {
+              (Update: @DateUtil.dateFormat(comment.updateDate))
+            }
             @control(comment)
           </span>
         </div>
