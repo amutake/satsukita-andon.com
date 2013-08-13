@@ -21,6 +21,12 @@
     </p>
   }
 
+  @form.globalError.map { error =>
+    <p class="error">
+      @error.message
+    </p>
+  }
+
   <div class="article-wrapper">
     <p class="article-date">
       @article.optDate.map { date =>

@@ -97,10 +97,13 @@ object Application extends Controller with Authentication {
   def postComment(id: Long) = Action { implicit request =>
     Articles.findById(id).map { article =>
 
-      def success = Redirect(routes.Application.article(id))
+      def success = Redirect(routes.Application.article(id)).flashing(
+        "success" -> "コメントを投稿しました。"
+      )
 
       def error(form: Form[(Option[Int], String, String, Option[String])]) = {
-        BadRequest(views.html.article(article, form, myAccount))
+        val formWithError = form.withGlobalError("エラー。もう一度投稿してください。")
+        BadRequest(views.html.article(article, formWithError, myAccount))
       }
 
       commentForm.bindFromRequest.fold(
