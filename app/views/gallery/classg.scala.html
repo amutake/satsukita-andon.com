@@ -37,7 +37,7 @@
           <td>
             <ul class="tags">
               @Tags.findByClassId(data.id).map { tag =>
-                <li><a href="@routes.Application.tags(tag.tag)">@tag.tag</a></li>
+                <li><a class="flat-btn" href="@routes.Application.tags(tag.tag)">@tag.tag</a></li>
               }
             </ul>
           </td>
