@@ -3,49 +3,59 @@
 @import models._
 @import andon.utils._
 
-@del(comment: Comment) = {
-  <form action="@routes.Application.deleteComment(comment.id)" method="POST" class="inline">
-    <input type="hidden" name="password" value="">
-    <a href="#" class="btn btn-danger delete-submit pull-right">削除</a>
-  </form>
-}
-@edit(comment: Comment, requirePass: Boolean) = {
-  <a class="btn pull-right" href="#edit-comment-@comment.id" data-toggle="modal">編集</a>
-
-  <div id="edit-comment-@comment.id" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="コメントの編集" aria-hidden="true">
+@modal(modalId: String, title: String, anchor: String)(body: Html) = {
+  <a class="@anchor" href="#@modalId" data-toggle="modal">@title</a>
+  <div id="@modalId" class="modal hide fade">
+    <div class="modal-header">
+      <a class="close" data-dismiss="modal">×</a>
+      <h1>コメントの@title</h1>
+    </div>
     <div class="modal-body">
-      <form action="@routes.Application.editComment(comment.id)" method="POST">
-        <p>本文: <textarea name="text" class="wide" rows="6">@comment.text</textarea></p>
-        @if(requirePass) {
-          <p>パスワード: <input type="password" name="password"></p>
-        } else {
-          <input type="hidden" name="password" value="">
-        }
-        <input type="submit" class="btn" value="送信">
-      </form>
+      @body
     </div>
   </div>
 }
 
-@modal(comment: Comment) = {
+@del(comment: Comment, requirePass: Boolean) = {
+  @if(requirePass) {
+    @modal("delete-comment-" + comment.id, "削除", "flat-btn") {
+      <form action="@routes.Application.deleteComment(comment.id)" method="POST" class="inline">
+        <p>パスワード: <input type="password" name="password"></p>
+        <a href="#" class="btn btn-danger delete-submit">削除</a>
+      </form>
+    }
+  } else {
+    <form action="@routes.Application.deleteComment(comment.id)" method="POST" class="inline">
+      <input type="hidden" name="password" value="">
+      <a href="#" class="btn btn-danger delete-submit pull-right">削除</a>
+    </form>
+  }
+}
+@edit(comment: Comment, requirePass: Boolean) = {
+  @modal("edit-comment-" + comment.id, "編集", "flat-btn") {
+    <form action="@routes.Application.editComment(comment.id)" method="POST">
+      <p>本文: <textarea name="text" class="wide" rows="6">@comment.text</textarea></p>
+      @if(requirePass) {
+        <p>パスワード: <input type="password" name="password"></p>
+      } else {
+        <input type="hidden" name="password" value="">
+      }
+      <input type="submit" class="btn" value="送信">
+    </form>
+  }
+}
+
+@control(comment: Comment) = {
   @if(comment.accountId != None) {
     @if(comment.accountId == accOpt.map(_.id)) {
-      @del(comment)
+      @del(comment, false)
       @edit(comment, false)
     }
   } else {
     @if(accOpt.map(_.level) == Some(Master) || accOpt.map(_.level) == Some(Admin)) {
-      @del(comment)
+      @del(comment, false)
     } else {
-      <a class="btn btn-danger pull-right" href="#delete-comment-@comment.id" data-toggle="modal">削除</a>
-      <div id="delete-comment-@comment.id" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="コメントの削除" aria-hidden="true">
-        <div class="modal-body">
-          <form action="@routes.Application.deleteComment(comment.id)" method="POST" class="inline">
-            <p>パスワード: <input type="password" name="password"></p>
-            <a href="#" class="btn btn-danger delete-submit">削除</a>
-          </form>
-        </div>
-      </div>
+      @del(comment, true)
       @edit(comment, true)
     }
   }
@@ -66,7 +76,6 @@
             }
           </span>
           <span class="comment-date pull-right">@DateUtil.dateFormat(comment.updateDate)</span>
-          @modal(comment)
         </p>
         <p class="comment-text">@comment.text<p>
       </li>
@@ -76,43 +85,45 @@
 
 <div class="comment-form">
   <h4>コメントを書く</h4>
-  @helper.form(routes.Application.postComment(id)) {
-    @form.globalError.map { error =>
-      <p class="error">
-        @error.message
-      </p>
-    }
+  @modal("create-comment", "作成", "flat-btn") {
+    @helper.form(routes.Application.postComment(id)) {
+      @form.globalError.map { error =>
+        <p class="error">
+          @error.message
+        </p>
+      }
 
-    @accOpt.map { acc =>
+      @accOpt.map { acc =>
 
-      <input type="hidden" name="accountId" value="@acc.id">
-      <input type="hidden" name="name" value="@acc.name">
+        <input type="hidden" name="accountId" value="@acc.id">
+        <input type="hidden" name="name" value="@acc.name">
 
-      <p><i class="icon-ok-sign icon-white"></i> @acc.name</p>
-    }.getOrElse {
-      @helper.inputText(
-        form("name"),
-        '_label -> "お名前(必須)",
-        '_help -> ""
+        <p><i class="icon-ok-sign icon-white"></i> @acc.name</p>
+      }.getOrElse {
+        @helper.inputText(
+          form("name"),
+          '_label -> "お名前(必須)",
+          '_help -> ""
+        )
+      }
+
+      @helper.textarea(
+        form("text"),
+        '_label -> "本文(必須)",
+        '_help -> "",
+        'class -> "wide",
+        'rows -> 5
       )
+
+      @if(accOpt.isEmpty) {
+        @helper.inputPassword(
+          form("password"),
+          '_label -> "パスワード",
+          '_help -> "編集・削除のときに必要です"
+        )
+      }
+
+      <button class="btn" type="submit">送信</button>
     }
-
-    @helper.textarea(
-      form("text"),
-      '_label -> "本文(必須)",
-      '_help -> "",
-      'class -> "wide",
-      'rows -> 5
-    )
-
-    @if(accOpt.isEmpty) {
-      @helper.inputPassword(
-        form("password"),
-        '_label -> "パスワード",
-        '_help -> "編集・削除のときに必要です"
-      )
-    }
-
-    <button class="btn" type="submit">送信</button>
   }
 </div>
