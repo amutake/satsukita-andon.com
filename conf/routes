@@ -14,8 +14,8 @@ GET     /howto                      controllers.Application.howto
 GET     /howto/:type/:genre         controllers.Application.category(type: String, genre: String)
 GET     /about                      controllers.Application.about
 GET     /contact                    controllers.Application.contact
-GET     /article                    controllers.Application.article(id: Long)
-POST    /comment                    controllers.Application.postComment(id: Long)
+GET     /article/:id                controllers.Application.article(id: Long)
+POST    /comment/:id                controllers.Application.postComment(id: Long)
 GET     /comments                   controllers.Application.comments
 POST    /comments/delete            controllers.Application.deleteComment(id: Long)
 POST    /comments/edit              controllers.Application.editComment(id: Long)
@@ -77,7 +77,6 @@ POST    /artisan/timesdata/create   controllers.Artisan.postCreateTimes
 GET     /api/search                 controllers.API.search(times: String, prize: String, grade: String, tag: String)
 GET     /api/search/times           controllers.API.searchByTimes(times: Int)
 POST    /api/upload                 controllers.API.upload
-GET     /api/comments/delete         controllers.API.deleteComment(id: Long, password: String)
 
 # uploaded file
 GET     /files/*filename            controllers.FileService.get(filename: String)
