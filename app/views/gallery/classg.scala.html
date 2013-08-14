@@ -45,9 +45,15 @@
         <tr>
           <td>講評</td>
           <td>
-            @Reviews.findByClassId(data.id).map { review =>
-              <p>@review.text by @Accounts.findNameById(review.accountId)</p>
-            }
+            <dl class="review">
+              @Reviews.findByClassId(data.id).map { review =>
+                <dt>
+                  <i class="icon-ok-sign icon-white"></i>
+                  @Accounts.findNameById(review.accountId)
+                </dt>
+                <dd>@Conv.newline(review.text)</dd>
+              }
+            </dl>
           </td>
         </tr>
       </table>

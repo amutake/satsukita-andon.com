@@ -14,4 +14,6 @@ object Conv {
   def both(s: String) = HtmlFormat.raw(pegdown.markdownToHtml(s))
 
   def markdown(s: String) = HtmlFormat.raw(pegdown.markdownToHtml(HtmlFormat.escape(s).toString))
+
+  def newline(s: String) = HtmlFormat.raw(HtmlFormat.escape(s).toString.replace("\n", "<br>"))
 }
