@@ -22,7 +22,7 @@
 
   <ul class="tags current-tags">
     @tags.map { tag =>
-      <li><span class="delete-tag" tag-id="@tag.id">&times;</span> @tag.tag</li>
+      <li class="flat-btn"><span class="delete-tag" tag-id="@tag.id">&times;</span> @tag.tag</li>
     }
   </ul>
 
@@ -34,7 +34,7 @@
 
   <ul class="tags other-tags">
     @names.map { name =>
-      <li>@name</li>
+      <li class="flat-btn">@name</li>
     }
   </ul>
 } {

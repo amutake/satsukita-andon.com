@@ -27,7 +27,7 @@ $(function() {
 
 	var addTag = function(tag) {
 		var $del = $("<span>").addClass("delete-tag").attr("href", "#").text("×").click(deleteTag);
-		var $li = $("<li>").append($del).append(" " + tag);
+		var $li = $("<li>").addClass("flat-btn").append($del).append(" " + tag);
 
 		acc.push({
 			id: 0,
