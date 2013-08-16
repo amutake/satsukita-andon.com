@@ -63,10 +63,7 @@ object Artisan extends Controller with Authentication {
   }
 
   def articles = IsValidAccount { account => implicit request =>
-    account.level match {
-      case Admin | Master => Ok(views.html.artisan.articles(Articles.all))
-      case Writer => Ok(views.html.artisan.articles(Articles.findByCreateAccountId(account.id)))
-    }
+    Ok(views.html.artisan.articles(account))
   }
 
   def article(id: Long) = IsEditableArticle(id) { _ => article => implicit request =>

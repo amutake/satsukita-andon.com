@@ -1,6 +1,49 @@
-@(articles: Seq[Article])(implicit flash: Flash)
+@(acc: Account)(implicit flash: Flash)
 
 @import andon.utils._
+@import models.Articles._
+
+@articles(atype: ArticleType) = @{
+  val as = if (atype == Howto) {
+    findDateSortedHowto
+  } else {
+    findByType(atype)
+  }
+  if (acc.level == Writer) {
+    as.filter(_.createAccountId == acc.id)
+  } else {
+    as
+  }
+}
+
+@table(atype: ArticleType) = {
+  <h4>@atype</h4>
+  <table class="table">
+    <tr>
+      <th>タイトル</th>
+      <th>ジャンル</th>
+      <th>作成</th>
+      <th>最終更新</th>
+      <th>操作</th>
+    </tr>
+    @articles(atype).map { article =>
+      <tr>
+        <td><a href="@routes.Artisan.article(article.id)">@article.title</a></td>
+        <td>@article.genre</td>
+        <td>@Accounts.findNameById(article.createAccountId)</td>
+        <td>@article.optDate.getOrElse(DateUtil.dateFormat(article.updateDate))</td>
+        <td>
+          <a href="@routes.Artisan.editArticle(article.id)">編集</a>
+          @if(article.articleType == Info || article.articleType == Howto) {
+            <form class="inline" method="post" action="@routes.Artisan.deleteArticle(article.id)">
+              <a href="#" class="delete-submit">削除</a>
+            </form>
+          }
+        </td>
+      </tr>
+    }
+  </table>
+}
 
 @common("記事一覧") {
 } {
@@ -16,37 +59,10 @@
     </p>
   }
 
-  @articles.groupBy(_.articleType).map { articles =>
-    <h4>@articles._1</h4>
-    <table class="table">
-      <tr>
-        <th>タイトル</th>
-        <th>ジャンル</th>
-        <th>作成者</th>
-        <th>最終更新者</th>
-        <th>作成日時</th>
-        <th>最終更新日時</th>
-        <th>操作</th>
-      </tr>
-      @articles._2.map { article =>
-        <tr>
-          <td><a href="@routes.Artisan.article(article.id)">@article.title</a></td>
-          <td>@article.genre</td>
-          <td>@Accounts.findNameById(article.createAccountId)</td>
-          <td>@Accounts.findNameById(article.updateAccountId)</td>
-          <td>@DateUtil.dateFormat(article.createDate)</td>
-          <td>@DateUtil.dateFormat(article.updateDate)</td>
-          <td>
-            <a class="btn" href="@routes.Artisan.editArticle(article.id)">編集する</a>
-            @if(article.articleType == Info || article.articleType == Howto) {
-              <form class="inline" method="post" action="@routes.Artisan.deleteArticle(article.id)">
-                <button class="btn btn-danger delete-submit">削除する</button>
-              </form>
-            }
-          </td>
-        </tr>
-      }
-    </table>
+  @defining(if (acc.level == Writer) { Seq(Howto) } else { Seq(Info, Howto, InfoTop, About, Contact) }) { atypes =>
+    @atypes.map { atype =>
+      @table(atype)
+    }
   }
 
 } {
