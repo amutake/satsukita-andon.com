@@ -30,7 +30,7 @@
       <tr>
         <td><a href="@routes.Artisan.article(article.id)">@article.title</a></td>
         <td>@article.genre</td>
-        <td>@Accounts.findNameById(article.createAccountId)</td>
+        <td>@article.optAuthor.getOrElse(Accounts.findNameById(article.createAccountId))</td>
         <td>@article.optDate.getOrElse(DateUtil.dateFormat(article.updateDate))</td>
         <td>
           <a href="@routes.Artisan.editArticle(article.id)">編集</a>

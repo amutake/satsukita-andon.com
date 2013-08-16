@@ -31,6 +31,9 @@ object Data extends Table[Datum]("DATA") {
 
   val query = Query(Data)
 
+  def dateSort(q: Query[Data.type, Datum]) =
+    q.sortBy(_.date.desc).sortBy(_.optDate.desc.nullsFirst)
+
   def findById(id: Int): Option[Datum] = db.withSession { implicit session: Session =>
     query.where(_.id === id).firstOption
   }
@@ -39,12 +42,16 @@ object Data extends Table[Datum]("DATA") {
     query.list
   }
 
+  def dateSorted = db.withSession { implicit session: Session =>
+    dateSort(query).list
+  }
+
   def findByGenre(g: String) = db.withSession { implicit session: Session =>
-    query.where(_.genre === g).list
+    dateSort(query.where(_.genre === g)).list
   }
 
   def findByAccountId(a: Int) = db.withSession { implicit session: Session =>
-    query.where(_.accountId === a).list
+    dateSort(query.where(_.accountId === a)).list
   }
 
   def create(name: String, accountId: Int, path: String, genre: String, optAuthor: Option[String], optDate: Option[String]) = db.withSession { implicit session: Session =>

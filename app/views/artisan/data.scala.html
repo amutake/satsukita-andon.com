@@ -1,5 +1,7 @@
 @(data: Seq[Datum])
 
+@import andon.utils._
+
 @common("資料一覧") {
 } {
   @breadcrumb(Seq(
@@ -14,12 +16,16 @@
       <tr>
         <th>ジャンル</th>
         <th>タイトル</th>
+        <th>作成</th>
+        <th>日時</th>
         <th>操作</th>
       </tr>
       @data._2.map { datum =>
         <tr>
           <td>@data._1</td>
           <td><a href="@datum.path">@datum.name</a></td>
+          <td>@datum.optAuthor.getOrElse(Accounts.findNameById(datum.accountId))</td>
+          <td>@datum.optDate.getOrElse(DateUtil.dateFormat(datum.date))</td>
           <td>
             <a class="btn" href="@routes.Artisan.editDatum(datum.id)">編集</a>
             <form action="@routes.Artisan.deleteDatum(datum.id)" method="POST" class="inline">

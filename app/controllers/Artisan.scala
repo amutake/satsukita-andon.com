@@ -254,7 +254,7 @@ object Artisan extends Controller with Authentication {
 
   def data = IsValidAccount { acc => _ =>
     acc.level match {
-      case Admin | Master => Ok(views.html.artisan.data(Data.all))
+      case Admin | Master => Ok(views.html.artisan.data(Data.dateSorted))
       case Writer => Ok(views.html.artisan.data(Data.findByAccountId(acc.id)))
     }
   }
