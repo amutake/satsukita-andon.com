@@ -73,6 +73,11 @@ object Articles extends Table[Article]("ARTICLES") {
     desc.where(_.articleType === (Howto: ArticleType)).where(_.genre === g).list
   }
 
+  def findDateSortedHowto = db.withSession { implicit session: Session =>
+    val howtos = query.where(_.articleType === (Howto: ArticleType))
+    howtos.sortBy(_.updateDate.desc).sortBy(_.optDate.desc.nullsFirst).list
+  }
+
   def all = db.withSession { implicit session: Session =>
     desc.list
   }

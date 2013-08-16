@@ -79,7 +79,7 @@
         <h4>すべて</h4>
         <h5>記事</h5>
         <table class="table">
-          @Articles.findByType(Howto).map { article =>
+          @Articles.findDateSortedHowto.map { article =>
             <tr>
               <td>
                 <i class="icon-file icon-white"></i>
