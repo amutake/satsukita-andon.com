@@ -45,7 +45,7 @@
               </td>
               <td>
                 @article.optDate.getOrElse {
-                  @DateUtil.dateFormat(article.createDate)
+                  @DateUtil.dateFormat(article.updateDate)
                 }
               </td>
             </tr>

@@ -58,7 +58,9 @@ object Accounts extends Table[Account]("ACCOUNTS") {
   }
 
   def findNameById(id: Int) = db.withSession { implicit session: Session =>
-    query.where(_.id === id).map(_.name).firstOption.getOrElse("?")
+    query.where(_.id === id).firstOption.map { acc =>
+      acc.name // + "(" + acc.times.n + "期)"
+    }.getOrElse("?")
   }
 
   def create(name: String, username: String, password: String, times: OrdInt, level: AccountLevel) = db.withSession { implicit session: Session =>
