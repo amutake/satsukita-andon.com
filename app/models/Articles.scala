@@ -1,6 +1,7 @@
 package models
 
 import scala.slick.driver.H2Driver.simple._
+import scala.slick.lifted.WrappingQuery
 
 import java.util.Date
 
@@ -47,6 +48,10 @@ object Articles extends Table[Article]("ARTICLES") {
   val query = Query(Articles)
 
   val desc = query.sortBy(_.id.desc)
+  val howtos = query.where(_.articleType === (Howto: ArticleType))
+
+  def dateSort(q: Query[Articles.type, Article]) =
+    q.sortBy(_.updateDate.desc).sortBy(_.optDate.desc.nullsFirst)
 
   def findById(id: Long) = db.withSession { implicit session: Session =>
     query.where(_.id === id).firstOption
@@ -70,12 +75,11 @@ object Articles extends Table[Article]("ARTICLES") {
   }
 
   def findHowtoByGenre(g: String) = db.withSession { implicit session: Session =>
-    desc.where(_.articleType === (Howto: ArticleType)).where(_.genre === g).list
+    dateSort(howtos.where(_.genre === g)).list
   }
 
   def findDateSortedHowto = db.withSession { implicit session: Session =>
-    val howtos = query.where(_.articleType === (Howto: ArticleType))
-    howtos.sortBy(_.updateDate.desc).sortBy(_.optDate.desc.nullsFirst).list
+    dateSort(howtos).list
   }
 
   def all = db.withSession { implicit session: Session =>
