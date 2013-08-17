@@ -182,19 +182,33 @@ dl.review {
         margin: 20px;
 
         li {
-            list-style-type: disc;
             margin-left: 20px;
-            margin-top: 2px;
+            margin-top: 4px;
         }
         ul, ol {
-            margin: 2px 20px 6px;
+            margin: 2px 20px 10px;
         }
     }
-    ul li {
-        list-style-type: disc;
+    ul {
+        li {
+            list-style-type: disc;
+        }
     }
-    ol li {
-        list-style-type: decimal;
+    ul ul, ol ul {
+        li {
+            list-style-type: circle;
+        }
+    }
+    ol ol ul, ol ul ul, ul ol ul, ul ul ul {
+        li {
+            list-style-type: square;
+        }
+    }
+
+    ol {
+        li {
+            list-style-type: decimal;
+        }
     }
 
     code {
