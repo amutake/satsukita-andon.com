@@ -22,7 +22,7 @@
     <!--[if (gt IE 8)|!(IE)]><!-->
     <div id="background">
       @Range(1, 17).map { n =>
-        <img id="background-@n" src="@routes.Assets.at("img/background/" + n + ".jpg")">
+        <img id="background-@n" src="@routes.Assets.at("img/background/" + n + ".jpg")" style="display: none;">
       }
     </div>
     <!--<![endif]-->

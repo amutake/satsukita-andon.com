@@ -37,6 +37,7 @@ $(function() {
 			opacity: $img.opacity,
 			zIndex: $img.zIndex
 		});
+		$img.img.show();
 	});
 
 	var go = function($imgs) {
