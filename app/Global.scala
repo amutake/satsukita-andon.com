@@ -13,7 +13,6 @@ object Global extends GlobalSettings {
 
   override def onStart(app: Application) {
     InitialData.createTable
-    InitialData.insert
     Cleaner.clean
   }
 
@@ -65,13 +64,5 @@ object InitialData {
     if (!tableMap.contains("COMMENTS")) {
       Comments.ddl.create
     }
-  }
-
-  def insert = {
-    inits.TimesData.initialize
-    inits.ClassData.initialize
-    inits.Tags.initialize
-    inits.Accounts.initialize
-    inits.Articles.initialize
   }
 }
