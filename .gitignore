@@ -14,13 +14,6 @@ dist
 /RUNNING_PID
 /.settings
 
-public/img/products
-public/img/thumbnails
-public/img/material
-public/img/howto
-public/img/copy.sh
-public/file/
-
 send.sh
 resize.sh
 deploy.sh
