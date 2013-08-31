@@ -11,7 +11,7 @@
 
   <h3>資料情報の編集</h3>
 
-  @helper.form(routes.Artisan.postEditDatum(id)) {
+  @helper.form(routes.Artisan.postEditDatum(id), 'enctype -> "multipart/form-data") {
 
     @form.globalError.map { error =>
       <p class="error">
@@ -19,9 +19,12 @@
       </p>
     }
 
+    <p>資料を更新する場合はこちらから再アップロードできます。</p>
+    <input type="file" name="file">
+
     @if(level != Writer) {
       <label class="checkbox">
-        <input type="checkbox" id="option" @if(form("optAuthor").value.isDefined) { checked }>
+        <input type="checkbox" id="option" @if(form("optAuthor").value.isDefined || form("optDate").value.isDefined) { checked }>
         作者を別にする
       </label>
 

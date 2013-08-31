@@ -63,6 +63,11 @@ object Data extends Table[Datum]("DATA") {
     query.where(_.id === id).map(d => d.name ~ d.genre ~ d.optAuthor ~ d.optDate).update((name, genre, optAuthor, optDate))
   }
 
+  def fileUpdate(id: Int, path: String) = db.withSession { implicit session: Session =>
+    val date = new Date()
+    query.where(_.id === id).map(d => d.date ~ d.path).update((date, path))
+  }
+
   def delete(id: Int) = db.withSession { implicit session: Session =>
     query.where(_.id === id).delete
   }
