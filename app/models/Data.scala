@@ -59,7 +59,6 @@ object Data extends Table[Datum]("DATA") {
     Data.ins.insert(name, accountId, date, path, genre, optAuthor, optDate)
     val author = optAuthor.getOrElse(Accounts.findNameById(accountId))
     Twitter.tweet(
-      "資料",
       author + "さんの資料『" + name + "』がアップロードされました",
       "/howto/data/" + java.net.URLEncoder.encode(genre, "UTF-8")
     )
@@ -70,7 +69,6 @@ object Data extends Table[Datum]("DATA") {
       query.where(_.id === id).map(d => d.name ~ d.genre ~ d.optAuthor ~ d.optDate).update((name, genre, optAuthor, optDate))
       val author = optAuthor.getOrElse(Accounts.findNameById(datum.accountId))
       Twitter.tweet(
-        "資料",
         author + "さんの資料『" + name + "』の情報が編集されました",
         "/howto/data/" + java.net.URLEncoder.encode(genre, "UTF-8")
       )
@@ -83,7 +81,6 @@ object Data extends Table[Datum]("DATA") {
       query.where(_.id === id).map(d => d.date ~ d.path).update((date, path))
       val author = datum.optAuthor.getOrElse(Accounts.findNameById(datum.accountId))
       Twitter.tweet(
-        "資料",
         author + "さんの資料『" + datum.name + "』が再アップロードされました",
         "/howto/data/" + java.net.URLEncoder.encode(datum.genre, "UTF-8")
       )
@@ -95,7 +92,6 @@ object Data extends Table[Datum]("DATA") {
       query.where(_.id === id).delete
       val author = datum.optAuthor.getOrElse(Accounts.findNameById(datum.accountId))
       Twitter.tweet(
-        "資料",
         author + "さんの資料『" + datum.name + "』が削除されました",
         ""
       )

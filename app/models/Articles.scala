@@ -116,7 +116,6 @@ object Articles extends Table[Article]("ARTICLES") {
     val date = new Date()
     val id = Articles.ins.insert(accountId, accountId, title, text, date, date, articleType, genre, optAuthor, optDate)
     Twitter.tweet(
-      "記事",
       Accounts.findNameById(accountId) + "により新しい記事『" + title  + "』が作成されました",
       "/article/" + id
     )
@@ -129,7 +128,6 @@ object Articles extends Table[Article]("ARTICLES") {
       val after = before.copy(updateAccountId = accountId, title = title, text = text, updateDate = date, genre = genre, optAuthor = optAuthor, optDate = optDate)
       query.where(_.id === id).update(after)
       Twitter.tweet(
-        "記事",
         Accounts.findNameById(accountId) + "により記事『" + before.title + "』が編集されました",
         "/article/" + id
       )
@@ -140,7 +138,6 @@ object Articles extends Table[Article]("ARTICLES") {
     findById(id).map { article =>
       query.where(_.id === id).delete
       Twitter.tweet(
-        "記事",
         "記事『" + article.title + "』が削除されました",
         ""
       )

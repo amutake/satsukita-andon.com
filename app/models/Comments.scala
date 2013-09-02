@@ -54,7 +54,6 @@ object Comments extends Table[Comment]("COMMENTS") {
     val date = new Date()
     val id = Comments.ins.insert(article, account, name, text, password.map(sha1(_)), date, date)
     Twitter.tweet(
-      "コメント",
       "記事『" + Articles.findTitleById(article) + "』に" + name + "さんのコメントが投稿されました",
       "/article/" + article + "#comment-" + id
     )
@@ -65,7 +64,6 @@ object Comments extends Table[Comment]("COMMENTS") {
     query.where(_.id === id).firstOption.map { comment =>
       query.where(_.id === id).map(c => c.text ~ c.updateDate).update((text, date))
       Twitter.tweet(
-        "コメント",
         "記事『" + Articles.findTitleById(comment.articleId) + "』への" + comment.name + "さんのコメントが編集されました",
         "/article/" + comment.articleId + "#comment-" + id
       )
@@ -76,7 +74,6 @@ object Comments extends Table[Comment]("COMMENTS") {
     findById(id).map { comment =>
       query.where(_.id === id).delete
       Twitter.tweet(
-        "コメント",
         "記事『" + Articles.findTitleById(comment.articleId) + "』への" + comment.name + "さんのコメントが削除されました",
         ""
       )
