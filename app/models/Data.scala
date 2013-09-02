@@ -57,18 +57,48 @@ object Data extends Table[Datum]("DATA") {
   def create(name: String, accountId: Int, path: String, genre: String, optAuthor: Option[String], optDate: Option[String]) = db.withSession { implicit session: Session =>
     val date = new Date()
     Data.ins.insert(name, accountId, date, path, genre, optAuthor, optDate)
+    val author = optAuthor.getOrElse(Accounts.findNameById(accountId))
+    Twitter.tweet(
+      "資料",
+      author + "さんの資料『" + name + "』がアップロードされました",
+      "/howto/data/" + java.net.URLEncoder.encode(genre, "UTF-8")
+    )
   }
 
   def update(id: Int, name: String, genre: String, optAuthor: Option[String], optDate: Option[String]) = db.withSession { implicit session: Session =>
-    query.where(_.id === id).map(d => d.name ~ d.genre ~ d.optAuthor ~ d.optDate).update((name, genre, optAuthor, optDate))
+    findById(id).map { datum =>
+      query.where(_.id === id).map(d => d.name ~ d.genre ~ d.optAuthor ~ d.optDate).update((name, genre, optAuthor, optDate))
+      val author = optAuthor.getOrElse(Accounts.findNameById(datum.accountId))
+      Twitter.tweet(
+        "資料",
+        author + "さんの資料『" + name + "』の情報が編集されました",
+        "/howto/data/" + java.net.URLEncoder.encode(genre, "UTF-8")
+      )
+    }
   }
 
   def fileUpdate(id: Int, path: String) = db.withSession { implicit session: Session =>
-    val date = new Date()
-    query.where(_.id === id).map(d => d.date ~ d.path).update((date, path))
+    findById(id).map { datum =>
+      val date = new Date()
+      query.where(_.id === id).map(d => d.date ~ d.path).update((date, path))
+      val author = datum.optAuthor.getOrElse(Accounts.findNameById(datum.accountId))
+      Twitter.tweet(
+        "資料",
+        author + "さんの資料『" + datum.name + "』が再アップロードされました",
+        "/howto/data/" + java.net.URLEncoder.encode(datum.genre, "UTF-8")
+      )
+    }
   }
 
   def delete(id: Int) = db.withSession { implicit session: Session =>
-    query.where(_.id === id).delete
+    findById(id).map { datum =>
+      query.where(_.id === id).delete
+      val author = datum.optAuthor.getOrElse(Accounts.findNameById(datum.accountId))
+      Twitter.tweet(
+        "資料",
+        author + "さんの資料『" + datum.name + "』が削除されました",
+        ""
+      )
+    }
   }
 }
