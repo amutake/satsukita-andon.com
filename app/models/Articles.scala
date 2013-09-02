@@ -82,6 +82,12 @@ object Articles extends Table[Article]("ARTICLES") {
     dateSort(howtos).list
   }
 
+  def findTitleById(id: Long) = db.withSession { implicit session: Session =>
+    query.where(_.id === id).firstOption.map { article =>
+      article.title
+    }.getOrElse("?")
+  }
+
   def all = db.withSession { implicit session: Session =>
     desc.list
   }
@@ -108,7 +114,13 @@ object Articles extends Table[Article]("ARTICLES") {
     optDate: Option[String]
   ) = db.withSession { implicit session: Session =>
     val date = new Date()
-    Articles.ins.insert(accountId, accountId, title, text, date, date, articleType, genre, optAuthor, optDate)
+    val id = Articles.ins.insert(accountId, accountId, title, text, date, date, articleType, genre, optAuthor, optDate)
+    Twitter.tweet(
+      "記事",
+      Accounts.findNameById(accountId) + "により新しい記事『" + title  + "』が作成されました",
+      "/article/" + id
+    )
+    id
   }
 
   def update(id: Long, accountId: Int, title: String, text: String, genre: String, optAuthor: Option[String], optDate: Option[String]) = db.withSession { implicit session: Session =>
@@ -116,10 +128,22 @@ object Articles extends Table[Article]("ARTICLES") {
       val date = new Date()
       val after = before.copy(updateAccountId = accountId, title = title, text = text, updateDate = date, genre = genre, optAuthor = optAuthor, optDate = optDate)
       query.where(_.id === id).update(after)
+      Twitter.tweet(
+        "記事",
+        Accounts.findNameById(accountId) + "により記事『" + before.title + "』が編集されました",
+        "/article/" + id
+      )
     }
   }
 
   def delete(id: Long) = db.withSession { implicit session: Session =>
-    query.where(_.id === id).delete
+    findById(id).map { article =>
+      query.where(_.id === id).delete
+      Twitter.tweet(
+        "記事",
+        "記事『" + article.title + "』が削除されました",
+        ""
+      )
+    }
   }
 }
