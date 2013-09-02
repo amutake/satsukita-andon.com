@@ -52,15 +52,34 @@ object Comments extends Table[Comment]("COMMENTS") {
 
   def create(article: Long, account: Option[Int], name: String, text: String, password: Option[String]) = db.withSession { implicit session: Session =>
     val date = new Date()
-    Comments.ins.insert(article, account, name, text, password.map(sha1(_)), date, date)
+    val id = Comments.ins.insert(article, account, name, text, password.map(sha1(_)), date, date)
+    Twitter.tweet(
+      "コメント",
+      "記事『" + Articles.findTitleById(article) + "』に" + name + "さんのコメントが投稿されました",
+      "/article/" + article + "#comment-" + id
+    )
   }
 
   def update(id: Long, text: String) = db.withSession { implicit session: Session =>
     val date = new Date()
-    query.where(_.id === id).map(c => c.text ~ c.updateDate).update((text, date))
+    query.where(_.id === id).firstOption.map { comment =>
+      query.where(_.id === id).map(c => c.text ~ c.updateDate).update((text, date))
+      Twitter.tweet(
+        "コメント",
+        "記事『" + Articles.findTitleById(comment.articleId) + "』への" + comment.name + "さんのコメントが編集されました",
+        "/article/" + comment.articleId + "#comment-" + id
+      )
+    }
   }
 
   def delete(id: Long) = db.withSession { implicit session: Session =>
-    query.where(_.id === id).delete
+    findById(id).map { comment =>
+      query.where(_.id === id).delete
+      Twitter.tweet(
+        "コメント",
+        "記事『" + Articles.findTitleById(comment.articleId) + "』への" + comment.name + "さんのコメントが削除されました",
+        ""
+      )
+    }
   }
 }
