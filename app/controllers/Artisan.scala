@@ -342,7 +342,7 @@ object Artisan extends Controller with Authentication {
     Ok(views.html.artisan.createClass(classIdForm))
   }
 
-  def postCreateClass = HasAuthority(Master) { _ => implicit request =>
+  def postCreateClass = HasAuthority(Master) { acc => implicit request =>
     classIdForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.artisan.createClass(formWithErrors)),
       result => {
@@ -353,6 +353,10 @@ object Artisan extends Controller with Authentication {
           ))
         }.getOrElse {
           ClassData.createByClassId(classId)
+          Twitter.tweet(
+            acc.name + "により" + classId + "が作成されました",
+            "/gallery/" + Seq(classId.times, classId.grade, classId.classn).mkString("/")
+          )
           Redirect(routes.Artisan.classData(Some(classId.times.n))).flashing(
             "success" -> "クラスを作成しました。"
           )
@@ -373,12 +377,18 @@ object Artisan extends Controller with Authentication {
     Ok(views.html.artisan.editClassData(data.id, classForm.fill(d)))
   }
 
-  def postEditClassData(id: Int) = AboutClass(id, Master) { _ => data => implicit request =>
+  def postEditClassData(id: Int) = AboutClass(id, Master) { acc => data => implicit request =>
     classForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.artisan.editClassData(data.id, formWithErrors)),
       result => {
         val prize = Prize.fromString(result._2)
         ClassData.update(data.id, result._1, prize)
+
+        Twitter.tweet(
+          acc.name + "により" + data.id + "の情報が編集されました",
+          "/gallery/" + Seq(data.id.times, data.id.grade, data.id.classn).mkString("/")
+        )
+
         Redirect(routes.Artisan.classData(Some(new ClassId(id).times.n))).flashing(
           "success" -> "クラス情報を変更しました。"
         )
@@ -400,7 +410,7 @@ object Artisan extends Controller with Authentication {
     Ok(views.html.artisan.editTags(data, tags, names))
   }
 
-  def postEditTags(id: Int) = AboutClass(id, Writer) { _ => data => implicit request =>
+  def postEditTags(id: Int) = AboutClass(id, Writer) { acc => data => implicit request =>
     tagsForm.bindFromRequest.fold(
       formWithErrors => Redirect(routes.Artisan.classData(Some(new ClassId(id).times.n))).flashing(
         "error" -> "エラー"
@@ -413,6 +423,10 @@ object Artisan extends Controller with Authentication {
             Tags.delete(tag._1)
           }
         }
+        Twitter.tweet(
+          acc.name + "により" + data.id + "のタグが編集されました",
+          "/gallery/" + Seq(data.id.times, data.id.grade, data.id.classn).mkString("/")
+        )
         Redirect(routes.Artisan.classData(Some(new ClassId(id).times.n))).flashing(
           "success" -> "タグを編集しました。"
         )
@@ -477,29 +491,34 @@ object Artisan extends Controller with Authentication {
   def postUploadImage(id: Int) = IsValidAccountWithParser(parse.multipartFormData) { acc => request =>
     val classId = new ClassId(id)
     ClassData.findByClassId(classId).map { c =>
-      request.body.files.foreach { file =>
-        if (file.contentType.map(_.take(5)) == Some("image")) {
-          val classDir = c.id.times + "/" + c.id.grade + "/" + c.id.classn + "/"
-          val fullsize = "/files/gallery/fullsize/" + classDir
-          val thumbnail = "/files/gallery/thumbnail/" + classDir
-          def valid(c: Char) = {
-            val r = """[\w\.]""".r
-            c.toString match {
-              case r() => true
-              case _ => false
-            }
-          }
-          val filename = new Date().getTime().toString + "-" + file.filename.filter(valid)
-
-          file.ref.moveTo(new File("." + fullsize + filename), true)
-          Files.copyFile(new File("." + fullsize + filename), new File("." + thumbnail + filename))
-
-          Process("mogrify -quality 50 ." + fullsize + filename).!
-            Process("mogrify -resize 600x -unsharp 2x1.2+0.5+0.5 -quality 75 ." + thumbnail + filename).!
-        } else {
-          println("Not image. Abort.")
-        }
+      val files = request.body.files.filter { file =>
+        file.contentType.map(_.take(5)) == Some("image")
       }
+      files.foreach { file =>
+        val classDir = c.id.times + "/" + c.id.grade + "/" + c.id.classn + "/"
+        val fullsize = "/files/gallery/fullsize/" + classDir
+        val thumbnail = "/files/gallery/thumbnail/" + classDir
+        def valid(c: Char) = {
+          val r = """[\w\.]""".r
+          c.toString match {
+            case r() => true
+            case _ => false
+          }
+        }
+        val filename = new Date().getTime().toString + "-" + file.filename.filter(valid)
+
+        file.ref.moveTo(new File("." + fullsize + filename), true)
+        Files.copyFile(new File("." + fullsize + filename), new File("." + thumbnail + filename))
+
+        Process("mogrify -quality 50 ." + fullsize + filename).!
+        Process("mogrify -resize 600x -unsharp 2x1.2+0.5+0.5 -quality 75 ." + thumbnail + filename).!
+      }
+
+      Twitter.tweet(
+        acc.name + "により" + classId + "の画像が" + files.length + "枚追加されました",
+        "/gallery/" + Seq(c.id.times, c.id.grade, c.id.classn).mkString("/")
+      )
+
       Redirect(routes.Artisan.classData(Some(new ClassId(id).times.n))).flashing(
         "success" -> "画像をアップロードしました。"
       )
@@ -517,6 +536,10 @@ object Artisan extends Controller with Authentication {
       formWithErrors => BadRequest(views.html.artisan.selectTop(data.id, formWithErrors)),
       top => {
         ClassData.updateTop(data.id, top)
+        Twitter.tweet(
+          acc.name + "により" + data.id + "のトップ画像が変更されました",
+          "/gallery/" + Seq(data.id.times, data.id.grade, data.id.classn).mkString("/")
+        )
         Redirect(routes.Artisan.classData(Some(new ClassId(id).times.n))).flashing(
           "success" -> "トップ画像を変更しました。"
         )
@@ -543,6 +566,11 @@ object Artisan extends Controller with Authentication {
           new File(tpath).delete()
         }
 
+        Twitter.tweet(
+          acc.name + "により" + data.id + "の画像が" + filenames.length + "枚削除されました",
+          "/gallery/" + Seq(data.id.times, data.id.grade, data.id.classn).mkString("/")
+        )
+
         Redirect(routes.Artisan.classData(Some(new ClassId(id).times.n))).flashing(
           "success" -> "画像を削除しました。"
         )
@@ -560,11 +588,15 @@ object Artisan extends Controller with Authentication {
     Ok(views.html.artisan.editTimesData(data.times, timesForm.fill(data.title)))
   }
 
-  def postEditTimesData(id: Int) = AboutTimes(id) { _ => data => implicit request =>
+  def postEditTimesData(id: Int) = AboutTimes(id) { acc => data => implicit request =>
     timesForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.artisan.editTimesData(data.times, formWithErrors)),
       title => {
         TimesData.update(data.times, title)
+        Twitter.tweet(
+          acc.name + "により" + data.times + "の情報が編集されました",
+          "/gallery"
+        )
         request.body.asMultipartFormData.flatMap { fd =>
           fd.file("top").map { file =>
             // TODO: check file extension
@@ -591,7 +623,7 @@ object Artisan extends Controller with Authentication {
     Ok(views.html.artisan.createTimes(timesBaseForm))
   }
 
-  def postCreateTimes = HasAuthority(Master) { _ => implicit request =>
+  def postCreateTimes = HasAuthority(Master) { acc => implicit request =>
     timesBaseForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.artisan.createTimes(formWithErrors)),
       n => {
@@ -602,6 +634,10 @@ object Artisan extends Controller with Authentication {
           ))
         }.getOrElse {
           TimesData.createByTimes(times)
+          Twitter.tweet(
+            acc.name + "により" + times + "が作成されました",
+            "/gallery"
+          )
           Redirect(routes.Artisan.timesData).flashing(
             "success" -> "回を作成しました。"
           )
