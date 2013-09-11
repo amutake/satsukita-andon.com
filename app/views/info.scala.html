@@ -72,7 +72,7 @@
         </p>
         <h1 class="title">@article.title</h1>
         <div class="info-text">
-          @Conv.both("""\A.*""".r.findFirstIn(article.text).getOrElse(""))
+          @Conv.both(Conv.intro(article.text))
           <a href="@routes.Application.article(article.id)">続きを読む</a>
         </div>
         <p class="author">

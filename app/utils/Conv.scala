@@ -15,5 +15,9 @@ object Conv {
 
   def markdown(s: String) = HtmlFormat.raw(pegdown.markdownToHtml(HtmlFormat.escape(s).toString))
 
-  def newline(s: String) = HtmlFormat.raw(HtmlFormat.escape(s).toString.replace("\n", "<br>"))
+  def toLF(s: String) = """\r\n?""".r.replaceAllIn(s, "\n")
+
+  def newline(s: String) = HtmlFormat.raw(HtmlFormat.escape(toLF(s)).toString.replace("\n", "<br>"))
+
+  def intro(s: String) = """\A(.+(\n\n|\n)?)+""".r.findFirstIn(toLF(s)).getOrElse(s)
 }
