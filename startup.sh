@@ -1,3 +1,3 @@
 #!/bin/bash
 
-play "start -Dhttp.port=6039"
+play "start -Dhttp.port=5927"
