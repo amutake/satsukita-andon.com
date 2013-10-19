@@ -1,6 +1,7 @@
 package models
 
 import play.api.libs.Codecs._
+import play.api.Logger
 
 import scala.slick.driver.H2Driver.simple._
 
@@ -53,6 +54,7 @@ object Comments extends Table[Comment]("COMMENTS") {
   def create(article: Long, account: Option[Int], name: String, text: String, password: Option[String]) = db.withSession { implicit session: Session =>
     val date = new Date()
     val id = Comments.ins.insert(article, account, name, text, password.map(sha1(_)), date, date)
+    Logger.info("comment: " + text)
     Twitter.tweet(
       "記事『" + Articles.findTitleById(article) + "』に" + name + "さんのコメントが投稿されました",
       "/article/" + article + "#comment-" + id
