@@ -121,8 +121,12 @@ object Application extends Controller with Authentication {
               account.map { _ =>
                 error(commentForm.fill(result).withGlobalError("ログインしてください"))
               }.getOrElse {
-                Comments.create(article.id, None, name, text, password)
-                success
+                if ("""https?://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?""".r.findFirstIn(text).isEmpty) {
+                  Comments.create(article.id, None, name, text, password)
+                  success
+                } else {
+                  error(commentForm.fill(result).withGlobalError("URLは投稿できません"))
+                }
               }
             }
           }
