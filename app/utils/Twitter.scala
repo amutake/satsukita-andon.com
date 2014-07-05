@@ -2,14 +2,14 @@ package andon.utils
 
 import java.util.Date
 
+import play.api.Logger
+
 import twitter4j._
 import twitter4j.auth.AccessToken
 
 object Twitter {
 
-  val twitter = new TwitterFactory().getInstance()
-  twitter.setOAuthConsumer("", "")
-  twitter.setOAuthAccessToken(new AccessToken("", ""))
+  val twitter = TwitterFactory.getSingleton()
 
   def tweet(body: String, url: String) = {
     val now = new Date()
@@ -18,7 +18,7 @@ object Twitter {
     try {
       twitter.updateStatus(header + body + link)
     } catch {
-      case e: Exception => println(e)
+      case e: Exception => Logger.error(e.toString())
     }
   }
 }
