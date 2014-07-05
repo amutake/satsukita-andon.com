@@ -48,7 +48,7 @@
             </a>
           </td>
           <td>@comment.name</td>
-          <td>@comment.text</td>
+          <td>@(comment.text.take(20))...</td>
           <td>@DateUtil.dateFormat(comment.createDate)</td>
         </tr>
       }
