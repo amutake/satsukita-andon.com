@@ -48,7 +48,13 @@
             </a>
           </td>
           <td>@comment.name</td>
-          <td>@(comment.text.take(20))...</td>
+          <td>
+            @if(comment.text.length > 30) {
+              @(comment.text.take(30))...
+            } else {
+              @(comment.text.take(30))
+            }
+          </td>
           <td>@DateUtil.dateFormat(comment.createDate)</td>
         </tr>
       }
