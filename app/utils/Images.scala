@@ -48,7 +48,7 @@ object Images {
 
   def toPath(file: File) = file.getPath.substring(1)
 
-  def getClassImages(id: ClassId) = list(id).map(toPath _)
+  def getClassImages(id: ClassId) = list(id).map(toPath _).sorted
 
   def getClassTopImages(t: OrdInt): Seq[(ClassData, String)] = {
     val cs = ClassData.findByTimes(t)
