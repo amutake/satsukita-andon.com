@@ -25,3 +25,5 @@ memo/
 *.sql
 *.db
 *.jar
+
+twitter4j.properties

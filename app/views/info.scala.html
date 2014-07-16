@@ -48,7 +48,13 @@
             </a>
           </td>
           <td>@comment.name</td>
-          <td>@comment.text</td>
+          <td>
+            @if(comment.text.length > 30) {
+              @(comment.text.take(30))...
+            } else {
+              @(comment.text.take(30))
+            }
+          </td>
           <td>@DateUtil.dateFormat(comment.createDate)</td>
         </tr>
       }
@@ -73,7 +79,7 @@
         <h1 class="title">@article.title</h1>
         <div class="info-text">
           @Conv.both(Conv.intro(article.text))
-          <a href="@routes.Application.article(article.id)">続きを読む</a>
+          <a href="@routes.Application.article(article.id)">続きを読む・コメントを書く</a>
         </div>
         <p class="author">
           Posted by @Accounts.findNameById(article.createAccountId)

@@ -26,7 +26,7 @@ object Artisan extends Controller with Authentication {
 
   val loginForm = Form(
     tuple(
-      "username" -> text.verifying(notEmpty).verifying(pattern("\\w+".r, error = "半角英数字のみです。")),
+      "username" -> text.verifying(notEmpty).verifying(pattern("""(\w|-)+""".r, error = "半角英数字・ハイフン・アンダースコアのみです。")),
       "password" -> text.verifying(notEmpty)
     ) verifying ("ユーザー名かパスワードが間違っています。", result => result match {
       case (username, password) => Accounts.authenticate(username, password).isDefined
@@ -139,7 +139,7 @@ object Artisan extends Controller with Authentication {
   val accountForm = Form(
     tuple(
       "name" -> text.verifying(notEmpty).verifying(notSpace),
-      "username" -> text.verifying(notEmpty).verifying(pattern("\\w+".r, error = "半角英数字のみです。")),
+      "username" -> text.verifying(notEmpty).verifying(pattern("""(\w|-)+""".r, error = "半角英数字・ハイフン・アンダースコアのみです。")),
       "times" -> number,
       "level" -> text.verifying(notEmpty).verifying(pattern("admin|master|writer".r, error = "不正な入力です。"))
     )
@@ -494,34 +494,40 @@ object Artisan extends Controller with Authentication {
       val files = request.body.files.filter { file =>
         file.contentType.map(_.take(5)) == Some("image")
       }
-      files.foreach { file =>
-        val classDir = c.id.times + "/" + c.id.grade + "/" + c.id.classn + "/"
-        val fullsize = "/files/gallery/fullsize/" + classDir
-        val thumbnail = "/files/gallery/thumbnail/" + classDir
-        def valid(c: Char) = {
-          val r = """[\w\.]""".r
-          c.toString match {
-            case r() => true
-            case _ => false
+      if (files.length != request.body.files.length) {
+        Redirect(routes.Artisan.classData(Some(new ClassId(id).times.n))).flashing(
+          "error" -> "画像ではないファイルが含まれています。"
+        )
+      } else {
+        files.foreach { file =>
+          val classDir = c.id.times + "/" + c.id.grade + "/" + c.id.classn + "/"
+          val fullsize = "/files/gallery/fullsize/" + classDir
+          val thumbnail = "/files/gallery/thumbnail/" + classDir
+          def valid(c: Char) = {
+            val r = """[\w\.]""".r
+            c.toString match {
+              case r() => true
+              case _ => false
+            }
           }
+          val filename = new Date().getTime().toString + "-" + file.filename.filter(valid)
+
+          file.ref.moveTo(new File("." + fullsize + filename), true)
+          Files.copyFile(new File("." + fullsize + filename), new File("." + thumbnail + filename))
+
+          Process("mogrify -quality 50 ." + fullsize + filename).!
+          Process("mogrify -resize 600x -unsharp 2x1.2+0.5+0.5 -quality 75 ." + thumbnail + filename).!
         }
-        val filename = new Date().getTime().toString + "-" + file.filename.filter(valid)
 
-        file.ref.moveTo(new File("." + fullsize + filename), true)
-        Files.copyFile(new File("." + fullsize + filename), new File("." + thumbnail + filename))
+        Twitter.tweet(
+          acc.name + "により" + classId + "の画像が" + files.length + "枚追加されました",
+          "/gallery/" + Seq(c.id.times, c.id.grade, c.id.classn).mkString("/")
+        )
 
-        Process("mogrify -quality 50 ." + fullsize + filename).!
-        Process("mogrify -resize 600x -unsharp 2x1.2+0.5+0.5 -quality 75 ." + thumbnail + filename).!
+        Redirect(routes.Artisan.classData(Some(new ClassId(id).times.n))).flashing(
+          "success" -> "画像をアップロードしました。"
+        )
       }
-
-      Twitter.tweet(
-        acc.name + "により" + classId + "の画像が" + files.length + "枚追加されました",
-        "/gallery/" + Seq(c.id.times, c.id.grade, c.id.classn).mkString("/")
-      )
-
-      Redirect(routes.Artisan.classData(Some(new ClassId(id).times.n))).flashing(
-        "success" -> "画像をアップロードしました。"
-      )
     }.getOrElse(BadRequest)
   }
 
