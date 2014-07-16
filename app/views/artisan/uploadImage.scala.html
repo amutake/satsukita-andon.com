@@ -1,13 +1,14 @@
 @(id: andon.utils.ClassId)
 
-@common(id.times + id.grade.toString + " " + id.classn.toString + " 画像のアップロード") {
+@common(id.toString + " 画像のアップロード") {
 } {
   @breadcrumb(Seq(
     (routes.Artisan.home, "Home"),
     (routes.Artisan.classData(Some(id.times.n)), "クラス一覧")
   ), "画像のアップロード")
 
-  <h3>@id.times @id.grade-@id.classn 画像のアップロード</h3>
+  <h3>@id.toString 画像のアップロード</h3>
+  <p>画像は複数選択可能です</p>
 
   @helper.form(routes.Artisan.postUploadImage(id.toInt), 'enctype -> "multipart/form-data") {
 
