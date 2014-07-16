@@ -26,7 +26,7 @@ object Artisan extends Controller with Authentication {
 
   val loginForm = Form(
     tuple(
-      "username" -> text.verifying(notEmpty).verifying(pattern("\\w+".r, error = "半角英数字のみです。")),
+      "username" -> text.verifying(notEmpty).verifying(pattern("""(\w|-)+""".r, error = "半角英数字・ハイフン・アンダースコアのみです。")),
       "password" -> text.verifying(notEmpty)
     ) verifying ("ユーザー名かパスワードが間違っています。", result => result match {
       case (username, password) => Accounts.authenticate(username, password).isDefined
