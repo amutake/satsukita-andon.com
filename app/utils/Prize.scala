@@ -28,6 +28,10 @@ case object Bronze extends Prize {
   def toEnglish = "bronze"
   def toJapanese = "銅賞"
 }
+case object Alumni extends Prize {
+  def toEnglish = "alumni"
+  def toJapanese = "同窓会賞"
+}
 
 object Prize {
 
@@ -36,6 +40,7 @@ object Prize {
     case "gold" => Some(Gold)
     case "silver" => Some(Silver)
     case "bronze" => Some(Bronze)
+    case "alumni" => Some(Alumni)
     case _ => None
   }
   def fromJapanese(s: String): Option[Prize] = s match {
@@ -43,6 +48,7 @@ object Prize {
     case "金賞" => Some(Gold)
     case "銀賞" => Some(Silver)
     case "銅賞" => Some(Bronze)
+    case "同窓会賞" => Some(Alumni)
     case _ => None
   }
   def fromString(s: String) = fromEnglish(s)

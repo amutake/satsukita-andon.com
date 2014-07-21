@@ -14,7 +14,7 @@
 @prize = {
   <select id="search-prize" name="prize">
     <option value="all">すべて</option>
-    @Seq(Grand, Gold, Silver, Bronze).map{ p =>
+    @Seq(Grand, Gold, Silver, Bronze, Alumni).map{ p =>
       <option value="@p.toString">@p.toJapanese</option>
     }
     <option value="none">賞なし</option>
