@@ -41,6 +41,9 @@
         @anchor(data, path)
       </li>
     }
+    case Alumni => {
+      @none(data, path)
+    }
   }
 }
 
@@ -53,7 +56,7 @@
 @gradeImgs(grade: Int, data: Seq[(ClassData, String)]) = {
   <h3>@grade年</h3>
   <ul class="thumbnails">
-    @Seq(Grand, Gold, Silver, Bronze).map { p =>
+    @Seq(Grand, Gold, Silver, Bronze, Alumni).map { p =>
       @data.filter(d => d._1.prize == Some(p)).map(d => prizes(p, d._1, d._2))
     }
     @data.filter(d => d._1.prize == None).map(d => none(d._1, d._2))
