@@ -32,6 +32,10 @@ case object Alumni extends Prize {
   def toEnglish = "alumni"
   def toJapanese = "同窓会賞"
 }
+case object Rekka extends Prize {
+  def toEnglish = "rekka"
+  def toJapanese = "烈夏賞"
+}
 
 object Prize {
 
@@ -41,6 +45,7 @@ object Prize {
     case "silver" => Some(Silver)
     case "bronze" => Some(Bronze)
     case "alumni" => Some(Alumni)
+    case "rekka" => Some(Rekka)
     case _ => None
   }
   def fromJapanese(s: String): Option[Prize] = s match {
@@ -49,11 +54,14 @@ object Prize {
     case "銀賞" => Some(Silver)
     case "銅賞" => Some(Bronze)
     case "同窓会賞" => Some(Alumni)
+    case "烈夏賞" => Some(Rekka)
     case _ => None
   }
   def fromString(s: String) = fromEnglish(s)
 
   def partialFromString(s: String): Prize = fromEnglish(s).get
+
+  def allPrizes = Seq(Grand, Gold, Silver, Bronze, Alumni, Rekka)
 
   implicit val prizeTypeMapper = MappedTypeMapper.base[Prize, String](
     { p => p.toString },

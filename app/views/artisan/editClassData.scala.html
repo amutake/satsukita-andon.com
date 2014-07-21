@@ -28,7 +28,7 @@
     @helper.select(
       form("prize"),
       options = {
-        val all = Seq(Grand, Gold, Silver, Bronze, Alumni)
+        val all = Prize.allPrizes
         ("none", "なし") +: all.map(_.toString).zip(all.map(_.toJapanese))
       },
       '_label -> "賞",

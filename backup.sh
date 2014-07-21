@@ -2,13 +2,13 @@
 
 cd ${0%/*}
 
-./shutdown.sh
-
 now=`date +%Y-%m-%d`
 
 echo 'compress files...'
 tar czf backup/${now}.tar.gz ./files
 echo 'done.'
+
+./shutdown.sh
 
 echo 'dump sql...'
 cd db
