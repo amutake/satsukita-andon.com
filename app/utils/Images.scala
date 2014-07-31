@@ -98,7 +98,7 @@ object Images {
 
   // other images
   def getOtherImages: Seq[String] = {
-    val dir = new File("./files/gallery/others/fullsize")
+    val dir = new File("./files/gallery/fullsize/others")
     if (dir.isDirectory) {
       dir.listFiles.toSeq.map(toPath _).sorted.reverse
     } else {
