@@ -1,0 +1,36 @@
+@(paths: Seq[String], page: Int, count: Int, max: Int)
+
+@import andon.utils._
+
+@pager = {
+  <ul class="pager">
+    @if(page <= 0) {
+      <li class="previous disabled"><a href="#">&larr; 前へ</a></li>
+    } else {
+      <li class="previous"><a href="@routes.Application.others(page - 1)">&larr; 前へ</a></li>
+    }
+    @if(page >= max) {
+      <li class="next disabled"><a href="#">次へ &rarr;</a></li>
+    } else {
+      <li class="next"><a href="@routes.Application.others(page + 1)">次へ &rarr;</a></li>
+    }
+  </ul>
+}
+
+@common("その他の画像 " + page.toString) {
+} {
+  @pager
+
+  <ul class="thumbnails">
+    @paths.drop(page * 30).take(30).map { path =>
+      <li class="span4">
+        <a class="fresco" href="@path" data-fresco-group="gallery">
+          <img src="@Images.toThumbnail(path)">
+        </a>
+      </li>
+    }
+  </ul>
+
+  @pager
+} {
+}

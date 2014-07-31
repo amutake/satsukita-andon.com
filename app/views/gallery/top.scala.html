@@ -3,9 +3,6 @@
 @common("Gallery") {
   <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/gallery.css")">
 } {
-
-  <p><a href="@routes.Application.search">条件に一致するクラスの検索</a></p>
-
   <ul class="thumbnails">
     @ts.map { t =>
       <li class="span4">
@@ -18,5 +15,9 @@
       </li>
     }
   </ul>
+
+  <p><a href="@routes.Application.search">条件に一致するクラスの検索</a></p>
+
+  <p><a href="@routes.Application.others(0)">その他の参考画像</a></p>
 } {
 }
