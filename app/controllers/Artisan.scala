@@ -667,8 +667,8 @@ object Artisan extends Controller with Authentication {
       )
     } else {
       files.foreach { file =>
-        val fullsize = "/files/gallery/others/fullsize"
-        val thumbnail = "/files/gallery/others/thumbnail"
+        val fullsize = "/files/gallery/fullsize/others/"
+        val thumbnail = "/files/gallery/thumbnail/others/"
         def valid(c: Char) = {
           val r = """[\w\.]""".r
           c.toString match {
