@@ -8,6 +8,7 @@ GET     /info                       controllers.Application.info(page: Int ?= 0)
 GET     /gallery                    controllers.Application.gallery
 GET     /gallery/search             controllers.Application.search
 GET     /gallery/tags/:tag          controllers.Application.tags(tag: String)
+GET     /gallery/others             controllers.Application.others(page: Int ?= 0)
 GET     /gallery/:t                 controllers.Application.timesGallery(t: andon.utils.OrdInt)
 GET     /gallery/:t/:g/:c           controllers.Application.classGallery(t: andon.utils.OrdInt, g: Int, c: Int)
 GET     /howto                      controllers.Application.howto
@@ -71,6 +72,8 @@ GET     /artisan/timesdata/edit     controllers.Artisan.editTimesData(id: Int)
 POST    /artisan/timesdata/edit     controllers.Artisan.postEditTimesData(id: Int)
 GET     /artisan/timesdata/create   controllers.Artisan.createTimes
 POST    /artisan/timesdata/create   controllers.Artisan.postCreateTimes
+GET     /artisan/gallery/others/upload controllers.Artisan.uploadOtherImages
+POST    /artisan/gallery/others/upload controllers.Artisan.postUploadOtherImages
 
 # API
 # TODO

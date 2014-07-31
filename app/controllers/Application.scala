@@ -43,6 +43,20 @@ object Application extends Controller with Authentication {
     Ok(views.html.gallery.tags(tag, cs))
   }
 
+  def others(page: Int) = Action {
+    val count: Int = 30
+    val paths = Images.getOtherImages
+    val max: Int = {
+      val len = paths.length
+      if (len % count == 0 && len != 0) {
+        (len / count) - 1
+      } else {
+        len / count
+      }
+    }
+    Ok(views.html.gallery.others(paths, page, count, max))
+  }
+
   def timesGallery(t: OrdInt) = Action {
     val times = TimesData.findByTimes(t)
     if (times.isDefined) {
