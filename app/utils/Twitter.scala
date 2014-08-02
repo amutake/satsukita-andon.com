@@ -14,7 +14,7 @@ object Twitter {
   def tweet(body: String, url: String) = {
     val now = new Date()
     val header = "[" + DateUtil.detail(now) + "]\n"
-    val link = if (url == "") "" else "\n" + "http://satsukita-andon.com" + url
+    val link = if (url == "") "" else "\n" + "http://test.satsukita-andon.com" + url
     try {
       twitter.updateStatus(header + body + link)
     } catch {
