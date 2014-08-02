@@ -12,7 +12,7 @@ object ApplicationBuild extends Build {
     jdbc,
     "com.typesafe.slick" %% "slick" % "1.0.1",
     "org.pegdown" % "pegdown" % "1.4.2",
-    "org.twitter4j" % "twitter4j-core" % "3.0.3"
+    "org.twitter4j" % "twitter4j-core" % "4.0.2"
   )
 
 
