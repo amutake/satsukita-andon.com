@@ -155,13 +155,14 @@ object Artisan extends Controller with Authentication {
     Ok(views.html.artisan.createAccount(acc, createAccountForm))
   }
 
-  def postCreateAccount = HasAuthority(Master) { acc => implicit request =>
+  def postCreateAccount = HasAuthority(Master) { me => implicit request =>
     createAccountForm.bindFromRequest.fold(
-      formWithErrors => BadRequest(views.html.artisan.createAccount(acc, formWithErrors)),
+      formWithErrors => BadRequest(views.html.artisan.createAccount(me, formWithErrors)),
       { newacc =>
         val pass = Random.alphanumeric.take(9).mkString
         val id = Accounts.create(newacc._1, newacc._2, pass, OrdInt(newacc._3.toInt), AccountLevel.fromString(newacc._4))
         Accounts.findById(id).map { acc =>
+          Twitter.tweet(me.name + "により新しいアカウント『" + acc.name + "』が作られました", "")
           Ok(views.html.artisan.confirmAccount(acc, pass))
         }.getOrElse(InternalServerError)
       }
@@ -185,6 +186,11 @@ object Artisan extends Controller with Authentication {
       { case (name, username, times, level) =>
         val l = AccountLevel.fromString(level)
         Accounts.update(id, name, username, OrdInt(times.toInt), l)
+        if (me.id == id) {
+          Twitter.tweet(me.name + "が自分のアカウント情報を編集しました", "")
+        } else {
+          Twitter.tweet(me.name + "によりアカウント『" + name + "』の情報が編集されました", "")
+        }
         Redirect(routes.Artisan.home).flashing(
           "success" -> "アカウントを編集しました。"
         )
@@ -192,8 +198,9 @@ object Artisan extends Controller with Authentication {
     )
   }
 
-  def deleteAccount(id: Int) = GreaterThan(id) { _ => _ => _ =>
+  def deleteAccount(id: Int) = GreaterThan(id) { me => acc => _ =>
     Accounts.delete(id)
+    Twitter.tweet(me.name + "によりアカウント『" + acc.name + "』が削除されました", "")
     Redirect(routes.Artisan.accounts()).flashing(
       "success" -> "アカウントを削除しました。"
     )
@@ -201,6 +208,7 @@ object Artisan extends Controller with Authentication {
 
   def deleteMyAccount = IsValidAccount { me => _ =>
     Accounts.delete(me.id)
+    Twitter.tweet(me.name + "が自分のアカウントを削除しました", "")
     Redirect(routes.Artisan.login()).withNewSession.flashing(
       "success" -> "アカウントを削除しました。"
     )
