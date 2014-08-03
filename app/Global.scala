@@ -14,6 +14,11 @@ object Global extends GlobalSettings {
   override def onStart(app: Application) {
     InitialData.createTable
     Cleaner.clean
+    Twitter.tweet("行灯職人への道が起動しました", "/")
+  }
+
+  override def onStop(app: Application) {
+    Twitter.tweet("行灯職人への道が停止しました", "")
   }
 
   override def onBadRequest(request: RequestHeader, error: String) = {
