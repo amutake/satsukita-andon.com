@@ -25,5 +25,6 @@ memo/
 *.sql
 *.db
 *.jar
+nohup.out
 
 twitter4j.properties
