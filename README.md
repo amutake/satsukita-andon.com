@@ -20,28 +20,28 @@ Required
   - access token
   - access token secret
 - h2.jar (http://www.h2database.com/html/download.html)
-  - checked with h2-1.3.*
+  - checked with h2-1.3.*.jar
   - put this binary to /db directory with the name `h2.jar`
 
 Usage of `andon` command
 ------------------------
 
-`andon` is a convenient command for (start|stop|restart|backup) application.
+`andon` is a convenient command for (start|stop|restart|backup) this application.
 
 Usage: andon (start|stop|restart|backup)
 
 - `start`
-  - start application
+  - starts the application
   - to detach, type Ctrl-D
 - `stop`
-  - stop application
+  - stops the application
 - `restart`
-  - restart application with a little down time
+  - restarts the application with a little down time
 - `backup`
-  - backup /files and DB contents
-  - require h2.jar
-  - backup-ed files are in /backup directory
-  - automatically restart
+  - takes backup of the contents of `files` directory and the DB contents
+  - automatically restarts the application
+  - `h2.jar` is needed
+  - backup files are in `backup` directory
 
 If you want to change port-number, edit `andon` file and change `port` variable to another number.
 
@@ -56,9 +56,9 @@ Branches
 Development
 -----------
 
-use `play run`
+Use `play run` instead of `andon start`.
 
-If you want to insert initial data, add the following.
+If you want to insert initial data, add the following code.
 
 (app/Global.scala)
 
