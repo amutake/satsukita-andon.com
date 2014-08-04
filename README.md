@@ -1,11 +1,12 @@
 行灯職人への道 - satsukita-andon.com
 ====================================
 
+![logo](https://raw.githubusercontent.com/amutake/satsukita-andon.com/master/docs/logo_black.png)
+
 http://satsukita-andon.com
 
 行灯職人への道 (satsukita-andon.com) is a website to record and support *andon-gyoretsu* (行灯行列), which is one of the most exciting events of Sapporo-Kita High School (札幌北高校).
 
-![logo](https://raw.githubusercontent.com/amutake/satsukita-andon.com/master/public/img/logo.png)
 
 Required
 --------
