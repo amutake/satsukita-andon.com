@@ -1,0 +1,74 @@
+#!/bin/bash
+
+cd ${0%/*}
+
+PID=6039
+
+function andon_shutdown() {
+    if [ -f RUNNING_PID ]; then
+        cat RUNNING_PID | xargs kill
+        echo "kill process"
+    else
+        echo "already killed"
+    fi
+}
+
+function andon_startup() {
+    play "start -Dhttp.port=${PID}"
+}
+
+function andon_restart() {
+    play stage
+
+    if [ -f ./target/start ]; then
+        andon_shutdown
+        ./target/start -Dhttp.port=${PID} >/dev/null &
+        echo "Success!"
+    else
+        echo "./target/start not found"
+    fi
+}
+
+function andon_backup() {
+
+    play stage
+
+    now=`date +%Y-%m-%d`
+
+    echo 'compress files...'
+    tar czf backup/${now}.tar.gz ./files
+    echo 'done.'
+
+    andon_shutdown
+
+    echo 'dump sql...'
+    cd db
+    if [ -f h2.jar ]; then
+        ./backup.sh
+        mv backup.sql ../backup/${now}.sql
+        echo 'done.'
+    else
+        echo "h2.jar not found. dumping sql is abort."
+    fi
+    cd ../
+
+    ./target/start -Dhttp.port=${PID} >/dev/null &
+    echo "Success!"
+}
+
+case "$1" in
+    start)
+        andon_startup
+        ;;
+    stop)
+        andon_shutdown
+        ;;
+    restart)
+        andon_restart
+        ;;
+    backup)
+        andon_backup
+        ;;
+    *)
+        echo "Usage: andon (start|stop|restart|backup)"
+esac
