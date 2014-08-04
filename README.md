@@ -41,7 +41,7 @@ Usage: andon (start|stop|restart|backup)
   - require h2.jar
   - backup-ed files are in /backup directory
 
-If you want to change port-number, edit `andon` file and change `PID` variable to another number.
+If you want to change port-number, edit `andon` file and change `port` variable to another number.
 
 Branches
 --------
