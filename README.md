@@ -63,11 +63,17 @@ If you want to insert initial data, add the following.
 ```diff
 ...
 
+object Global extends GlobalSettings {
+
   override def onStart(app: Application) {
     ...
     InitialData.insert
     ...
   }
+
+  ...
+
+}
 
 ...
 
