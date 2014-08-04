@@ -61,7 +61,7 @@ If you want to insert initial data, add the following.
 
 (app/Global.scala)
 
-```diff
+```scala
 ...
 
 object Global extends GlobalSettings {
