@@ -77,6 +77,7 @@ function andon_restore() {
             andon_shutdown
 
             echo "restoring files..."
+            rm -r files
             tar xzf backup/${1}.tar.gz
             echo "done."
 
