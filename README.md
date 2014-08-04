@@ -1,9 +1,9 @@
-satsukita-andon.com
-===================
+行灯職人への道 - satsukita-andon.com
+====================================
 
-[行灯職人への道](http://satsukita-andon.com)
+http://satsukita-andon.com
 
-行灯職人への道 is a website to record and support andon-gyoretsu (行灯行列) on sapporo-kita high school (札幌北高校).
+行灯職人への道 (satsukita-andon.com) is a website to record and support *andon-gyoretsu* (行灯行列), which is one of the most exciting events of Sapporo-Kita High School (札幌北高校).
 
 ![logo](https://raw.githubusercontent.com/amutake/satsukita-andon.com/master/public/img/logo.png)
 
