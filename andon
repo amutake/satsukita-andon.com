@@ -2,7 +2,7 @@
 
 cd ${0%/*}
 
-PID=5927
+port=5927
 
 function andon_shutdown() {
     if [ -f RUNNING_PID ]; then
@@ -14,7 +14,7 @@ function andon_shutdown() {
 }
 
 function andon_startup() {
-    play "start -Dhttp.port=${PID}"
+    play "start -Dhttp.port=${port}"
 }
 
 function andon_restart() {
@@ -22,7 +22,7 @@ function andon_restart() {
 
     if [ -f ./target/start ]; then
         andon_shutdown
-        ./target/start -Dhttp.port=${PID} >/dev/null &
+        ./target/start -Dhttp.port=${port} >/dev/null &
         echo "Success!"
     else
         echo "./target/start not found"
@@ -52,7 +52,7 @@ function andon_backup() {
     fi
     cd ../
 
-    ./target/start -Dhttp.port=${PID} >/dev/null &
+    ./target/start -Dhttp.port=${port} >/dev/null &
     echo "Success!"
 }
 
