@@ -1,11 +1,12 @@
-satsukita-andon.com
-===================
+行灯職人への道 - satsukita-andon.com
+====================================
 
-[行灯職人への道](http://satsukita-andon.com)
+![logo](https://raw.githubusercontent.com/amutake/satsukita-andon.com/master/docs/logo_black.png)
 
-行灯職人への道 is a website to record and support andon-gyoretsu (行灯行列) on sapporo-kita high school (札幌北高校).
+http://satsukita-andon.com
 
-![logo](https://raw.githubusercontent.com/amutake/satsukita-andon.com/master/public/img/logo.png)
+行灯職人への道 (satsukita-andon.com) is a website to record and support *andon-gyoretsu* (行灯行列), which is one of the most exciting events of Sapporo-Kita High School (札幌北高校).
+
 
 Required
 --------
@@ -19,27 +20,30 @@ Required
   - access token
   - access token secret
 - h2.jar (http://www.h2database.com/html/download.html)
-  - checked with h2-1.3.*
+  - checked with h2-1.3.*.jar
   - put this binary to /db directory with the name `h2.jar`
 
 Usage of `andon` command
 ------------------------
 
-`andon` is a convenient command for (start|stop|restart|backup) application.
+`andon` is a convenient command for (start|stop|restart|backup) this application.
 
 Usage: andon (start|stop|restart|backup)
 
 - `start`
-  - start application
+  - starts the application
   - to detach, type Ctrl-D
 - `stop`
-  - stop application
+  - stops the application
 - `restart`
-  - restart application with
+  - restarts the application with a little down time (about 10 seconds)
 - `backup`
-  - backup /files and DB contents
-  - require h2.jar
-  - backup-ed files are in /backup directory
+  - takes backup of the contents of `files` directory and the DB contents
+  - automatically restarts the application with a little down time (about 30 seconds)
+  - `h2.jar` is needed
+  - backup files will be in `backup` directory
+    - e.g., `2014-08-03.tar.gz` (`files` directory) and `2014-08-03.sql` (DB records)
+    - you should move (or send) these files into backup storage
 
 If you want to change port-number, edit `andon` file and change `port` variable to another number.
 
@@ -54,13 +58,13 @@ Branches
 Development
 -----------
 
-use `play run`
+Use `play run` instead of `./andon start`.
 
-If you want to insert initial data, add the following.
+If you want to insert initial data, add the following code.
 
 (app/Global.scala)
 
-```diff
+```scala
 ...
 
 object Global extends GlobalSettings {

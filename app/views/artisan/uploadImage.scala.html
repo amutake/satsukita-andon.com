@@ -8,13 +8,21 @@
   ), "画像のアップロード")
 
   <h3>@id.toString 画像のアップロード</h3>
-  <p>画像は複数選択可能です。一度に100Mまでアップロード可能です。画像以外はアップロードできません。送信に時間がかかるので、一度送信ボタンを押したら画面が変わるまで待ってください。</p>
 
-  @helper.form(routes.Artisan.postUploadImage(id.toInt), 'enctype -> "multipart/form-data") {
+  <div class="article">
+    <ul>
+      <li>画像は複数選択可能です。Internet Explorer 9 以下など複数選択に対応していないブラウザもあるので、そのような場合は諦めて一枚ずつアップロードするか他のブラウザを使ってください。</li>
+      <li>一度に100MBまでアップロード可能です。</li>
+      <li>画像以外はアップロードできません。</li>
+      <li>送信に時間がかかるので、一度送信ボタンを押したら画面が変わるまで待ってください。</li>
+    </ul>
 
-    <input type="file" name="images" multiple required>
+    @helper.form(routes.Artisan.postUploadImage(id.toInt), 'enctype -> "multipart/form-data") {
 
-    <button class="btn" type="submit">送信</button>
-  }
+      <input type="file" name="images" multiple required>
+
+      <button class="btn" type="submit">送信</button>
+    }
+  </div>
 } {
 }

@@ -5,12 +5,21 @@
   ), "参考画像のアップロード")
 
   <h3>参考画像のアップロード</h3>
-  <p>画像は複数選択可能です。一度に100Mまでアップロード可能です。画像以外はアップロードできません。送信に時間がかかるので、一度送信ボタンを押したら画面が変わるまで待ってください。</p>
-  <p>ここでは各クラスに関係のない画像(ねぶたなど)のみにしてください。各クラスに関係のある画像は、クラス一覧 -> 画像のアップロードからアップロードしてください。</p>
 
-  @helper.form(routes.Artisan.postUploadOtherImages, 'enctype -> "multipart/form-data") {
-    <input type="file" name="images" multiple required>
-    <button class="btn" type="submit">送信</button>
-  }
+  <div class="article">
+    <ul>
+      <li>ここにアップロードした画像は、<a href="/gallery/others" target="_blank">こちら</a>から見ることができます。</li>
+      <li>画像は複数選択可能です。Internet Explorer 9 以下など複数選択に対応していないブラウザもあるので、そのような場合は諦めて一枚ずつアップロードするか他のブラウザを使ってください。</li>
+      <li>一度に100MBまでアップロード可能です。</li>
+      <li>画像以外はアップロードできません。</li>
+      <li>送信に時間がかかるので、一度送信ボタンを押したら画面が変わるまで待ってください。</li>
+      <li>ここでは各クラスに関係のない画像(ねぶたなど)のみにしてください。各クラスに関係のある画像は、クラス一覧 -> 画像のアップロードからアップロードしてください。</li>
+    </ul>
+
+    @helper.form(routes.Artisan.postUploadOtherImages, 'enctype -> "multipart/form-data") {
+      <input type="file" name="images" multiple required>
+      <button class="btn" type="submit">送信</button>
+    }
+  </div>
 } {
 }
