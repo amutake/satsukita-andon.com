@@ -36,12 +36,14 @@ Usage: andon (start|stop|restart|backup)
 - `stop`
   - stops the application
 - `restart`
-  - restarts the application with a little down time
+  - restarts the application with a little down time (about 10 seconds)
 - `backup`
   - takes backup of the contents of `files` directory and the DB contents
-  - automatically restarts the application
+  - automatically restarts the application with a little down time (about 30 seconds)
   - `h2.jar` is needed
-  - backup files are in `backup` directory
+  - backup files will be in `backup` directory
+    - e.g., `2014-08-03.tar.gz` (`files` directory) and `2014-08-03.sql` (DB records)
+    - you should move (or send) these files into backup storage
 
 If you want to change port-number, edit `andon` file and change `port` variable to another number.
 
@@ -56,7 +58,7 @@ Branches
 Development
 -----------
 
-Use `play run` instead of `andon start`.
+Use `play run` instead of `./andon start`.
 
 If you want to insert initial data, add the following code.
 
