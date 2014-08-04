@@ -35,11 +35,12 @@ Usage: andon (start|stop|restart|backup)
 - `stop`
   - stop application
 - `restart`
-  - restart application with
+  - restart application with a little down time
 - `backup`
   - backup /files and DB contents
   - require h2.jar
   - backup-ed files are in /backup directory
+  - automatically restart
 
 If you want to change port-number, edit `andon` file and change `port` variable to another number.
 
