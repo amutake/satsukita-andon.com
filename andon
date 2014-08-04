@@ -31,29 +31,73 @@ function andon_restart() {
 
 function andon_backup() {
 
-    play stage
+    if [ -f ./db/h2.jar ]; then
+        echo "play staging..."
+        play stage 1>/dev/null
+        echo "done."
 
-    now=`date +%Y-%m-%d`
+        now=`date +%Y-%m-%d`
 
-    echo 'compress files...'
-    tar czf backup/${now}.tar.gz ./files
-    echo 'done.'
+        echo 'compressing files...'
+        tar czf backup/${now}.tar.gz ./files
+        echo 'done.'
 
-    andon_shutdown
+        andon_shutdown
 
-    echo 'dump sql...'
-    cd db
-    if [ -f h2.jar ]; then
+        echo 'dumping sql...'
+        cd db
         ./backup.sh
         mv backup.sql ../backup/${now}.sql
         echo 'done.'
-    else
-        echo "h2.jar not found. dumping sql is abort."
-    fi
-    cd ../
+        cd ../
 
-    ./target/start -Dhttp.port=${port} >/dev/null &
-    echo "Success!"
+        ./target/start -Dhttp.port=${port} >/dev/null &
+        echo "Success!"
+    else
+        echo "h2.jar not found. abort."
+    fi
+}
+
+function andon_restore() {
+
+    if [ -f ./backup/${1}.tar.gz ] && [ -f ./backup/${1}.sql ] && [ -f ./db/h2.jar ]; then
+        echo "${1}.tar.gz and ${1}.sql found"
+        printf "[caution!] "
+        printf "This command will delete current contents and restore to specified version. "
+        printf "OK? [Y/n]: "
+        read ok
+        if [ "$ok" == "Y" ] || [ "$ok" == "y" ]; then
+
+            echo "play stage..."
+            play stage 1>/dev/null
+            echo "done."
+
+            echo "Restore application to version-${1}!"
+
+            andon_shutdown
+
+            echo "restoring files..."
+            tar xzf backup/${1}.tar.gz
+            echo "done."
+
+            echo 'restoring db...'
+            cd db
+            rm default.*
+            ./restore.sh ../backup/${1}
+            echo 'done.'
+            cd ../
+
+            ./target/start -Dhttp.port=${port} >/dev/null &
+
+            echo "Success!"
+
+        else
+            echo "abort."
+        fi
+    else
+        echo "not found: backup/${1}.tar.gz or backup/${1}.sql or db/h2.jar"
+        echo "please make sure if exists"
+    fi
 }
 
 case "$1" in
@@ -68,6 +112,9 @@ case "$1" in
         ;;
     backup)
         andon_backup
+        ;;
+    restore)
+        andon_restore $2
         ;;
     *)
         echo "Usage: andon (start|stop|restart|backup)"
