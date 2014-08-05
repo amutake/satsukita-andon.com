@@ -46,9 +46,10 @@ Usage: andon (start|stop|restart|backup|restore)
     - you should move (or send) these files into backup storage
 - `restore`
   - restores backup files
+  - down time is about 1 minute.
+  - current contents will be deleted! be careful!
   - to restore to 2014-08-05, run `./andon restore 2014-08-05`
     - `backup/2014-08-05.tar.gz`, `backup/2014-08-05.sql` and `db/h2.jar` are needed
-    - current contents will be deleted!
 
 If you want to change port-number, edit `andon` file and change `port` variable to another number.
 
