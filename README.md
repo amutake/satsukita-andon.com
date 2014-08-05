@@ -26,9 +26,9 @@ Required
 Usage of `andon` command
 ------------------------
 
-`andon` is a convenient command for (start|stop|restart|backup) this application.
+`andon` is a convenient command for (start|stop|restart|backup|restore) this application.
 
-Usage: andon (start|stop|restart|backup)
+Usage: andon (start|stop|restart|backup|restore)
 
 - `start`
   - starts the application
