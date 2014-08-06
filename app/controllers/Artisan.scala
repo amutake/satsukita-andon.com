@@ -376,12 +376,13 @@ object Artisan extends Controller with Authentication {
   val classForm = Form(
     tuple(
       "title" -> text,
-      "prize" -> text
+      "prize" -> text,
+      "intro" -> text
     )
   )
 
   def editClassData(id: Int) = AboutClass(id, Master) { _ => data => _ =>
-    val d = (data.title, data.prize.map(_.toString).getOrElse("none"))
+    val d = (data.title, data.prize.map(_.toString).getOrElse("none"), data.intro)
     Ok(views.html.artisan.editClassData(data.id, classForm.fill(d)))
   }
 
@@ -390,7 +391,7 @@ object Artisan extends Controller with Authentication {
       formWithErrors => BadRequest(views.html.artisan.editClassData(data.id, formWithErrors)),
       result => {
         val prize = Prize.fromString(result._2)
-        ClassData.update(data.id, result._1, prize)
+        ClassData.update(data.id, result._1, prize, result._3)
 
         Twitter.tweet(
           acc.name + "により" + data.id + "の情報が編集されました",

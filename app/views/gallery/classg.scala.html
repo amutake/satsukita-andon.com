@@ -22,16 +22,19 @@
       <table class="table dl">
         <tr>
           <td>クラス</td>
-          <td>@data.id.toJapanese</dd>
+          <td>@data.id.toJapanese</td>
         </tr>
         <tr>
           <td>タイトル</td>
-          <td>@data.title</dd>
+          <td>@data.title</td>
         </tr>
         <tr>
           <td>賞</td>
           <td>@data.prize.map(_.span).getOrElse { なし }</td>
         </tr>
+        <tr>
+          <td>紹介文</td>
+          <td>@data.intro</td>
         <tr>
           <td>タグ</td>
           <td>
