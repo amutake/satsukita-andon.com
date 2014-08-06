@@ -6,7 +6,7 @@ import scala.slick.driver.H2Driver.simple._
 
 import andon.utils._
 
-case class Account(id: Int, name: String, username: String, password: String, times: OrdInt, level: AccountLevel) {
+case class Account(id: Int, name: String, username: String, password: String, times: OrdInt, level: AccountLevel, class1: Option[ClassId], class2: Option[ClassId], class3: Option[ClassId]) {
   def validPassword(pass: String) = sha1(pass) == password
 }
 
@@ -20,13 +20,16 @@ object Accounts extends Table[Account]("ACCOUNTS") {
   def password = column[String]("PASSWORD", O.NotNull)
   def times = column[OrdInt]("TIMES", O.NotNull)
   def level = column[AccountLevel]("LEVEL", O.NotNull)
+  def class1 = column[Option[ClassId]]("CLASS1")
+  def class2 = column[Option[ClassId]]("CLASS2")
+  def class3 = column[Option[ClassId]]("CLASS3")
 
-  def * = id ~ name ~ username ~ password ~ times ~ level <> (
+  def * = id ~ name ~ username ~ password ~ times ~ level ~ class1 ~ class2 ~ class3 <> (
     Account.apply _,
     Account.unapply _
   )
 
-  def ins = name ~ username ~ password ~ times ~ level returning id
+  def ins = name ~ username ~ password ~ times ~ level ~ class1 ~ class2 ~ class3 returning id
 
   val query = Query(Accounts)
 
@@ -63,12 +66,14 @@ object Accounts extends Table[Account]("ACCOUNTS") {
     }.getOrElse("?")
   }
 
-  def create(name: String, username: String, password: String, times: OrdInt, level: AccountLevel) = db.withSession { implicit session: Session =>
-    Accounts.ins.insert(name, username, sha1(password), times, level)
+  def create(name: String, username: String, password: String, times: OrdInt, level: AccountLevel,
+    class1: Option[ClassId], class2: Option[ClassId], class3: Option[ClassId]) = db.withSession { implicit session: Session =>
+    Accounts.ins.insert(name, username, sha1(password), times, level, class1, class2, class3)
   }
 
-  def update(id: Int, name: String, username: String, times: OrdInt, level: AccountLevel) = db.withSession { implicit session: Session =>
-    query.where(_.id === id).map(a => a.name ~ a.username ~ a.times ~ a.level).update((name, username, times, level))
+  def update(id: Int, name: String, username: String, times: OrdInt, level: AccountLevel,
+    class1: Option[ClassId], class2: Option[ClassId], class3: Option[ClassId]) = db.withSession { implicit session: Session =>
+    query.where(_.id === id).map(a => a.name ~ a.username ~ a.times ~ a.level ~ a.class1 ~ a.class2 ~ a.class3).update((name, username, times, level, class1, class2, class3))
   }
 
   def updatePassword(id: Int, password: String) = db.withSession { implicit session: Session =>
