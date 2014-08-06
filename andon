@@ -118,5 +118,5 @@ case "$1" in
         andon_restore $2
         ;;
     *)
-        echo "Usage: andon (start|stop|restart|backup)"
+        echo "Usage: andon (start|stop|restart|backup|restore)"
 esac

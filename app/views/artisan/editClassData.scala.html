@@ -1,4 +1,4 @@
-@(id: andon.utils.ClassId, form: Form[(String, String)])
+@(id: andon.utils.ClassId, form: Form[(String, String, String)])
 
 @import andon.utils._
 
@@ -33,6 +33,14 @@
       },
       '_label -> "賞",
       '_help -> ""
+    )
+
+    @helper.textarea(
+      form("intro"),
+      '_label -> "紹介文",
+      '_help -> "",
+      'class -> "wide",
+      'rows -> 5
     )
 
     <button class="btn" type="submit">送信</button>

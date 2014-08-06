@@ -4,7 +4,7 @@ import scala.slick.driver.H2Driver.simple._
 
 import andon.utils._
 
-case class ClassData(id: ClassId, title: String, prize: Option[Prize], top: Option[String])
+case class ClassData(id: ClassId, title: String, prize: Option[Prize], top: Option[String], intro: String)
 
 object ClassData extends Table[ClassData]("CLASSDATA") {
 
@@ -17,10 +17,11 @@ object ClassData extends Table[ClassData]("CLASSDATA") {
   def title = column[String]("TITLE", O.NotNull)
   def prize = column[Option[Prize]]("PRIZE")
   def top = column[Option[String]]("TOP")
+  def intro = column[String]("INTRO")
 
-  def * = id ~ times ~ grade ~ classn ~ title ~ prize ~ top <> (
-    (id, _, _, _, title, prize, top) => ClassData(id, title, prize, top),
-    d => Some((d.id, d.id.times, d.id.grade, d.id.classn, d.title, d.prize, d.top))
+  def * = id ~ times ~ grade ~ classn ~ title ~ prize ~ top ~ intro <> (
+    (id, _, _, _, title, prize, top, intro) => ClassData(id, title, prize, top, intro),
+    d => Some((d.id, d.id.times, d.id.grade, d.id.classn, d.title, d.prize, d.top, d.intro))
   )
 
   val query = Query(ClassData)
@@ -83,11 +84,11 @@ object ClassData extends Table[ClassData]("CLASSDATA") {
   }
 
   def createByClassId(id: ClassId) = db.withSession { implicit session: Session =>
-    ClassData.insert(ClassData(id, "", None, None))
+    ClassData.insert(ClassData(id, "", None, None, ""))
   }
 
-  def update(id: ClassId, title: String, prize: Option[Prize]) = db.withSession { implicit session: Session =>
-    query.where(_.id === id).map(d => d.title ~ d.prize).update((title, prize))
+  def update(id: ClassId, title: String, prize: Option[Prize], intro: String) = db.withSession { implicit session: Session =>
+    query.where(_.id === id).map(d => d.title ~ d.prize ~ d.intro).update((title, prize, intro))
   }
 
   def updateTop(id: ClassId, top: Option[String]) = db.withSession { implicit session: Session =>
