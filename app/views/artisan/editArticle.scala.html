@@ -1,5 +1,5 @@
-@(level: andon.utils.AccountLevel, id: Long,
-  form: Form[(String, String, String, String, Option[String], Option[String])])
+@(acc: Account, id: Long, aId: Int,
+  form: Form[(String, String, String, String, Option[String], Option[String], Boolean)])
 
 @import andon.utils._
 
@@ -24,7 +24,7 @@
 
       <input type="hidden" name="type" value="@form("type").value">
 
-      @if(level != Writer) {
+      @if(acc.level != Writer) {
 
         <label class="checkbox">
           <input type="checkbox" id="option" @if(form("optAuthor").value.isDefined) { checked }>
@@ -68,6 +68,16 @@
         'class -> "wide",
         'rows -> 20
       )
+
+      @if(acc.id == aId || acc.level != Writer) {
+        @helper.checkbox(
+          form("editable"),
+          '_label -> "誰でも編集可能にする",
+          '_help -> ""
+        )
+      } else {
+        <input type="hidden" name="editable" value="@form("editable").value">
+      }
 
       <input type="submit" class="btn" value="送信">
     }
