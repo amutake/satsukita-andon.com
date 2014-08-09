@@ -120,11 +120,15 @@ object Artisan extends Controller with Authentication {
     )
   }
 
-  def deleteArticle(id: Long) = IsEditableArticle(id) { _ => _ => _ =>
-    Articles.delete(id)
-    Redirect(routes.Artisan.articles).flashing(
-      "success" -> "記事を削除しました"
-    )
+  def deleteArticle(id: Long) = IsEditableArticle(id) { acc => art => _ =>
+    if (acc.level == Writer && acc.id != art.createAccountId) {
+      Forbidden(views.html.errors.forbidden())
+    } else {
+      Articles.delete(id)
+      Redirect(routes.Artisan.articles).flashing(
+        "success" -> "記事を削除しました"
+      )
+    }
   }
 
   def accounts = HasAuthority(Master) { account => implicit request =>
