@@ -19,7 +19,8 @@ case class Article(
   articleType: ArticleType,
   genre: String,
   optAuthor: Option[String],
-  optDate: Option[String]
+  optDate: Option[String],
+  editable: Boolean
 )
 
 object Articles extends Table[Article]("ARTICLES") {
@@ -37,13 +38,14 @@ object Articles extends Table[Article]("ARTICLES") {
   def genre = column[String]("GENRE", O.NotNull)
   def optAuthor = column[Option[String]]("OPT_AUTHOR")
   def optDate = column[Option[String]]("OPT_DATE")
+  def editable = column[Boolean]("EDITABLE")
 
   def * = id ~ createAccountId ~ updateAccountId ~ title ~ text ~
-    createDate ~ updateDate ~ articleType ~ genre ~ optAuthor ~ optDate <>
+    createDate ~ updateDate ~ articleType ~ genre ~ optAuthor ~ optDate ~ editable <>
     (Article.apply _, Article.unapply _)
 
   def ins = createAccountId ~ updateAccountId ~ title ~ text ~
-    createDate ~ updateDate ~ articleType ~ genre ~ optAuthor ~ optDate returning id
+    createDate ~ updateDate ~ articleType ~ genre ~ optAuthor ~ optDate ~ editable returning id
 
   val query = Query(Articles)
 
@@ -82,6 +84,10 @@ object Articles extends Table[Article]("ARTICLES") {
     dateSort(howtos).list
   }
 
+  def findByWriterEditable(aId: Int) = db.withSession { implicit session: Session =>
+    dateSort(howtos.where(a => a.createAccountId === aId || a.editable === true)).list
+  }
+
   def findTitleById(id: Long) = db.withSession { implicit session: Session =>
     query.where(_.id === id).firstOption.map { article =>
       article.title
@@ -111,10 +117,11 @@ object Articles extends Table[Article]("ARTICLES") {
     articleType: ArticleType,
     genre: String,
     optAuthor: Option[String],
-    optDate: Option[String]
+    optDate: Option[String],
+    editable: Boolean
   ) = db.withSession { implicit session: Session =>
     val date = new Date()
-    val id = Articles.ins.insert(accountId, accountId, title, text, date, date, articleType, genre, optAuthor, optDate)
+    val id = Articles.ins.insert(accountId, accountId, title, text, date, date, articleType, genre, optAuthor, optDate, editable)
     Twitter.tweet(
       Accounts.findNameById(accountId) + "により新しい記事『" + title  + "』が作成されました",
       "/article/" + id
@@ -122,10 +129,10 @@ object Articles extends Table[Article]("ARTICLES") {
     id
   }
 
-  def update(id: Long, accountId: Int, title: String, text: String, genre: String, optAuthor: Option[String], optDate: Option[String]) = db.withSession { implicit session: Session =>
+  def update(id: Long, accountId: Int, title: String, text: String, genre: String, optAuthor: Option[String], optDate: Option[String], editable: Boolean) = db.withSession { implicit session: Session =>
     findById(id).map { before =>
       val date = new Date()
-      val after = before.copy(updateAccountId = accountId, title = title, text = text, updateDate = date, genre = genre, optAuthor = optAuthor, optDate = optDate)
+      val after = before.copy(updateAccountId = accountId, title = title, text = text, updateDate = date, genre = genre, optAuthor = optAuthor, optDate = optDate, editable = editable)
       query.where(_.id === id).update(after)
       Twitter.tweet(
         Accounts.findNameById(accountId) + "により記事『" + before.title + "』が編集されました",

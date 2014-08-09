@@ -4,15 +4,14 @@
 @import models.Articles._
 
 @articles(atype: ArticleType) = @{
-  val as = if (atype == Howto) {
-    findDateSortedHowto
+  if (atype == Howto) {
+    if (acc.level == Writer) {
+      findByWriterEditable(acc.id)
+    } else {
+      findDateSortedHowto
+    }
   } else {
     findByType(atype)
-  }
-  if (acc.level == Writer) {
-    as.filter(_.createAccountId == acc.id)
-  } else {
-    as
   }
 }
 

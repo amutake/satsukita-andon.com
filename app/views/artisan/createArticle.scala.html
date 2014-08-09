@@ -1,5 +1,5 @@
 @(level: andon.utils.AccountLevel, types: List[andon.utils.ArticleType],
-  form: Form[(String, String, String, String, Option[String], Option[String])])
+  form: Form[(String, String, String, String, Option[String], Option[String], Boolean)])
 
 @import andon.utils._
 
@@ -70,6 +70,12 @@
         '_help -> "",
         'class -> "wide",
         'rows -> 20
+      )
+
+      @helper.checkbox(
+        form("editable"),
+        '_label -> "誰でも編集可能にする",
+        '_help -> ""
       )
 
       <button class="btn" type="submit">送信</button>

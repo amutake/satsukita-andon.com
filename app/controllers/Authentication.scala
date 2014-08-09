@@ -64,7 +64,7 @@ trait Authentication {
         f(account)(a)(request)
       }
       case Writer => article.map { a =>
-        if (a.createAccountId == account.id) {
+        if (a.createAccountId == account.id || a.editable) {
           f(account)(a)(request)
         } else {
           Results.Forbidden(views.html.errors.forbidden())
