@@ -127,4 +127,15 @@ trait Authentication {
       f(acc)(t)(request)
     }.getOrElse(Results.NotFound(views.html.errors.notFound(request.path)))
   }
+
+  def MyClassOrMaster(id: Int)(f: => Account => ClassData => Request[AnyContent] => Result) = IsValidAccount { me => request =>
+    val classId = new ClassId(id)
+    ClassData.findByClassId(classId).map { c =>
+      if (me.myClass(classId) || me.level != Writer) {
+        f(me)(c)(request)
+      } else {
+        Results.Forbidden(views.html.errors.forbidden())
+      }
+    }.getOrElse(Results.NotFound(views.html.errors.notFound(request.path)))
+  }
 }

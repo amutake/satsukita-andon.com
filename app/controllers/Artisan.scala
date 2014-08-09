@@ -363,7 +363,7 @@ object Artisan extends Controller with Authentication {
   }
 
   def classData(times: Option[Int]) = IsValidAccount { acc => implicit request =>
-    Ok(views.html.artisan.classData(times, acc.level))
+    Ok(views.html.artisan.classData(times, acc))
   }
 
   val classIdForm = Form(
@@ -570,11 +570,11 @@ object Artisan extends Controller with Authentication {
 
   val topForm = Form(single("top" -> optional(text)))
 
-  def selectTop(id: Int) = AboutClass(id, Master) { acc => data => _ =>
+  def selectTop(id: Int) = MyClassOrMaster(id) { acc => data => _ =>
     Ok(views.html.artisan.selectTop(data.id, topForm.fill(data.top)))
   }
 
-  def postSelectTop(id: Int) = AboutClass(id, Master) { acc => data => implicit request =>
+  def postSelectTop(id: Int) = MyClassOrMaster(id) { acc => data => implicit request =>
     topForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.artisan.selectTop(data.id, formWithErrors)),
       top => {

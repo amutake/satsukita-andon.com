@@ -8,6 +8,7 @@ import andon.utils._
 
 case class Account(id: Int, name: String, username: String, password: String, times: OrdInt, level: AccountLevel, class1: Option[ClassId], class2: Option[ClassId], class3: Option[ClassId]) {
   def validPassword(pass: String) = sha1(pass) == password
+  def myClass(id: ClassId) = Some(id) == class1 || Some(id) == class2 || Some(id) == class3
 }
 
 object Accounts extends Table[Account]("ACCOUNTS") {
