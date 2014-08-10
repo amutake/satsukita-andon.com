@@ -25,6 +25,21 @@
 
     <dt>アカウントレベル</dt>
     <dd>@acc.level.toJapanese</dd>
+
+    @acc.class1.map { id =>
+      <dt>1年次</dt>
+      <dd>@id</dd>
+    }
+
+    @acc.class2.map { id =>
+      <dt>2年次</dt>
+      <dd>@id</dd>
+    }
+
+    @acc.class3.map { id =>
+      <dt>3年次</dt>
+      <dd>@id</dd>
+    }
   </dl>
 
   @if(acc.level == Admin) {
