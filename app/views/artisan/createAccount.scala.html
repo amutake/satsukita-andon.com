@@ -1,4 +1,4 @@
-@(acc: Account, form: Form[(String, String, Int, String)])
+@(acc: Account, form: Form[(String, String, Int, String, Option[Int], Option[Int], Option[Int])])
 
 @import andon.utils._
 
@@ -30,14 +30,10 @@
       '_help -> ""
     )
 
-    @helper.select(
+    @helper.inputText(
       form("times"),
-      options = {
-        val all = TimesData.all
-        all.map(_.times.n.toString).zip(all.map(_.times.toString))
-      },
       '_label -> "卒業期",
-      '_help -> ""
+      '_help -> "数値のみ"
     )
 
     @helper.select(
@@ -52,6 +48,24 @@
       },
       '_label -> "アカウントレベル",
       '_help -> ""
+    )
+
+    @helper.inputText(
+      form("class1"),
+      '_label -> "1年時のクラス",
+      '_help -> "数値のみ(オプション)"
+    )
+
+    @helper.inputText(
+      form("class2"),
+      '_label -> "2年時のクラス",
+      '_help -> "数値のみ(オプション)"
+    )
+
+    @helper.inputText(
+      form("class3"),
+      '_label -> "3年時のクラス",
+      '_help -> "数値のみ(オプション)"
     )
 
     <button class="btn" type="submit">送信</button>

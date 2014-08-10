@@ -146,13 +146,16 @@ object Artisan extends Controller with Authentication {
       "name" -> text.verifying(notEmpty).verifying(notSpace),
       "username" -> text.verifying(notEmpty).verifying(pattern("""(\w|-)+""".r, error = "半角英数字・ハイフン・アンダースコアのみです。")),
       "times" -> number,
-      "level" -> text.verifying(notEmpty).verifying(pattern("admin|master|writer".r, error = "不正な入力です。"))
+      "level" -> text.verifying(notEmpty).verifying(pattern("admin|master|writer".r, error = "不正な入力です。")),
+      "class1" -> optional(number),
+      "class2" -> optional(number),
+      "class3" -> optional(number)
     )
   )
 
   val createAccountForm = Form(
     accountForm.mapping.verifying("そのユーザー名は既に使われています。", result => result match {
-      case (_, u, _, _) => !Accounts.all.map(_.username).contains(u)
+      case (_, u, _, _, _, _, _) => !Accounts.all.map(_.username).contains(u)
     })
   )
 
@@ -164,8 +167,18 @@ object Artisan extends Controller with Authentication {
     createAccountForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.artisan.createAccount(me, formWithErrors)),
       { newacc =>
+        val times = OrdInt(newacc._3.toInt)
+        def mkClassId(grade: Int) = { classn: Int =>
+          val t = grade match {
+            case 1 => OrdInt(times.n - 2)
+            case 2 => OrdInt(times.n - 1)
+            case 3 => times
+          }
+          ClassId(t, grade, classn)
+        }
         val pass = Random.alphanumeric.take(9).mkString
-        val id = Accounts.create(newacc._1, newacc._2, pass, OrdInt(newacc._3.toInt), AccountLevel.fromString(newacc._4))
+        val id = Accounts.create(newacc._1, newacc._2, pass, times, AccountLevel.fromString(newacc._4),
+          newacc._5.map(mkClassId(1)), newacc._6.map(mkClassId(2)), newacc._7.map(mkClassId(3)))
         Accounts.findById(id).map { acc =>
           Twitter.tweet(me.name + "により新しいアカウント『" + acc.name + "』が作られました", "")
           Ok(views.html.artisan.confirmAccount(acc, pass))
@@ -175,7 +188,8 @@ object Artisan extends Controller with Authentication {
   }
 
   def editAccount(id: Int) = IsEditableAccount(id) { _ => acc => _ =>
-    val data = (acc.name, acc.username, acc.times.n, acc.level.toString)
+    val data = (acc.name, acc.username, acc.times.n, acc.level.toString,
+      acc.class1.map(_.classn), acc.class2.map(_.classn), acc.class3.map(_.classn))
     Ok(views.html.artisan.editAccount(acc, accountForm.fill(data)))
   }
 
@@ -188,9 +202,18 @@ object Artisan extends Controller with Authentication {
           "error" -> "不正な操作"
         ))
       },
-      { case (name, username, times, level) =>
+      { case (name, username, times, level, class1, class2, class3) =>
         val l = AccountLevel.fromString(level)
-        Accounts.update(id, name, username, OrdInt(times.toInt), l)
+        def mkClassId(grade: Int) = { classn: Int =>
+          val t = grade match {
+            case 1 => OrdInt(times.toInt - 2)
+            case 2 => OrdInt(times.toInt - 1)
+            case 3 => OrdInt(times.toInt)
+          }
+          ClassId(t, grade, classn)
+        }
+        Accounts.update(id, name, username, OrdInt(times.toInt), l,
+          class1.map(mkClassId(1)), class2.map(mkClassId(2)), class3.map(mkClassId(3)))
         if (me.id == id) {
           Twitter.tweet(me.name + "が自分のアカウント情報を編集しました", "")
         } else {
@@ -340,7 +363,7 @@ object Artisan extends Controller with Authentication {
   }
 
   def classData(times: Option[Int]) = IsValidAccount { acc => implicit request =>
-    Ok(views.html.artisan.classData(times, acc.level))
+    Ok(views.html.artisan.classData(times, acc))
   }
 
   val classIdForm = Form(
@@ -547,11 +570,11 @@ object Artisan extends Controller with Authentication {
 
   val topForm = Form(single("top" -> optional(text)))
 
-  def selectTop(id: Int) = AboutClass(id, Master) { acc => data => _ =>
+  def selectTop(id: Int) = MyClassOrMaster(id) { acc => data => _ =>
     Ok(views.html.artisan.selectTop(data.id, topForm.fill(data.top)))
   }
 
-  def postSelectTop(id: Int) = AboutClass(id, Master) { acc => data => implicit request =>
+  def postSelectTop(id: Int) = MyClassOrMaster(id) { acc => data => implicit request =>
     topForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.artisan.selectTop(data.id, formWithErrors)),
       top => {

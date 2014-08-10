@@ -27,6 +27,21 @@
 
     <dt>アカウントレベル</dt>
     <dd>@acc.level.toJapanese</dd>
+
+    @acc.class1.map { id =>
+      <dt>1年時</dt>
+      <dd>@id</dd>
+    }
+
+    @acc.class2.map { id =>
+      <dt>2年時</dt>
+      <dd>@id</dd>
+    }
+
+    @acc.class3.map { id =>
+      <dt>3年時</dt>
+      <dd>@id</dd>
+    }
   </dl>
 
   <p><a href="@routes.Artisan.home()">ホームへ</a></p>
