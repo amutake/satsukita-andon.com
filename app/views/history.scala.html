@@ -1,0 +1,32 @@
+@(histories: Iterable[andon.utils.History], article: Article)
+
+@import andon.utils._
+@import models._
+@import java.util.Date
+
+@common("History - " + article.title) {
+} {
+
+  <table class="table">
+
+    <tr>
+      <th>日時</th>
+      <th>編集</th>
+      <th>操作</th>
+    </tr>
+
+    @histories.map { history =>
+      <tr>
+        <td>
+          @DateUtil.detail(new Date(history.time.toLong * 1000))
+        </td>
+        <td>
+          @Accounts.findNameById(history.accountId)
+        </td>
+        <td>
+        </td>
+      </tr>
+    }
+  </table>
+} {
+}

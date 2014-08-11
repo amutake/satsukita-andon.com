@@ -16,6 +16,8 @@ GET     /howto/:type/:genre         controllers.Application.category(type: Strin
 GET     /about                      controllers.Application.about
 GET     /contact                    controllers.Application.contact
 GET     /article/:id                controllers.Application.article(id: Long)
+# GET     /article/:id/:cid           controllers.Application.historyContent(id: Long, cid: String)
+GET     /article/history/:id        controllers.Application.history(id: Long)
 POST    /comment/:id                controllers.Application.postComment(id: Long)
 GET     /comments                   controllers.Application.comments
 POST    /comments/delete            controllers.Application.deleteComment(id: Long)
