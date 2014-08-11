@@ -33,6 +33,7 @@
         <td>@article.optDate.getOrElse(DateUtil.dateFormat(article.updateDate))</td>
         <td>
           <a href="@routes.Artisan.editArticle(article.id)">編集</a>
+          <a href="@routes.Artisan.history(article.id)">履歴</a>
           @if((acc.level != Writer && (article.articleType == Info || article.articleType == Howto)) ||
             (acc.level == Writer && article.articleType == Howto && acc.id == article.createAccountId)) {
             <form class="inline" method="post" action="@routes.Artisan.deleteArticle(article.id)">

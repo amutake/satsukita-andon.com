@@ -1,0 +1,23 @@
+@(history: andon.utils.History, article: Article)
+
+@import andon.utils._
+@import models._
+
+@common(article.title + " - " + DateUtil.detail(history.date)) {
+} {
+  @breadcrumb(Seq(
+    (routes.Artisan.home, "Home"),
+    (routes.Artisan.articles, "記事一覧"),
+    (routes.Artisan.history(history.articleId), "編集履歴")
+  ), "表示")
+
+  <div class="article-wrapper">
+    <h1 class="article-title">@article.title</h1>
+      <div class="article">
+      @history.content.map { c =>
+        @Conv.both(c)
+      }
+    </div>
+  </div>
+} {
+}

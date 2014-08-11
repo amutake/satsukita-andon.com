@@ -134,6 +134,23 @@ object Artisan extends Controller with Authentication {
     }
   }
 
+  def history(id: Long) = IsEditableArticle(id) { acc => art => _ =>
+    val hists = History.histories(id)
+    Ok(views.html.artisan.history(hists, art))
+  }
+
+  def historyContent(id: Long, commitId: String) = IsEditableArticle(id) { acc => art => implicit request =>
+    History.history(id, commitId).map { hist =>
+      Ok(views.html.artisan.historyContent(hist, art))
+    }.getOrElse(NotFound(views.html.errors.notFound(request.path)))
+  }
+
+  def historySource(id: Long, commitId: String) = IsEditableArticle(id) { acc => art => implicit request =>
+    History.history(id, commitId).map { hist =>
+      Ok(views.html.artisan.historySource(hist, art))
+    }.getOrElse(NotFound(views.html.errors.notFound(request.path)))
+  }
+
   def accounts = HasAuthority(Master) { account => implicit request =>
     Ok(views.html.artisan.accounts(account, Accounts.all))
   }
