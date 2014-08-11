@@ -3,6 +3,7 @@
 cd ${0%/*}
 
 port=6039
+branch=master
 
 function andon_shutdown() {
     if [ -f RUNNING_PID ]; then
