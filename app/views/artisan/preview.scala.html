@@ -1,0 +1,13 @@
+@(preview: String)
+
+@import andon.utils.Conv
+
+@common("プレビュー") {
+} {
+  <div class="article-wrapper">
+    <div class="article">
+      @Conv.both(preview)
+    </div>
+  </div>
+} {
+}

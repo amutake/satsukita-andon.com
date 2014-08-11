@@ -78,9 +78,14 @@
         '_help -> ""
       )
 
+      <a id="preview" class="btn" href="#">プレビュー</a>
       <button class="btn" type="submit">送信</button>
     }
   </div>
+
+  <form id="preview-form" class="hidden" action="@routes.Artisan.preview" method="POST" target="_blank">
+    <input id="preview-text" type="hidden" name="text" value="">
+  </form>
 
   <div class="span3">
     <input class="fileupload-input" type="file" name="file" multiple>
@@ -91,4 +96,11 @@
 } {
   <script type="text/javascript" src="@routes.Assets.at("js/insertImage.js")"></script>
   <script type="text/javascript" src="@routes.Assets.at("js/optionAuthor.js")"></script>
+  <script type="text/javascript">
+    $("#preview").on("click", function(e) {
+      e.preventDefault();
+      $("#preview-text").val($("#text").val());
+      $("#preview-form").submit();
+    });
+  </script>
 }
