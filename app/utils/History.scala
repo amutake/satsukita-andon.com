@@ -45,7 +45,7 @@ object History {
   private def commonUpdate(id: Long, text: String, authorId: Int, typ: String) = {
     val name = filename(id)
     val file = new PrintWriter(dir ++ name)
-    file.println(text)
+    file.print(text)
     file.close
     git.add.addFilepattern(name).call
     commit(id, authorId, typ)
