@@ -7,7 +7,8 @@
 } {
   @breadcrumb(Seq(
     (routes.Artisan.home, "Home"),
-    (routes.Artisan.articles, "記事一覧")
+    (routes.Artisan.articles, "記事一覧"),
+    (routes.Artisan.article(article.id), "記事詳細")
   ), "編集履歴")
 
   <h3>@article.title の編集履歴</h3>
