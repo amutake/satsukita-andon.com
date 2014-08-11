@@ -33,17 +33,17 @@ function andon_restart() {
 function andon_backup() {
 
     if [ -f ./db/h2.jar ]; then
-        echo "play staging..."
-        play stage 1>/dev/null
-        echo "done."
-
         now=`date +%Y-%m-%d`
 
         echo 'compressing files...'
         tar czf backup/${now}.tar.gz ./files
         echo 'done.'
 
-        andon_shutdown
+        echo 'git push articles...'
+        cd history
+        git push origin $branch
+        cd ../
+        echo 'done.'
 
         echo 'dumping sql...'
         cd db
@@ -52,7 +52,6 @@ function andon_backup() {
         echo 'done.'
         cd ../
 
-        ./target/start -Dhttp.port=${port} >/dev/null &
         echo "Success!"
     else
         echo "h2.jar not found. abort."
@@ -81,6 +80,14 @@ function andon_restore() {
             rm -r files
             tar xzf backup/${1}.tar.gz
             echo "done."
+
+            echo 'restoring history...'
+            rm -r history
+            git clone git@bitbucket.org:amutake/andon-articles.git history
+            cd history
+            git checkout $branch
+            cd ../
+            echo 'done.'
 
             echo 'restoring db...'
             cd db
