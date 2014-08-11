@@ -2,10 +2,11 @@
 
 @import andon.utils._
 @import models._
-@import java.util.Date
 
 @common("History - " + article.title) {
 } {
+
+  <h3>@article.title の編集履歴</h3>
 
   <table class="table">
 
@@ -18,12 +19,13 @@
     @histories.map { history =>
       <tr>
         <td>
-          @DateUtil.detail(new Date(history.time.toLong * 1000))
+          @DateUtil.detail(history.date)
         </td>
         <td>
           @Accounts.findNameById(history.accountId)
         </td>
         <td>
+          <a href="@routes.Application.historyContent(history.articleId, history.id)">見る</a>
         </td>
       </tr>
     }

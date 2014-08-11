@@ -8,11 +8,12 @@ import org.eclipse.jgit.treewalk.filter._
 import org.eclipse.jgit.internal.storage.file._
 
 import java.io._
+import java.util.Date
 
 import collection.JavaConversions._
 import models.Articles
 
-case class History(id: String, articleId: Long, accountId: Int, time: Int) {
+case class History(id: String, articleId: Long, accountId: Int, date: Date) {
   def content = History.content(articleId, id)
 }
 
@@ -60,10 +61,17 @@ object History {
 
   // history
 
+  def commitToHistory(id: Long, commit: RevCommit) = {
+    val date = new Date(commit.getCommitTime.toLong * 1000)
+    History(commit.getName, id, commit.getAuthorIdent.getName.toInt, date)
+  }
+
   def histories(id: Long) = {
-    git.log.addPath(filename(id)).call.map { commit =>
-      History(commit.getName, id, commit.getAuthorIdent.getName.toInt, commit.getCommitTime)
-    }
+    git.log.addPath(filename(id)).call.map(commitToHistory(id, _))
+  }
+
+  def history(articleId: Long, commitId: String): Option[History] = {
+    histories(articleId).filter(_.id == commitId).headOption
   }
 
   def content(articleId: Long, commitId: String): Option[String] = {
