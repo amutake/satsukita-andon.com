@@ -52,7 +52,7 @@ object History {
   }
 
   private def commit(id: Long, authorId: Int, typ: String) = {
-    val message = typ + ": article id = " + id + ", account id = " + authorId
+    val message = s"AUTO COMMIT ver1: ${typ}: article id = ${id}, account id = ${authorId}"
     git.commit.setMessage(message)
       .setAuthor(authorId.toString, email)
       .setCommitter(authorId.toString, email)
