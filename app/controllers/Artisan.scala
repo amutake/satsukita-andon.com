@@ -96,6 +96,7 @@ object Artisan extends Controller with Authentication {
       formWithErrors => BadRequest(views.html.artisan.createArticle(acc.level, creatable(acc.level), formWithErrors)),
       { article =>
         val id = Articles.create(acc.id, article._1, article._2, ArticleType.fromString(article._3), article._4, article._5, article._6, article._7)
+        History.create(id, article._2, acc.id)
         Redirect(routes.Artisan.article(id)).flashing(
           "success" -> "記事を作成しました。"
         )
@@ -113,6 +114,7 @@ object Artisan extends Controller with Authentication {
       formWithErrors => BadRequest(views.html.artisan.editArticle(acc, id, art.createAccountId, formWithErrors)),
       article => {
         Articles.update(id, acc.id, article._1, article._2, article._4, article._5, article._6, article._7)
+        History.update(id, article._2, acc.id)
         Redirect(routes.Artisan.article(id)).flashing(
           "success" -> "記事を編集しました。"
         )
@@ -125,6 +127,7 @@ object Artisan extends Controller with Authentication {
       Forbidden(views.html.errors.forbidden())
     } else {
       Articles.delete(id)
+      History.delete(id, acc.id)
       Redirect(routes.Artisan.articles).flashing(
         "success" -> "記事を削除しました"
       )

@@ -20,6 +20,7 @@ deploy.sh
 defreeze.sh
 
 files/
+history/
 memo/
 
 *.sql

@@ -13,7 +13,9 @@ object Global extends GlobalSettings {
 
   override def onStart(app: Application) {
     InitialData.createTable
-    Cleaner.clean
+    History.init
+    // See issue#62
+    // Cleaner.clean
     Twitter.tweet("行灯職人への道が起動しました", "/")
   }
 

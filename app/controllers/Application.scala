@@ -108,6 +108,21 @@ object Application extends Controller with Authentication {
     }.getOrElse(NotFound(views.html.errors.notFound(request.path)))
   }
 
+  def history(id: Long) = Action { implicit request =>
+    Articles.findById(id).map { article =>
+      val histories = History.histories(id)
+      Ok(views.html.history(histories, article))
+    }.getOrElse(NotFound(views.html.errors.notFound(request.path)))
+  }
+
+  def historyContent(id: Long, commitId: String) = Action { implicit request =>
+    Articles.findById(id).flatMap { article =>
+      History.history(id, commitId).map { history =>
+        Ok(views.html.historyContent(history, article))
+      }
+    }.getOrElse(NotFound(views.html.errors.notFound(request.path)))
+  }
+
   def postComment(id: Long) = Action { implicit request =>
     Articles.findById(id).map { article =>
 
