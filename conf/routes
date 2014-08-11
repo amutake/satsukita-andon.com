@@ -35,6 +35,7 @@ GET     /artisan/article/create     controllers.Artisan.createArticle
 POST    /artisan/article/create     controllers.Artisan.postCreateArticle
 GET     /artisan/article/edit       controllers.Artisan.editArticle(id: Long)
 POST    /artisan/article/edit       controllers.Artisan.postEditArticle(id: Long)
+POST    /artisan/article/preview    controllers.Artisan.preview
 POST    /artisan/article/delete     controllers.Artisan.deleteArticle(id: Long)
 GET     /artisan/article/history/:id      controllers.Artisan.history(id: Long)
 GET     /artisan/article/:id/content/:cid controllers.Artisan.historyContent(id: Long, cid: String)

@@ -122,6 +122,24 @@ object Artisan extends Controller with Authentication {
     )
   }
 
+  val previewForm = Form(
+    "text" -> text
+  )
+
+  def preview = IsValidAccount { acc => implicit request =>
+
+    previewForm.bindFromRequest.fold(
+      formWithErrors => BadRequest(views.html.errors.error(new Exception("予期しないエラー"))),
+      preview => {
+        Ok(views.html.artisan.preview(preview)).withHeaders(
+          // for Google Chrome
+          // http://stackoverflow.com/questions/17016960/google-chromes-xss-auditor-causing-issues
+          "X-XSS-Protection" -> "0"
+        )
+      }
+    )
+  }
+
   def deleteArticle(id: Long) = IsEditableArticle(id) { acc => art => _ =>
     if (acc.level == Writer && acc.id != art.createAccountId) {
       Forbidden(views.html.errors.forbidden())
