@@ -4,6 +4,7 @@ cd ${0%/*}
 
 port=5927
 branch=test
+repo="git@bitbucket.org:amutake/andon-articles.git"
 
 function andon_shutdown() {
     if [ -f RUNNING_PID ]; then
@@ -35,14 +36,16 @@ function andon_backup() {
     if [ -f ./db/h2.jar ]; then
         now=`date +%Y-%m-%d`
 
-        echo 'compressing files...'
-        tar czf backup/${now}.tar.gz ./files
+        echo 'git push history...'
+        cd history
+        git remote add origin $repo || true
+        git tag -a ${branch}-${now} -m 'automatically backup'
+        git push origin ${branch}-${now}
+        cd ../
         echo 'done.'
 
-        echo 'git push articles...'
-        cd history
-        git push origin $branch
-        cd ../
+        echo 'compressing files...'
+        tar czf backup/${now}.tar.gz ./files
         echo 'done.'
 
         echo 'dumping sql...'
@@ -76,18 +79,17 @@ function andon_restore() {
 
             andon_shutdown
 
+            echo 'restoring history...'
+            cd history
+            git fetch --tags
+            git checkout ${branch}-${1}
+            cd ../
+            echo 'done.'
+
             echo "restoring files..."
             rm -r files
             tar xzf backup/${1}.tar.gz
             echo "done."
-
-            echo 'restoring history...'
-            rm -r history
-            git clone git@bitbucket.org:amutake/andon-articles.git history
-            cd history
-            git checkout $branch
-            cd ../
-            echo 'done.'
 
             echo 'restoring db...'
             cd db
