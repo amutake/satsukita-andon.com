@@ -7,9 +7,10 @@ import org.eclipse.jgit.treewalk._
 import org.eclipse.jgit.treewalk.filter._
 import org.eclipse.jgit.internal.storage.file._
 
-import java.io.PrintWriter
+import java.io._
 
 import collection.JavaConversions._
+import models.Articles
 
 case class History(id: String, articleId: Long, accountId: Int, time: Int) {
   def content = History.content(articleId, id)
@@ -82,6 +83,23 @@ object History {
       }
     } catch {
       case _: Exception => None
+    }
+  }
+
+  // initialize
+
+  def init = {
+    val historyDir = new File(dir)
+    if (!historyDir.exists) {
+      historyDir.mkdir
+    }
+    val gitDir = new File(dir + ".git")
+    if (!gitDir.exists) {
+      Git.init.setBare(false).setDirectory(historyDir).call
+
+      Articles.all.reverse.foreach { article =>
+        create(article.id, article.text, article.createAccountId)
+      }
     }
   }
 }
