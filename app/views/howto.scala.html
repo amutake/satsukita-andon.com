@@ -42,6 +42,9 @@
                 @article.optAuthor.getOrElse {
                   @Accounts.findNameById(article.createAccountId)
                 }
+                @if(article.editable) {
+                  など
+                }
               </td>
               <td>
                 @article.optDate.getOrElse {
@@ -91,6 +94,9 @@
               <td>
                 @article.optAuthor.getOrElse {
                   @Accounts.findNameById(article.createAccountId)
+                }
+                @if(article.editable) {
+                  など
                 }
               </td>
               <td>

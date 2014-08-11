@@ -1,0 +1,34 @@
+@(histories: Iterable[andon.utils.History], article: Article)
+
+@import andon.utils._
+@import models._
+
+@common("History - " + article.title) {
+} {
+
+  <h3>@article.title の編集履歴</h3>
+
+  <table class="table">
+
+    <tr>
+      <th>日時</th>
+      <th>編集</th>
+      <th>操作</th>
+    </tr>
+
+    @histories.map { history =>
+      <tr>
+        <td>
+          @DateUtil.detail(history.date)
+        </td>
+        <td>
+          @Accounts.findNameById(history.accountId)
+        </td>
+        <td>
+          <a href="@routes.Application.historyContent(history.articleId, history.id)">見る</a>
+        </td>
+      </tr>
+    }
+  </table>
+} {
+}
