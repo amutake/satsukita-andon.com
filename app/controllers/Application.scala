@@ -123,6 +123,15 @@ object Application extends Controller with Authentication {
     }.getOrElse(NotFound(views.html.errors.notFound(request.path)))
   }
 
+  def diff(id: Long, commitId: String) = Action { implicit request =>
+    val result = for {
+      article <- Articles.findById(id)
+      newHistory <- History.history(id, commitId)
+      oldHistory = History.previousHistory(id, commitId)
+    } yield Ok(views.html.diff(newHistory, oldHistory, article))
+    result.getOrElse(NotFound(views.html.errors.notFound(request.path)))
+  }
+
   def postComment(id: Long) = Action { implicit request =>
     Articles.findById(id).map { article =>
 

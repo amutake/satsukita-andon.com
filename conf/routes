@@ -17,6 +17,7 @@ GET     /about                      controllers.Application.about
 GET     /contact                    controllers.Application.contact
 GET     /article/:id                controllers.Application.article(id: Long)
 GET     /article/history/:id        controllers.Application.history(id: Long)
+GET     /article/diff/:id/:cid      controllers.Application.diff(id: Long, cid: String)
 GET     /article/:id/:cid           controllers.Application.historyContent(id: Long, cid: String)
 POST    /comment/:id                controllers.Application.postComment(id: Long)
 GET     /comments                   controllers.Application.comments
