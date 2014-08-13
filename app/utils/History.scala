@@ -74,10 +74,23 @@ object History {
     histories(articleId).filter(_.id == commitId).headOption
   }
 
+  def previousHistory(articleId: Long, commitId: String): Option[History] = {
+    val hists = histories(articleId).toSeq
+    val i = hists.indexWhere(h => h.id == commitId)
+    if (i == -1) {
+      None
+    } else {
+      hists.lift(i + 1)
+    }
+  }
+
+  def getCommit(commitId: String): RevCommit = {
+    new RevWalk(repository).parseCommit(repository.resolve(commitId))
+  }
+
   def content(articleId: Long, commitId: String): Option[String] = {
     try {
-      val commitObjectId = repository.resolve(commitId)
-      val commit = new RevWalk(repository).parseCommit(commitObjectId)
+      val commit = getCommit(commitId)
       val treewalk = new TreeWalk(repository)
       treewalk.addTree(commit.getTree)
       treewalk.setRecursive(true)
