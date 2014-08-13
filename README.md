@@ -8,8 +8,8 @@ http://satsukita-andon.com
 行灯職人への道 (satsukita-andon.com) is a website to record and support *andon-gyoretsu* (行灯行列), which is one of the most exciting events of Sapporo-Kita High School (札幌北高校).
 
 
-Required
---------
+Requirements
+------------
 
 - play-2.1.5
 - java-1.7
@@ -93,6 +93,17 @@ object InitialData {
     Accounts.create("開発者", "developer", "password", OrdInt(60), Admin)
   }
 }
+```
+
+Deployment
+----------
+
+```
+% git clone git@github.com:amutake/satsukita-andon.com.git
+% cd satsukita-andon.com
+% git submodule init
+% git submodule update
+% ./andon start
 ```
 
 Contributing
