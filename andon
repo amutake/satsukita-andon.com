@@ -20,12 +20,11 @@ function andon_startup() {
 }
 
 function andon_restart() {
-    play stage
+    play compile
 
     if [ -f ./target/start ]; then
         andon_shutdown
-        ./target/start -Dhttp.port=${port} >/dev/null &
-        echo "Success!"
+        andon_startup
     else
         echo "./target/start not found"
     fi
@@ -71,8 +70,8 @@ function andon_restore() {
         read ok
         if [ "$ok" == "Y" ] || [ "$ok" == "y" ]; then
 
-            echo "play stage..."
-            play stage 1>/dev/null
+            echo "play compile..."
+            play compile
             echo "done."
 
             echo "Restore application to version-${1}!"
@@ -98,10 +97,7 @@ function andon_restore() {
             echo 'done.'
             cd ../
 
-            ./target/start -Dhttp.port=${port} >/dev/null &
-
-            echo "Success!"
-
+            andon_startup
         else
             echo "abort."
         fi
