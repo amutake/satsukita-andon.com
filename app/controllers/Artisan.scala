@@ -169,6 +169,15 @@ object Artisan extends Controller with Authentication {
     }.getOrElse(NotFound(views.html.errors.notFound(request.path)))
   }
 
+  def diff(id: Long, commitId: String) = IsEditableArticle(id) { acc => art => implicit request =>
+    val result = for {
+      article <- Articles.findById(id)
+      newHistory <- History.history(id, commitId)
+      oldHistory = History.previousHistory(id, commitId)
+    } yield Ok(views.html.artisan.diff(newHistory, oldHistory, article))
+    result.getOrElse(NotFound(views.html.errors.notFound(request.path)))
+  }
+
   def accounts = HasAuthority(Master) { account => implicit request =>
     Ok(views.html.artisan.accounts(account, Accounts.all))
   }

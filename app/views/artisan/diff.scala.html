@@ -1,0 +1,26 @@
+@(newH: andon.utils.History, oldH: Option[andon.utils.History], art: Article)
+
+@import andon.utils._
+@import models._
+
+@common("差分 - " + art.title) {
+  <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/diff.css")">
+} {
+  @breadcrumb(Seq(
+    (routes.Artisan.home, "Home"),
+    (routes.Artisan.articles, "記事一覧"),
+    (routes.Artisan.article(art.id), "記事詳細"),
+    (routes.Artisan.history(art.id), "編集履歴")
+  ), "差分")
+
+  <h3>@art.title</h3>
+  <textarea id="oldtxt" class="hidden">@oldH.map(_.content).getOrElse("")</textarea>
+  <textarea id="newtxt" class="hidden">@newH.content.getOrElse("")</textarea>
+  <p id="difftitle" class="hidden">@DateUtil.detail(newH.date) の更新</p>
+  <div id="diffdiv">
+  </div>
+} {
+  <script type="text/javascript" src="@routes.Assets.at("jsdifflib/difflib.js")"></script>
+  <script type="text/javascript" src="@routes.Assets.at("jsdifflib/diffview.js")"></script>
+  <script type="text/javascript" src="@routes.Assets.at("js/diff.js")"></script>
+}
