@@ -109,7 +109,7 @@ Deployment
 Fonts
 -----
 
-The font used in the logo is DFP祥南行書体w5.
+The font used in the logo is 祥南行書体.
 
 Contributing
 ------------
