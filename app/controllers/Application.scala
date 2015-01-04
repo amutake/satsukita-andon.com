@@ -81,6 +81,10 @@ object Application extends Controller with Authentication {
     Ok(views.html.howto("", ""))
   }
 
+  def allHowto = Action {
+    Ok(views.html.howto("all", ""))
+  }
+
   def category(htype: String, genre: String) = Action {
     Ok(views.html.howto(htype, genre))
   }

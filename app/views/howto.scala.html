@@ -19,7 +19,7 @@
   <div class="span3">
     <ul class="nav nav-list">
       <li class="nav-header">記事・資料</li>
-      <li><a href="@routes.Application.howto()">すべての記事・資料</a></li>
+      <li><a href="@routes.Application.allHowto()">すべての記事・資料</a></li>
       <li class="nav-header">記事</li>
       @link(Articles.findByType(Howto).map(_.genre).distinct, "article")
       <li class="nav-header">資料</li>
@@ -78,7 +78,7 @@
           }
         </table>
       }
-      case _ => {
+      case "all" => {
         <h4>すべて</h4>
         <h5>記事</h5>
         <table class="table">
@@ -131,6 +131,62 @@
             </tr>
           }
         </table>
+      }
+      case _ => {
+        <h4>最近更新された記事・資料</h4>
+        <h5>記事</h5>
+        <table class="table">
+          @Articles.findDateSortedHowto.take(10).map { article =>
+            <tr>
+              <td>
+                <i class="icon-file icon-white"></i>
+                <a href="@routes.Application.article(article.id)">@article.title</a>
+              </td>
+              <td>
+                @article.genre
+              </td>
+              <td>
+                @article.optAuthor.getOrElse {
+                  @Accounts.findNameById(article.createAccountId)
+                }
+                @if(article.editable) {
+                  など
+                }
+              </td>
+              <td>
+                @article.optDate.getOrElse {
+                  @DateUtil.dateFormat(article.updateDate)
+                }
+              </td>
+            </tr>
+          }
+        </table>
+        <p class="text-center more"><a href="@routes.Application.allHowto()">すべて見る</a></p>
+        <h5>資料</h5>
+        <table class="table">
+          @Data.dateSorted.take(10).map { file =>
+            <tr>
+              <td>
+                <i class="icon-download icon-white"></i>
+                <a href="@file.path">@file.name</a>
+              </td>
+              <td>
+                @file.genre
+              </td>
+              <td>
+                @file.optAuthor.getOrElse {
+                  @Accounts.findNameById(file.accountId)
+                }
+              </td>
+              <td>
+                @file.optDate.getOrElse {
+                  @DateUtil.dateFormat(file.date)
+                }
+              </td>
+            </tr>
+          }
+        </table>
+        <p class="text-center more"><a href="@routes.Application.allHowto()">すべて見る</a></p>
       }
     }
   </div>

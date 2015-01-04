@@ -2,7 +2,7 @@
 
 @import andon.utils._
 
-@common("記事の編集") {
+@common("講評の編集 " + id.toString) {
 } {
   @breadcrumb(Seq(
     (routes.Artisan.home, "Home"),
@@ -16,6 +16,36 @@
       @error.message
     </p>
   }
+
+  <h4>クラス情報</h4>
+
+  @models.ClassData.findByClassId(id).map { data =>
+    @Images.findImagePath(data).map { path =>
+      <a class="fresco" href="@Images.toFullsize(path)">
+        <img src="@Images.toThumbnail(path)">
+      </a>
+    }
+    <table class="table dl" style="margin-top: 14px">
+      <tr>
+        <td>クラス</td>
+        <td>@data.id.toJapanese</td>
+      </tr>
+      <tr>
+        <td>タイトル</td>
+        <td>@data.title</td>
+      </tr>
+      <tr>
+        <td>賞</td>
+        <td>@data.prize.map(_.span).getOrElse { なし }</td>
+      </tr>
+      <tr>
+        <td>紹介文</td>
+        <td>@data.intro</td>
+      </tr>
+    </table>
+  }
+
+  <h4>講評</h4>
 
   @helper.form(routes.Artisan.postEditReview(id.toInt)) {
 

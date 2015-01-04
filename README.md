@@ -106,6 +106,11 @@ Deployment
 % ./andon start
 ```
 
+Fonts
+-----
+
+The font used in the logo is DFP祥南行書体w5.
+
 Contributing
 ------------
 
