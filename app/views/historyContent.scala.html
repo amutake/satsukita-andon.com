@@ -3,7 +3,7 @@
 @import andon.utils._
 @import models._
 
-@common(article.title + " - " + DateUtil.detail(history.date)) {
+@common(article.title + " - " + DateUtil.detail(history.date))("記事『" + article.title + "』の " + DateUtil.detail(history.date) + " 時点の内容") {
 } {
 
   <div class="article-wrapper">

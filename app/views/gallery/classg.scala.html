@@ -10,7 +10,7 @@
   </li>
 }
 
-@common(data.id.toString + " " + data.title) {
+@common(data.id.toString + " " + data.title)(data.id.toString + "の作品『" + data.title + "』の写真や情報です。") {
   <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/gallery.css")">
 } {
   @Images.findImagePath(data).map { path =>

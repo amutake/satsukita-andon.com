@@ -1,4 +1,4 @@
-@(title: String)(head: Html)(body: Html)(footer: Html)(js: Html)
+@(title: String)(descr: String)(head: Html)(body: Html)(footer: Html)(js: Html)
 
 @* 無駄な改行が入るため minify している *@
 @longtitle = {@if(title == "") {@{"行灯職人への道"}} else {@{title + " - 行灯職人への道"}}}
@@ -76,10 +76,10 @@ Powered by picascii.com
     <meta name="twitter:site" content="@@andon_bot">
     <meta name="twitter:title" content="@longtitle">
     <meta name="twitter:image" content="http://satsukita-andon.com/assets/img/twittercards.png">
-    <meta name="twitter:description" content="View the page on 行灯職人への道.">
-    <meta name="og:title" content="@longtitle">
-    <meta name="og:description" content="View the page on 行灯職人への道.">
-    <meta name="og:image" content="http://satsukita-andon.com/assets/img/facebookcards.png">
+    <meta name="twitter:description" content="@descr">
+    <meta property="og:title" content="@longtitle">
+    <meta property="og:description" content="@descr">
+    <meta property="og:image" content="http://satsukita-andon.com/assets/img/facebookcards.png">
     <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="@routes.Assets.at("img/favicon.ico")">
     <link rel="stylesheet" media="screen" href="@routes.Assets.at("bootstrap/css/bootstrap.min.css")">
     <link rel="stylesheet" href="@routes.Assets.at("fresco/css/fresco/fresco.css")">

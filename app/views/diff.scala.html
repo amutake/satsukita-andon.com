@@ -3,7 +3,7 @@
 @import andon.utils._
 @import models._
 
-@common("差分 - " + art.title) {
+@common("差分 - " + art.title)(art.title + " - " + DateUtil.detail(newH.date) + " の更新") {
   <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/diff.css")">
 } {
   <h3>@art.title</h3>

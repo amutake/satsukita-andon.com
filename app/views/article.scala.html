@@ -6,7 +6,7 @@
 
 @title() = @{ article.articleType.toString + " - " + article.title }
 
-@common(title) {
+@common(title)(article.text.take(120) + "...") {
 } {
 
   @flash.get("success").map { message =>
