@@ -1,12 +1,14 @@
 package andon.api
 
+import scala.concurrent.ExecutionContext
+import scala.util.Try
+import scala.util.control.NonFatal
+
 import akka.stream.ActorFlowMaterializer
-import akka.http.server._
-import Directives._
+import akka.http.server._, Directives._
 import akka.http.marshalling.ToResponseMarshallable
 import akka.http.marshalling.Marshaller._
 import akka.http.unmarshalling.Unmarshaller._
-import scala.concurrent.ExecutionContext
 
 import andon.api.util.Json4sJacksonSupport._
 import andon.api.util.Errors
@@ -15,12 +17,19 @@ import andon.api.controllers._
 object Routes {
 
   def route(version: String)(implicit ec: ExecutionContext, fm: ActorFlowMaterializer): Route = {
-    pathPrefix(version) {
-      articles
-    } ~
-    complete {
-      // catch-all
-      Errors.ApiNotFound
+    val exceptionHandler = ExceptionHandler {
+      case NonFatal(e) => complete {
+        Errors.Unexpected(e)
+      }
+    }
+    handleExceptions(exceptionHandler) {
+      pathPrefix(version) {
+        articles
+      } ~
+      complete {
+        // catch-all
+        Errors.ApiNotFound
+      }
     }
   }
 
