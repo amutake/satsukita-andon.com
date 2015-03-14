@@ -1,4 +1,4 @@
-package andon.api
+package andon.api.util
 
 import scala.concurrent.ExecutionContext
 import scala.reflect.Manifest

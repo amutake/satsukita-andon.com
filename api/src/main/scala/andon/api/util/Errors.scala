@@ -1,4 +1,4 @@
-package andon.api
+package andon.api.util
 
 import akka.http.model.{ StatusCode, StatusCodes }
 

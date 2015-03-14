@@ -8,7 +8,9 @@ import akka.http.marshalling.Marshaller._
 import akka.http.unmarshalling.Unmarshaller._
 import scala.concurrent.ExecutionContext
 
-import Json4sJacksonSupport._
+import andon.api.util.Json4sJacksonSupport._
+import andon.api.util.Errors
+import andon.api.controllers._
 
 object Routes {
 
@@ -27,14 +29,14 @@ object Routes {
       get {
         parameterMap { params =>
           complete {
-            Articles.all(params)
+            ArticleController.all(params)
           }
         }
       } ~
       post {
-        entity(as[Article]) { article =>
+        entity(as[CreateArticle]) { article =>
           complete {
-            Articles.add(article)
+            ArticleController.add(article)
           }
         } ~
         complete {
@@ -45,7 +47,7 @@ object Routes {
     path("articles" / LongNumber) { id =>
       get {
         complete {
-          Articles.get(id)
+          ArticleController.get(id)
         }
       }
     }
