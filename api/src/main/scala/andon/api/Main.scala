@@ -21,12 +21,6 @@ object Main extends App {
   Class.forName("org.h2.Driver")
   ConnectionPool.singleton("jdbc:h2:./test", "", "")
 
-  try {
-    models.Articles.make()
-  } catch {
-    case e: Throwable => println(e.getMessage)
-  }
-
   Http().bind(
     interface = host,
     port = port
