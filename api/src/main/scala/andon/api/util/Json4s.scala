@@ -8,6 +8,7 @@ import akka.http.unmarshalling.Unmarshaller
 import akka.http.model.{ ContentTypes, HttpCharsets, MediaTypes }
 import org.json4s.{ Serialization, Formats, NoTypeHints }
 import org.json4s.jackson.{ Serialization => JacksonSerialization }
+import org.json4s.ext.JodaTimeSerializers
 // import org.json4s.native.{ Serialization => NativeSerialization }
 
 trait Json4sSupport {
@@ -28,5 +29,5 @@ trait Json4sSupport {
 
 object Json4sJacksonSupport extends Json4sSupport {
   val serialization = JacksonSerialization
-  val formats = JacksonSerialization.formats(NoTypeHints)
+  val formats = JacksonSerialization.formats(NoTypeHints) ++ JodaTimeSerializers.all
 }

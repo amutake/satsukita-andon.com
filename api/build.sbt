@@ -26,6 +26,7 @@ libraryDependencies ++= {
     "com.typesafe.akka" %% "akka-http-core-experimental" % akkaHttp,
     "com.typesafe.akka" %% "akka-http-experimental" % akkaHttp,
     "org.json4s" %% "json4s-jackson" % "3.2.11",
+    "org.json4s" %% "json4s-ext" % "3.2.11",
     "org.scalikejdbc" %% "scalikejdbc" % "2.2.4",
     "com.h2database" % "h2" % "1.4.185",
     "ch.qos.logback" % "logback-classic" % "1.1.2",
