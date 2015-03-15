@@ -38,7 +38,12 @@ object Routes {
       get {
         parameterMap { params =>
           complete {
-            ArticleController.all(params)
+            val offset = params.get("offset").map(s => Try(s.toInt).toOption).flatten
+            val limit = params.get("limit").map(s => Try(s.toInt).toOption).flatten
+            ArticleController.all(
+              offset = offset,
+              limit = limit
+            )
           }
         }
       } ~

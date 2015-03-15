@@ -11,9 +11,10 @@ case class CreateArticle(
 
 object ArticleController {
 
-  def all(params: Map[String, String]) = {
-    println(params)
-    Articles.all
+  def all(offset: Option[Int], limit: Option[Int]) = {
+    val o = offset.getOrElse(0)
+    val l = limit.filter(l => 0 <= l && l <= 50).getOrElse(20)
+    Articles.all(o, l)
   }
 
   def get(id: Long): Either[Errors.Error, Article] = {

@@ -57,9 +57,12 @@ object Articles {
       updatedAt = None)
   }
 
-  def all(implicit s: DBSession = Article.autoSession): Seq[Article] = {
+  def all(offset: Int, limit: Int)
+    (implicit s: DBSession = Article.autoSession): Seq[Article] = {
     withSQL {
       select.from(Article as a)
+        .limit(limit)
+        .offset(offset)
     }.map(Article(a)).list.apply()
   }
 
