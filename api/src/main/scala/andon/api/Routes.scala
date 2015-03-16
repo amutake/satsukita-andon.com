@@ -48,7 +48,7 @@ object Routes {
         }
       } ~
       post {
-        entity(as[CreateArticle]) { article =>
+        entity(as[ArticleJsons.Create]) { article =>
           complete {
             ArticleController.add(article)
           }
