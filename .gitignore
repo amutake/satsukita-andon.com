@@ -23,7 +23,8 @@ files/
 history/
 memo/
 
-*.sql
+backup/*.sql
+db/*.sql
 *.db
 *.jar
 nohup.out
