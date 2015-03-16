@@ -6,7 +6,7 @@ import akka.http.server.{ RouteResult, RoutingLog, RoutingSetup, RoutingSettings
 import akka.stream.scaladsl.Sink
 import akka.stream.ActorFlowMaterializer
 
-import scalikejdbc._
+import scalikejdbc.config._
 
 object Main extends App {
 
@@ -18,8 +18,7 @@ object Main extends App {
   val host = "localhost"
   val port = 6039
 
-  Class.forName("org.h2.Driver")
-  ConnectionPool.singleton("jdbc:h2:./test", "", "")
+  DBs.setupAll()
 
   Http().bind(
     interface = host,
