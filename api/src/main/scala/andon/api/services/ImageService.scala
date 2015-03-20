@@ -1,9 +1,9 @@
 package andon.api.services
 
 import java.io.File
-
 import scala.collection.JavaConversions
 import com.typesafe.config.ConfigFactory
+
 import andon.api.util.OrdInt
 
 object ImageObjects {
