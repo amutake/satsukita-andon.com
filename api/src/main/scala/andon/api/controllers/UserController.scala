@@ -17,5 +17,7 @@ object UserJsons {
         user.login,
         user.name,
         user.icon)
+
+    val Deleted = Simple(0, "deleted", "?", None) // deleted user
   }
 }

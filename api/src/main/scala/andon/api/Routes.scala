@@ -34,34 +34,47 @@ object Routes {
   }
 
   private def articles(implicit ec: ExecutionContext, fm: ActorFlowMaterializer): Route = {
-    path("articles") {
-      get {
-        parameterMap { params =>
+    pathPrefix("articles") {
+      pathEnd {
+        get {
+          parameterMap { params =>
+            complete {
+              val offset = params.get("offset").map(s => Try(s.toInt).toOption).flatten
+              val limit = params.get("limit").map(s => Try(s.toInt).toOption).flatten
+              ArticleController.all(
+                offset = offset,
+                limit = limit
+              )
+            }
+          }
+        } ~
+        post {
+          entity(as[ArticleJsons.Create]) { article =>
+            complete {
+              ArticleController.add(article)
+            }
+          } ~
           complete {
-            val offset = params.get("offset").map(s => Try(s.toInt).toOption).flatten
-            val limit = params.get("limit").map(s => Try(s.toInt).toOption).flatten
-            ArticleController.all(
-              offset = offset,
-              limit = limit
-            )
+            Errors.JsonError
           }
         }
       } ~
-      post {
-        entity(as[ArticleJsons.Create]) { article =>
-          complete {
-            ArticleController.add(article)
+      pathPrefix(LongNumber) { id =>
+        pathEnd {
+          get {
+            complete {
+              ArticleController.get(id)
+            }
           }
         } ~
-        complete {
-          Errors.JsonError
-        }
-      }
-    } ~
-    path("articles" / LongNumber) { id =>
-      get {
-        complete {
-          ArticleController.get(id)
+        pathPrefix("commits") {
+          pathEnd {
+            get {
+              complete {
+                ArticleController.commits(id)
+              }
+            }
+          }
         }
       }
     }

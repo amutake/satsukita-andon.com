@@ -72,8 +72,8 @@ object HistoryService {
     History(commit.getName, id, commit.getAuthorIdent.getName.toLong, date)
   }
 
-  def histories(id: Long) = {
-    git.log.addPath(filename(id)).call.map(commitToHistory(id, _))
+  def histories(id: Long): Seq[History] = {
+    git.log.addPath(filename(id)).call.map(commitToHistory(id, _)).toSeq
   }
 
   def history(articleId: Long, commitId: String): Option[History] = {

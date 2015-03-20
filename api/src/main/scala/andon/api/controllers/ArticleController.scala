@@ -1,7 +1,8 @@
 package andon.api.controllers
 
 import andon.api.util.Errors
-import andon.api.models.{ Article, Articles, ArticleObjects }
+import andon.api.models.{ Article, Articles, ArticleObjects, User, Users }
+import andon.api.services.{ HistoryService, HistoryObjects }
 import com.github.nscala_time.time.Imports._
 
 object ArticleJsons {
@@ -55,23 +56,54 @@ object ArticleJsons {
   }
 }
 
+object CommitJsons {
+
+  final case class Simples(
+    article: ArticleJsons.Simple,
+    commits: Seq[Simple]
+  )
+
+  final case class Simple(
+    id: String,
+    user: UserJsons.Simple,
+    date: DateTime
+  )
+}
+
 object ArticleController {
 
-  import ArticleJsons._
+  import andon.api.controllers.{ ArticleJsons => A }
+  import andon.api.controllers.{ CommitJsons => C }
 
-  def all(offset: Option[Int], limit: Option[Int]): Seq[Simple] = {
+  def all(offset: Option[Int], limit: Option[Int]): Seq[A.Simple] = {
     val o = offset.getOrElse(0)
     val l = limit.filter(l => 0 <= l && l <= 50).getOrElse(20)
-    Articles.all(o, l).map(Simple.apply)
+    Articles.all(o, l).map(A.Simple.apply)
   }
 
-  def get(id: Long): Either[Errors.Error, Detail] = {
-    Articles.find(id).map(Detail.apply)
+  def get(id: Long): Either[Errors.Error, A.Detail] = {
+    Articles.find(id).map(A.Detail.apply)
       .toRight(Errors.ResourceNotFound)
   }
 
-  def add(article: ArticleJsons.Create): Either[Errors.Error, Detail] = {
+  def add(article: ArticleJsons.Create): Either[Errors.Error, A.Detail] = {
     Articles.create(article.title, article.body, article.user_id)
-      .right.map(Detail.apply)
+      .right.map(A.Detail.apply)
+  }
+
+  /**
+    * If a deleted article id is requested, return ResourceNotFound
+    */
+  def commits(id: Long): Either[Errors.Error, C.Simples] = {
+    Articles.find(id).map(A.Simple.apply).map { article =>
+      val commits = HistoryService.histories(id)
+      val userIds = commits.map(_.userId).distinct
+      val users = Users.allIn(userIds).map(UserJsons.Simple.apply)
+      val simples = commits.map { c =>
+        val u = users.filter(_.id == c.userId).headOption.getOrElse(UserJsons.Simple.Deleted)
+        C.Simple(c.id, u, c.date)
+      }
+      C.Simples(article, simples)
+    }.toRight(Errors.ResourceNotFound)
   }
 }

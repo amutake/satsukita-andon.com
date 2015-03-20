@@ -33,6 +33,12 @@ object User extends SQLSyntaxSupport[User] {
 }
 
 object Users {
-  val u = User.syntax
+  val u = User.syntax("u")
   val column = User.column
+
+  def allIn(ids: Seq[Long])(implicit s: DBSession = User.autoSession): Seq[User] = {
+    withSQL {
+      select.from(User as u).where.in(u.id, ids)
+    }.map(User(u)).list.apply()
+  }
 }
