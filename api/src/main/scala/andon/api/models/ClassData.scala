@@ -35,11 +35,31 @@ object ClassData extends SQLSyntaxSupport[ClassData] {
     (implicit s: DBSession = autoSession): Option[Base] = {
     withSQL {
       select.from(ClassData as c)
-        .leftJoin(Prize as p).on(c.times, p.times).on(c.grade, p.grade).on(c.`class`, p.`class`)
+        .leftJoin(Prize as p).on(sqls"".eq(c.times, p.times).and.eq(c.grade, p.grade).and.eq(c.`class`, p.`class`))
         .where.eq(c.times, times).and.eq(c.grade, grade).and.eq(c.`class`, `class`)
     }.one(ClassData(c)).toMany(Prize.opt(p))
       .map { (cd, prizes) => Base(cd, prizes.map(_.kind)) }
       .single.apply()
+  }
+
+  def gradeAll(times: Int, grade: Int)(implicit s: DBSession = autoSession): Seq[Base] = {
+    withSQL {
+      select.from(ClassData as c)
+        .leftJoin(Prize as p).on(sqls"".eq(c.times, p.times).and.eq(c.grade, p.grade).and.eq(c.`class`, p.`class`))
+        .where.eq(c.times, times).and.eq(c.grade, grade)
+    }.one(ClassData(c)).toMany(Prize.opt(p))
+      .map { (cd, prizes) => Base(cd, prizes.map(_.kind)) }
+      .list.apply()
+  }
+
+  def timesAll(times: Int)(implicit s: DBSession = autoSession): Seq[Base] = {
+    withSQL {
+      select.from(ClassData as c)
+        .leftJoin(Prize as p).on(sqls"".eq(c.times, p.times).and.eq(c.grade, p.grade).and.eq(c.`class`, p.`class`))
+        .where.eq(c.times, times)
+    }.one(ClassData(c)).toMany(Prize.opt(p))
+      .map { (cd, prizes) => Base(cd, prizes.map(_.kind)) }
+      .list.apply()
   }
 }
 

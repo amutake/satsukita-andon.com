@@ -29,3 +29,21 @@ object ClassDataJsons {
         base.cd.topUrl.getOrElse("http://files.satsukita-andon.com/util/no-image.png"))
   }
 }
+
+object ClassDataController {
+
+  import ClassDataJsons._
+
+  def getClass(times: OrdInt, grade: Int, `class`: Int) = {
+    ClassData.find(times.raw, grade, `class`).map(Simple.apply)
+      .toRight(Errors.ResourceNotFound)
+  }
+
+  def getGrade(times: OrdInt, grade: Int) = {
+    ClassData.gradeAll(times.raw, grade).map(Simple.apply)
+  }
+
+  def getTimes(times: OrdInt) = {
+    ClassData.timesAll(times.raw).map(Simple.apply)
+  }
+}

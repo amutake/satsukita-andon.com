@@ -11,7 +11,7 @@ import akka.http.marshalling.Marshaller._
 import akka.http.unmarshalling.Unmarshaller._
 
 import andon.api.util.Json4sJacksonSupport._
-import andon.api.util.Errors
+import andon.api.util.{ Errors, OrdIntMatcher }
 import andon.api.controllers._
 
 object Routes {
@@ -24,7 +24,7 @@ object Routes {
     }
     handleExceptions(exceptionHandler) {
       pathPrefix(version) {
-        articles
+        articles ~ classData
       } ~
       complete {
         // catch-all
@@ -62,6 +62,34 @@ object Routes {
       get {
         complete {
           ArticleController.get(id)
+        }
+      }
+    }
+  }
+
+  private def classData(implicit ec: ExecutionContext, fm: ActorFlowMaterializer): Route = {
+    pathPrefix("classes" / OrdIntMatcher) { t =>
+      pathEnd {
+        get {
+          complete {
+            ClassDataController.getTimes(t)
+          }
+        }
+      } ~
+      pathPrefix(IntNumber) { g =>
+        pathEnd {
+          get {
+            complete {
+              ClassDataController.getGrade(t, g)
+            }
+          }
+        } ~
+        path(IntNumber) { c =>
+          get {
+            complete {
+              ClassDataController.getClass(t, g, c)
+            }
+          }
         }
       }
     }
