@@ -9,6 +9,7 @@ import org.eclipse.jgit.internal.storage.file.FileRepository
 import java.io.{ File, PrintWriter }
 
 import scala.collection.JavaConversions._
+import scala.util.Try
 import com.typesafe.config.ConfigFactory
 import com.github.nscala_time.time.Imports._
 
@@ -72,42 +73,46 @@ object HistoryService {
     History(commit.getName, id, commit.getAuthorIdent.getName.toLong, date)
   }
 
-  def histories(id: Long): Seq[History] = {
-    git.log.addPath(filename(id)).call.map(commitToHistory(id, _)).toSeq
-  }
-
-  def history(articleId: Long, commitId: String): Option[History] = {
-    histories(articleId).filter(_.id == commitId).headOption
-  }
-
-  def previousHistory(articleId: Long, commitId: String): Option[History] = {
-    val hists = histories(articleId).toSeq
-    val i = hists.indexWhere(h => h.id == commitId)
-    if (i == -1) {
-      None
-    } else {
-      hists.lift(i + 1)
+  def histories(id: Long): Option[Seq[History]] = {
+    Try(git.log.addPath(filename(id)).call).toOption.map { cs =>
+      cs.map(commitToHistory(id, _)).toSeq
     }
   }
 
-  private def getCommit(commitId: String): RevCommit = {
-    new RevWalk(repository).parseCommit(repository.resolve(commitId))
+  def history(articleId: Long, commitId: String): Option[History] = {
+    getCommit(commitId).map(commitToHistory(articleId, _))
+  }
+
+  def previousHistory(articleId: Long, commitId: String): Option[History] = {
+    histories(articleId).flatMap { hists =>
+      val i = hists.indexWhere(h => h.id == commitId)
+      if (i == -1) {
+        None
+      } else {
+        hists.lift(i + 1)
+      }
+    }
+  }
+
+  private def getCommit(commitId: String): Option[RevCommit] = {
+    Try(new RevWalk(repository).parseCommit(repository.resolve(commitId))).toOption
   }
 
   def body(articleId: Long, commitId: String): Option[String] = {
     try {
-      val commit = getCommit(commitId)
-      val treewalk = new TreeWalk(repository)
-      treewalk.addTree(commit.getTree)
-      treewalk.setRecursive(true)
-      treewalk.setFilter(PathFilter.create(filename(articleId)))
-      treewalk.next() match {
-        case false => None
-        case true => {
-          val id = treewalk.getObjectId(0)
-          Some(new String(repository.open(id).getBytes))
+      getCommit(commitId).map { commit =>
+        val treewalk = new TreeWalk(repository)
+        treewalk.addTree(commit.getTree)
+        treewalk.setRecursive(true)
+        treewalk.setFilter(PathFilter.create(filename(articleId)))
+        treewalk.next() match {
+          case false => None
+          case true => {
+            val id = treewalk.getObjectId(0)
+            Some(new String(repository.open(id).getBytes))
+          }
         }
-      }
+      }.getOrElse(None)
     } catch {
       case _: Throwable => None
     }

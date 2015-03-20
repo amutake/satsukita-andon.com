@@ -74,6 +74,13 @@ object Routes {
                 ArticleController.commits(id)
               }
             }
+          } ~
+          path(Rest) { commitId =>
+            get {
+              complete {
+                ArticleController.commit(id, commitId)
+              }
+            }
           }
         }
       }

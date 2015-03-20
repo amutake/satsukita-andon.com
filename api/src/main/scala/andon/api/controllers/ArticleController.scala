@@ -68,6 +68,15 @@ object CommitJsons {
     user: UserJsons.Simple,
     date: DateTime
   )
+
+  final case class Detail(
+    id: String,
+    article_id: Long,
+    title: String,
+    body: String,
+    user: UserJsons.Simple,
+    date: DateTime
+  )
 }
 
 object ArticleController {
@@ -93,10 +102,13 @@ object ArticleController {
 
   /**
     * If a deleted article id is requested, return ResourceNotFound
+    * If the git file is not found, return ResourceNotFound
     */
   def commits(id: Long): Either[Errors.Error, C.Simples] = {
-    Articles.find(id).map(A.Simple.apply).map { article =>
-      val commits = HistoryService.histories(id)
+    (for {
+      article <- Articles.find(id).map(A.Simple.apply)
+      commits <- HistoryService.histories(id)
+    } yield {
       val userIds = commits.map(_.userId).distinct
       val users = Users.allIn(userIds).map(UserJsons.Simple.apply)
       val simples = commits.map { c =>
@@ -104,6 +116,27 @@ object ArticleController {
         C.Simple(c.id, u, c.date)
       }
       C.Simples(article, simples)
-    }.toRight(Errors.ResourceNotFound)
+    }).toRight(Errors.ResourceNotFound)
+  }
+
+  /**
+    * If the user that have commited it is already deleted, return ResourceNotFound
+    */
+  def commit(articleId: Long, commitId: String): Either[Errors.Error, C.Detail] = {
+    (for {
+      article <- Articles.find(articleId)
+      commit <- HistoryService.history(articleId, commitId)
+      user <- Users.find(commit.userId).map(UserJsons.Simple.apply)
+      body <- commit.body
+    } yield {
+      C.Detail(
+        id = commit.id,
+        article_id = article.article.id,
+        title = article.article.title,
+        body = body,
+        user = user,
+        date = commit.date
+      )
+    }).toRight(Errors.ResourceNotFound)
   }
 }
