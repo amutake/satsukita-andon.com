@@ -31,7 +31,8 @@ libraryDependencies ++= {
     "org.scalikejdbc" %% "scalikejdbc-config" % "2.2.4",
     "com.h2database" % "h2" % "1.4.185",
     "ch.qos.logback" % "logback-classic" % "1.1.2",
-    "com.github.nscala-time" %% "nscala-time" % "1.8.0"
+    "com.github.nscala-time" %% "nscala-time" % "1.8.0",
+    "org.eclipse.jgit" % "org.eclipse.jgit" % "3.7.0.201502260915-r"
   )
 }
 
