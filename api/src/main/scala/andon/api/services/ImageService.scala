@@ -23,9 +23,11 @@ object ImageService {
 
   private object Images {
 
-    lazy val base = {
+    lazy val (base, endpoint) = {
       val conf = ConfigFactory.load()
-      conf.getString("images.base") // e.g., /home/amutake/sites/satsukita-andon.com/files
+      val base = conf.getString("images.path") // e.g., /home/amutake/sites/satsukita-andon.com/files
+      val endpoint = conf.getString("images.endpoint")
+      (base, endpoint)
     }
 
     def fullsizeDirPath(t: OrdInt, g: Int, c: Int): String =
@@ -61,7 +63,7 @@ object ImageService {
         val fulls = fulldir.listFiles.map(_.getName).sorted.drop(o).take(l)
         val thumbs = thumbdir.listFiles.map(_.getName).sorted.drop(o).take(l)
         fulls.zip(thumbs).map { case (full, thumb) =>
-          Image(fullsizeDirPath(t, g, c) + full, thumbnailDirPath(t, g, c) + thumb)
+          Image(endpoint + fullsizeDirPath(t, g, c) + full, endpoint + thumbnailDirPath(t, g, c) + thumb)
         }
       }
       res.toSeq.flatten

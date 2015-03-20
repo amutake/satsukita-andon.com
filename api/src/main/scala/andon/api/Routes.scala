@@ -24,7 +24,7 @@ object Routes {
     }
     handleExceptions(exceptionHandler) {
       pathPrefix(version) {
-        articles ~ classData
+        articles ~ classData ~ gallery
       } ~
       complete {
         // catch-all
@@ -94,4 +94,32 @@ object Routes {
       }
     }
   }
+
+  private def gallery(implicit ec: ExecutionContext, fm: ActorFlowMaterializer): Route = {
+    path("gallery" / OrdIntMatcher / IntNumber / IntNumber) { case (t, g, c) =>
+      get {
+        parameterMap { params =>
+          complete {
+            val offset = params.get("offset").map(s => Try(s.toInt).toOption).flatten
+            val limit = params.get("limit").map(s => Try(s.toInt).toOption).flatten
+            GalleryController.all(t, g, c, offset, limit)
+          }
+        }
+      }
+    }
+  }
+
+  // path("festivals" / OrdIntMatcher) { t =>
+  //   get {
+  //     FestivalController.detail(t) // also return prize info
+  //   }
+  // } ~
+  // path("festivals") {
+  //   get {
+  //     complete {
+  //       GalleryController.all
+  //     }
+  //   }
+  // }
+
 }
