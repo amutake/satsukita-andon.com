@@ -27,6 +27,8 @@ object ClassData extends SQLSyntaxSupport[ClassData] {
       description = rs.get(c.description),
       topUrl = rs.get(c.topUrl)
     )
+  def opt(c: SyntaxProvider[ClassData])(rs: WrappedResultSet): Option[ClassData] =
+    rs.intOpt(c.resultName.times).map(_ => ClassData(c)(rs))
 
   val c = syntax("c")
   val p = Prize.syntax("p")

@@ -24,7 +24,7 @@ object Routes {
     }
     handleExceptions(exceptionHandler) {
       pathPrefix(version) {
-        articles ~ classData ~ gallery
+        articles ~ classData ~ gallery ~ festivals
       } ~
       complete {
         // catch-all
@@ -129,17 +129,22 @@ object Routes {
     }
   }
 
-  // path("festivals" / OrdIntMatcher) { t =>
-  //   get {
-  //     FestivalController.detail(t) // also return prize info
-  //   }
-  // } ~
-  // path("festivals") {
-  //   get {
-  //     complete {
-  //       GalleryController.all
-  //     }
-  //   }
-  // }
-
+  private def festivals(implicit ec: ExecutionContext, fm: ActorFlowMaterializer): Route = {
+    pathPrefix("festivals") {
+      pathEnd {
+        get {
+          complete {
+            FestivalController.all
+          }
+        }
+      } ~
+      path(OrdIntMatcher) { t =>
+        get {
+          complete {
+            FestivalController.detail(t) // also return prize info
+          }
+        }
+      }
+    }
+  }
 }
