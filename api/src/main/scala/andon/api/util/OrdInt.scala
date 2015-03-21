@@ -27,7 +27,7 @@ object OrdInt {
             case 1 if ord == "st" => Some(OrdInt(n))
             case 2 if ord == "nd" => Some(OrdInt(n))
             case 3 if ord == "rd" => Some(OrdInt(n))
-            case _ if ord == "th" => Some(OrdInt(n))
+            case p if p != 1 && p != 2 && p != 3 && ord == "th" => Some(OrdInt(n))
             case _ => None
           }
         }
