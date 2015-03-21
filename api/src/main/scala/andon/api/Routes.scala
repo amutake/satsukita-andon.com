@@ -11,7 +11,7 @@ import akka.http.marshalling.Marshaller._
 import akka.http.unmarshalling.Unmarshaller._
 
 import andon.api.util.Json4sJacksonSupport._
-import andon.api.util.{ Errors, OrdIntMatcher }
+import andon.api.util.{ Errors, OrdIntMatcher, SignedIntNumber }
 import andon.api.controllers._
 
 object Routes {
@@ -104,7 +104,7 @@ object Routes {
             }
           }
         } ~
-        path(IntNumber) { c =>
+        path(SignedIntNumber) { c =>
           get {
             complete {
               ClassDataController.getClass(t, g, c)
@@ -116,7 +116,7 @@ object Routes {
   }
 
   private def gallery(implicit ec: ExecutionContext, fm: ActorFlowMaterializer): Route = {
-    path("gallery" / OrdIntMatcher / IntNumber / IntNumber) { case (t, g, c) =>
+    path("gallery" / OrdIntMatcher / IntNumber / SignedIntNumber) { case (t, g, c) =>
       get {
         parameterMap { params =>
           complete {
@@ -149,7 +149,7 @@ object Routes {
   }
 
   private def reviews(implicit ec: ExecutionContext, fm: ActorFlowMaterializer): Route = {
-    path("reviews" / OrdIntMatcher / IntNumber / IntNumber) { (t, g, c) =>
+    path("reviews" / OrdIntMatcher / IntNumber / SignedIntNumber) { (t, g, c) =>
       get {
         complete {
           ReviewController.all(t, g, c)
