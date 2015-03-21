@@ -1,9 +1,11 @@
 package andon.api.controllers
 
+import scalikejdbc.DB
+import com.github.nscala_time.time.Imports._
+
 import andon.api.util.Errors
 import andon.api.models.{ Article, Articles, ArticleObjects, User, Users }
 import andon.api.services.{ HistoryService, HistoryObjects }
-import com.github.nscala_time.time.Imports._
 
 object ArticleJsons {
 
@@ -96,8 +98,12 @@ object ArticleController {
   }
 
   def add(article: ArticleJsons.Create): Either[Errors.Error, A.Detail] = {
-    Articles.create(article.title, article.body, article.user_id)
-      .right.map(A.Detail.apply)
+    DB.localTx { implicit s =>
+      Articles.create(article.title, article.body, article.user_id).right.map { a =>
+        HistoryService.create(a.article.id, a.article.body, a.article.createUserId)
+        A.Detail(a)
+      }
+    }
   }
 
   /**
