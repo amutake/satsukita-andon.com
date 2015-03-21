@@ -29,14 +29,24 @@ object Review extends SQLSyntaxSupport[Review] {
     )
 }
 
+object ReviewObjects {
+  final case class Base(review: Review, user: User)
+}
+
 object Reviews {
 
-  val r = Review.syntax("r")
+  import ReviewObjects._
 
-  def all(times: Int, grade: Int, `class`: Int)(implicit s: DBSession = Review.autoSession): Seq[Review] = {
+  val r = Review.syntax("r")
+  val u = User.syntax("u")
+
+  def all(times: Int, grade: Int, `class`: Int)(implicit s: DBSession = Review.autoSession): Seq[Base] = {
     withSQL {
       select.from(Review as r)
+        .innerJoin(User as u).on(u.id, r.userId)
         .where.eq(r.times, times).and.eq(r.grade, grade).and.eq(r.`class`, `class`)
-    }.map(Review(r)).list.apply()
+    }.one(Review(r)).toOne(User(u))
+      .map { (r, u) => Base(r, u) }
+      .list.apply()
   }
 }

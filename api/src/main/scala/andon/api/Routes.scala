@@ -24,7 +24,7 @@ object Routes {
     }
     handleExceptions(exceptionHandler) {
       pathPrefix(version) {
-        articles ~ classData ~ gallery ~ festivals
+        articles ~ classData ~ gallery ~ festivals ~ reviews
       } ~
       complete {
         // catch-all
@@ -143,6 +143,16 @@ object Routes {
           complete {
             FestivalController.detail(t) // also return prize info
           }
+        }
+      }
+    }
+  }
+
+  private def reviews(implicit ec: ExecutionContext, fm: ActorFlowMaterializer): Route = {
+    path("reviews" / OrdIntMatcher / IntNumber / IntNumber) { (t, g, c) =>
+      get {
+        complete {
+          ReviewController.all(t, g, c)
         }
       }
     }
