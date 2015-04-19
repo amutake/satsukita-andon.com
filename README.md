@@ -22,6 +22,9 @@ Requirements
 - h2.jar (http://www.h2database.com/html/download.html)
   - checked with h2-1.3.*.jar
   - put this binary to /db directory with the name `h2.jar`
+- Elasticsearch-1.5
+  - with kuromoji plugin
+  - see [tools/es-load](tools/el-load)
 
 Usage of `andon` command
 ------------------------

@@ -136,6 +136,16 @@ object Application extends Controller with Authentication {
     result.getOrElse(NotFound(views.html.errors.notFound(request.path)))
   }
 
+  def articleSearch(q: String, p: Option[Int]) = Action { implicit request =>
+    val page = p.fold(1) { n =>
+      if (n < 1) 1 else n
+    }
+    val limit = 20
+    val offset = (page - 1) * limit
+    val res = Elasticsearch.search(q, offset, limit)
+    Ok(views.html.articleSearch(q, page, res))
+  }
+
   def postComment(id: Long) = Action { implicit request =>
     Articles.findById(id).map { article =>
 

@@ -20,4 +20,21 @@ object Conv {
   def newline(s: String) = HtmlFormat.raw(HtmlFormat.escape(toLF(s)).toString.replace("\n", "<br>"))
 
   def intro(s: String) = """\A(.+(\n\n|\n)?)+""".r.findFirstIn(toLF(s)).getOrElse(s)
+
+  def elasticsearch(s: String) = {
+    val sb = new StringBuilder()
+    s.foreach {
+      case '∀' =>
+        sb.append("<span class=\"match\">")
+      case '∃' =>
+        sb.append("</span>")
+      case '<' => sb.append("&lt;")
+      case '>' => sb.append("&gt;")
+      case '"' => sb.append("&quot;")
+      case '\'' => sb.append("&#x27;")
+      case '&' => sb.append("&amp;")
+      case c => sb += c
+    }
+    new Html(sb)
+  }
 }

@@ -13,7 +13,8 @@ object ApplicationBuild extends Build {
     "com.typesafe.slick" %% "slick" % "1.0.1",
     "org.pegdown" % "pegdown" % "1.2.1",
     "org.twitter4j" % "twitter4j-core" % "4.0.2",
-    "org.eclipse.jgit" % "org.eclipse.jgit" % "3.4.1.201406201815-r"
+    "org.eclipse.jgit" % "org.eclipse.jgit" % "3.4.1.201406201815-r",
+    "com.sksamuel.elastic4s" %% "elastic4s" % "1.5.4"
   )
 
 

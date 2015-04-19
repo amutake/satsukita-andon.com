@@ -6,7 +6,8 @@
 
 @title() = @{ article.articleType.toString + " - " + article.title }
 
-@common(title) {
+@common(title)(article.text.take(120) + "...") {
+  <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/sp.css")">
 } {
 
   @flash.get("success").map { message =>

@@ -1,6 +1,6 @@
 @(tag: String, cs: Seq[(ClassData, String)])
 
-@common("タグ - " + tag) {
+@common("タグ - " + tag)("タグ『" + tag + "』を持つクラス一覧です") {
   <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/gallery.css")">
 } {
 
