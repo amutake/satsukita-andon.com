@@ -1,8 +1,6 @@
 #!/bin/bash
 
-sbt assembly
-
-curl -XDELETE 'http://localhost:9200/andon'
+# curl -XDELETE 'http://localhost:9200/andon'
 
 curl -XPUT 'http://localhost:9200/andon/' -d '{
   "settings": {
@@ -63,5 +61,3 @@ curl -XPUT 'http://localhost:9200/andon/' -d '{
     }
   }
 }'
-
-java -jar ./target/scala-2.11/es-load.jar
