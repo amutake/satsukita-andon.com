@@ -1,0 +1,42 @@
+@(q: String, p: Int, result: andon.utils.SearchResult)
+
+@import scala.math._
+@import andon.utils._
+
+@pager = {
+  <ul class="pager">
+    @if(p <= 1) {
+      <li class="previous disabled"><a href="#">&larr; 前へ</a></li>
+    } else {
+      <li class="previous"><a href="@routes.Application.articleSearch(q, Some(p - 1))">&larr; 前へ</a></li>
+    }
+    @if(p >= ceil(result.total.toDouble / 20)) {
+      <li class="next disabled"><a href="#">次へ &rarr;</a></li>
+    } else {
+      <li class="next"><a href="@routes.Application.articleSearch(q, Some(p + 1))">次へ &rarr;</a></li>
+    }
+  </ul>
+}
+
+@common("\"" + q + "\" の検索結果")("\"" + q + "\" の検索結果") {
+  <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/search.css")">
+} {
+  <form action="/article/search" method="GET">
+    <input type="text" name="q" class="search-query" placeholder="Search for..." value="@q">
+    <button type="submit" class="btn">検索</button>
+  </form>
+  <p>"@q" の検索結果: @result.total 件</p>
+  @pager
+  <div class="search-result">
+    <ul>
+      @result.hits.map { case SearchHit(score, highlight, article) =>
+        <li class="search-hit">
+          <p><a class="search-title" href="/article/@article.id">@article.title</a> (カテゴリ: @article.articleType, 作成者: @article.optAuthor.getOrElse(models.Accounts.findNameById(article.createAccountId)), ジャンル: @article.genre)</p>
+          <p class="search-highlight">@Conv.elasticsearch(highlight)</p>
+        </li>
+      }
+    </ul>
+  </div>
+  @pager
+} {
+}
