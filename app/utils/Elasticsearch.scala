@@ -16,7 +16,7 @@ object Elasticsearch {
 
   def search(q: String, offset: Int, limit: Int): SearchResult = {
     val res = client.execute {
-      esearch in "andon" / "articles" rawQuery (
+      esearch in "andon-test" / "articles" rawQuery (
         s"""{"match": {"_all": {"query": "${q}", "operator": "and"}}}"""
       ) highlighting (
         highlight field "text"

@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# curl -XDELETE 'http://localhost:9200/andon'
+# curl -XDELETE 'http://localhost:9200/andon-test'
 
-curl -XPUT 'http://localhost:9200/andon/' -d '{
+curl -XPUT 'http://localhost:9200/andon-test/' -d '{
   "settings": {
     "analysis": {
       "filter": {
