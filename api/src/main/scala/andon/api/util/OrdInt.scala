@@ -1,10 +1,10 @@
 package andon.api.util
 
 import scala.util.Try
-import akka.http.server._
-import akka.http.server.PathMatcher.{ Matching, Matched, Unmatched }
-import akka.http.server.util.Tuple._
-import akka.http.model.Uri.Path, Path.Segment
+import akka.http.scaladsl.server._
+import akka.http.scaladsl.server.PathMatcher.{ Matching, Matched, Unmatched }
+import akka.http.scaladsl.server.util.Tuple._
+import akka.http.scaladsl.model.Uri.Path, Path.Segment
 
 case class OrdInt(raw: Int) {
   override def toString: String = {

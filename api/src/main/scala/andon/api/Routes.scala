@@ -5,10 +5,10 @@ import scala.util.Try
 import scala.util.control.NonFatal
 
 import akka.stream.ActorFlowMaterializer
-import akka.http.server._, Directives._
-import akka.http.marshalling.ToResponseMarshallable
-import akka.http.marshalling.Marshaller._
-import akka.http.unmarshalling.Unmarshaller._
+import akka.http.scaladsl.server._, Directives._
+import akka.http.scaladsl.marshalling.ToResponseMarshallable
+import akka.http.scaladsl.marshalling.Marshaller._
+import akka.http.scaladsl.unmarshalling.Unmarshaller._
 
 import andon.api.util.Json4sJacksonSupport._
 import andon.api.util.{ Errors, OrdIntMatcher, SignedIntNumber }

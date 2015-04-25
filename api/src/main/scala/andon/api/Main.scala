@@ -1,8 +1,8 @@
 package andon.api
 
 import akka.actor.ActorSystem
-import akka.http.Http
-import akka.http.server.{ RouteResult, RoutingLog, RoutingSetup, RoutingSettings }
+import akka.http.scaladsl.Http
+import akka.http.scaladsl.server.{ RouteResult, RoutingLog, RoutingSetup, RoutingSettings }
 import akka.stream.scaladsl.Sink
 import akka.stream.ActorFlowMaterializer
 

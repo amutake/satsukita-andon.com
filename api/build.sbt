@@ -20,11 +20,11 @@ scalacOptions ++= Seq(
 )
 
 libraryDependencies ++= {
-  val akkaHttp = "1.0-M4"
+  val akkaHttp = "1.0-RC1"
   Seq(
     "com.typesafe.akka" %% "akka-stream-experimental" % akkaHttp,
     "com.typesafe.akka" %% "akka-http-core-experimental" % akkaHttp,
-    "com.typesafe.akka" %% "akka-http-experimental" % akkaHttp,
+    "com.typesafe.akka" %% "akka-http-scala-experimental" % akkaHttp,
     "org.json4s" %% "json4s-jackson" % "3.2.11",
     "org.json4s" %% "json4s-ext" % "3.2.11",
     "org.scalikejdbc" %% "scalikejdbc" % "2.2.4",

@@ -1,8 +1,8 @@
 package andon.api.util
 
-import akka.http.server.PathMatcher
-import akka.http.server.PathMatcher.{ Matching, Matched, Unmatched }
-import akka.http.model.Uri.Path, Path.Segment
+import akka.http.scaladsl.server.PathMatcher
+import akka.http.scaladsl.server.PathMatcher.{ Matching, Matched, Unmatched }
+import akka.http.scaladsl.model.Uri.Path, Path.Segment
 
 object SignedIntNumber extends PathMatcher[Tuple1[Int]] {
   def apply(path: Path): Matching[Tuple1[Int]] = path match {

@@ -3,9 +3,9 @@ package andon.api.util
 import scala.concurrent.ExecutionContext
 import scala.reflect.Manifest
 import akka.stream.ActorFlowMaterializer
-import akka.http.marshalling.Marshaller
-import akka.http.unmarshalling.Unmarshaller
-import akka.http.model.{ ContentTypes, HttpCharsets, MediaTypes }
+import akka.http.scaladsl.marshalling.Marshaller
+import akka.http.scaladsl.unmarshalling.Unmarshaller
+import akka.http.scaladsl.model.{ ContentTypes, HttpCharsets, MediaTypes }
 import org.json4s.{ Serialization, Formats, NoTypeHints }
 import org.json4s.jackson.{ Serialization => JacksonSerialization }
 import org.json4s.ext.JodaTimeSerializers

@@ -1,6 +1,6 @@
 package andon.api.util
 
-import akka.http.model.{ StatusCode, StatusCodes }
+import akka.http.scaladsl.model.{ StatusCode, StatusCodes }
 
 object Errors {
 
