@@ -41,14 +41,14 @@ object ArticleObjects {
   }
 }
 
-object Articles {
+trait ArticleModel {
 
   import ArticleObjects._
 
-  val a = Article.syntax("a")
-  val cu = User.syntax("cu")
-  val uu = User.syntax("uu")
-  val column = Article.column
+  private val a = Article.syntax("a")
+  private val cu = User.syntax("cu")
+  private val uu = User.syntax("uu")
+  private val column = Article.column
 
   def find(id: Long)(implicit s: DBSession = Article.autoSession): Option[Base] = {
     withSQL {
@@ -60,7 +60,7 @@ object Articles {
   }
 
   def create(title: String, body: String, userId: Long)
-      (implicit s: DBSession = Article.autoSession): Either[Errors.Error, Base] = {
+    (implicit s: DBSession = Article.autoSession): Either[Errors.Error, Base] = {
     val optUser = withSQL {
       select.from(User as cu).where.eq(cu.id, userId)
     }.map(User(cu)).single.apply()
@@ -99,3 +99,5 @@ object Articles {
     }.map(Base(a, cu, uu)).list.apply()
   }
 }
+
+object ArticleModel extends ArticleModel

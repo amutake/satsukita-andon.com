@@ -4,7 +4,7 @@ import scalikejdbc.DB
 import com.github.nscala_time.time.Imports._
 
 import andon.api.util.Errors
-import andon.api.models.{ Article, Articles, ArticleObjects, User, Users }
+import andon.api.models.{ Article, ArticleModel, ArticleObjects, User, Users }
 import andon.api.services.{ HistoryService, HistoryObjects }
 
 object ArticleJsons {
@@ -81,10 +81,12 @@ object CommitJsons {
   )
 }
 
-object ArticleController {
+trait ArticleController {
 
   import andon.api.controllers.{ ArticleJsons => A }
   import andon.api.controllers.{ CommitJsons => C }
+
+  val Articles: ArticleModel
 
   def all(offset: Option[Int], limit: Option[Int]): Seq[A.Simple] = {
     val o = offset.getOrElse(0)
@@ -145,4 +147,8 @@ object ArticleController {
       )
     }).toRight(Errors.ResourceNotFound)
   }
+}
+
+object ArticleController extends ArticleController {
+  val Articles = ArticleModel
 }
