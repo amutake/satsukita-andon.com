@@ -7,7 +7,7 @@ case class User(
   login: String,
   password: String,
   name: String,
-  times: Int, // times?
+  times: Int, // times? grad?
   icon: Option[String],
   firstId: Option[Int], // class id
   secondId: Option[Int],

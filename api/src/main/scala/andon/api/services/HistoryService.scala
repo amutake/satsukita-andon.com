@@ -19,7 +19,7 @@ object HistoryObjects {
   }
 }
 
-object HistoryService {
+trait HistoryService {
 
   import HistoryObjects._
 
@@ -118,3 +118,5 @@ object HistoryService {
     }
   }
 }
+
+object HistoryService extends HistoryService

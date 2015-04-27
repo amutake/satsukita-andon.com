@@ -87,6 +87,7 @@ trait ArticleController {
   import andon.api.controllers.{ CommitJsons => C }
 
   val Articles: ArticleModel
+  val HistoryService: HistoryService
 
   def all(offset: Option[Int], limit: Option[Int]): Seq[A.Simple] = {
     val o = offset.getOrElse(0)
@@ -151,4 +152,5 @@ trait ArticleController {
 
 object ArticleController extends ArticleController {
   val Articles = ArticleModel
+  val HistoryService = andon.api.services.HistoryService
 }
