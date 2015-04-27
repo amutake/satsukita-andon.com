@@ -7,6 +7,7 @@ src/types
 typings
 public/kobito.*
 public/*.css
+public/bundle.js
 public/js/*.js
 public/env/*.js
 test/e2e/screenshots/*.png

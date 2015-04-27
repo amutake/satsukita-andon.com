@@ -1,6 +1,6 @@
 {
-  "name": "arda-starter-project",
-  "version": "0.13.1",
+  "name": "frontend",
+  "version": "0.0.0",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "test-e2e": "./node_modules/.bin/mocha -t 150000 --require espower-coffee/guess test/spec-helper.coffee test/e2e/*.coffee",
     "build": "npm install; node_modules/.bin/dtsm install; node_modules/.bin/gulp; node_modules/.bin/gulp build:web"
   },
-  "author": "mizchi",
+  "author": "amutake",
   "dependencies": {
     "arda": "0.13.1",
     "bluebird": "^2.9.3",

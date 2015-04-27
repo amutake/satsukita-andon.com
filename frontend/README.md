@@ -1,4 +1,8 @@
-# Arda Starter Kit
+# Frontned
+
+frontend implementation of satsukita-andon.com
+
+forked from [mizchi-sandbox/arda-starter-project](https://github.com/mizchi-sandbox/arda-starter-project)
 
 ```
 npm install -g dtsm gulp
