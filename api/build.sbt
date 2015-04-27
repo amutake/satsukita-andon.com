@@ -27,13 +27,14 @@ libraryDependencies ++= {
     "com.typesafe.akka" %% "akka-http-scala-experimental" % akkaHttp,
     "org.json4s" %% "json4s-jackson" % "3.2.11",
     "org.json4s" %% "json4s-ext" % "3.2.11",
-    "org.scalikejdbc" %% "scalikejdbc" % "2.2.4",
-    "org.scalikejdbc" %% "scalikejdbc-config" % "2.2.4",
+    "org.scalikejdbc" %% "scalikejdbc" % "2.2.6",
+    "org.scalikejdbc" %% "scalikejdbc-config" % "2.2.6",
     "com.h2database" % "h2" % "1.4.185",
     "ch.qos.logback" % "logback-classic" % "1.1.2",
     "com.github.nscala-time" %% "nscala-time" % "1.8.0",
     "org.eclipse.jgit" % "org.eclipse.jgit" % "3.7.0.201502260915-r",
-    "org.scalatest" %% "scalatest" % "2.2.4" % "test"
+    "org.scalatest" %% "scalatest" % "2.2.4" % "test",
+    "org.scalikejdbc" %% "scalikejdbc-test" % "2.2.6" % "test"
   )
 }
 

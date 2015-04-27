@@ -75,17 +75,20 @@ trait ArticleModel {
           column.createdAt -> now)
       }.updateAndReturnGeneratedKey.apply()
 
-      Right(Base(Article(
-        id = id,
-        title = title,
-        body = body,
-        createUserId = userId,
-        updateUserId = None,
-        createdAt = now,
-        updatedAt = None),
+      Base(
+        Article(
+          id = id,
+          title = title,
+          body = body,
+          createUserId = userId,
+          updateUserId = None,
+          createdAt = now,
+          updatedAt = None
+        ),
         user,
-        None))
-    }.getOrElse(Left(Errors.ResourceNotFound))
+        None
+      )
+    }.toRight(Errors.ResourceNotFound)
   }
 
   def all(offset: Int, limit: Int)
