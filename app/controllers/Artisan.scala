@@ -394,7 +394,14 @@ object Artisan extends Controller with Authentication {
         request.body.asMultipartFormData.flatMap { fd =>
           fd.file("file").map { file =>
             val now = new Date()
-            val path = "/files/data/" + now.getTime().toString + "-" + file.filename.filter(_ != ' ')
+            def valid(c: Char) = {
+              val r = """[a-zA-Z0-9\.-]""".r
+              c.toString match {
+                case r() => true
+                case _ => false
+              }
+            }
+            val path = "/files/data/" + now.getTime().toString + "-" + file.filename.filter(valid)
             file.ref.moveTo(new File("." + path), true)
             Data.fileUpdate(id, path)
             Redirect(routes.Artisan.home).flashing(
