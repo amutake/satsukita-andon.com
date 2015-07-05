@@ -59,7 +59,7 @@ object ArtisanData extends Controller with ControllerUtils with Authentication {
           val author = result._3.getOrElse(Accounts.findNameById(acc.id))
           Notifier.notify(
             tweet = true,
-            body = author + "さんの資料『" + result._1 + "』がアップロードされました",
+            body = author + "により資料『" + result._1 + "』がアップロードされました",
             url = Some("/howto/data/" + java.net.URLEncoder.encode(result._2, "UTF-8"))
           )
           Redirect(routes.Artisan.home).flashing(
@@ -85,7 +85,7 @@ object ArtisanData extends Controller with ControllerUtils with Authentication {
         val author = result._3.getOrElse(Accounts.findNameById(acc.id))
         Notifier.notify(
           tweet = true,
-          body = author + "さんの資料『" + result._1 + "』の情報が編集されました",
+          body = author + "により資料『" + result._1 + "』の情報が編集されました",
           url = Some("/howto/data/" + java.net.URLEncoder.encode(result._2, "UTF-8"))
         )
         request.body.asMultipartFormData.flatMap { fd =>
@@ -118,7 +118,7 @@ object ArtisanData extends Controller with ControllerUtils with Authentication {
     val author = datum.optAuthor.getOrElse(Accounts.findNameById(datum.accountId))
     Notifier.notify(
       tweet = true,
-      body = author + "さんの資料『" + datum.name + "』が削除されました"
+      body = author + "により資料『" + datum.name + "』が削除されました"
     )
     Redirect(routes.Artisan.home).flashing(
       "success" -> "資料を削除しました。"
