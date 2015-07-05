@@ -1,0 +1,9 @@
+# base url of this app
+notifier.base="http://satsukita-andon.com"
+
+# application name
+notifier.appname="行灯職人への道"
+
+# incoming webhook url
+# https://api.slack.com/incoming-webhooks
+notifier.slack.incoming="https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX"

@@ -29,5 +29,5 @@ memo/
 nohup.out
 
 twitter4j.properties
-conf/slack.conf
+conf/notifier.conf
 /data

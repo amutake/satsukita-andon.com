@@ -26,8 +26,8 @@ Requirements
 - Elasticsearch-1.5
   - with kuromoji plugin
   - see [tools/es-load](tools/el-load)
-- Slack Incoming Webhooks
-  - `cp conf/slack.conf.example conf/slack.conf` and edit it
+- Notifier Setting Up
+  - `cp conf/notifier.conf.example conf/notifier.conf` and edit it
 
 Usage of `andon` command
 ------------------------
