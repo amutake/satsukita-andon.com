@@ -12,7 +12,7 @@
   <h3>記事の作成</h3>
 
   <div class="span9">
-    @helper.form(routes.Artisan.postCreateArticle, 'style -> "margin-bottom: 80px;") {
+    @helper.form(routes.ArtisanArticle.postCreateArticle, 'style -> "margin-bottom: 80px;") {
 
       @form.globalError.map { error =>
         <p class="error">
@@ -83,7 +83,7 @@
     }
   </div>
 
-  <form id="preview-form" class="hidden" action="@routes.Artisan.preview" method="POST" target="_blank">
+  <form id="preview-form" class="hidden" action="@routes.ArtisanArticle.preview" method="POST" target="_blank">
     <input id="preview-text" type="hidden" name="text" value="">
   </form>
 

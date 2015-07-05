@@ -4,7 +4,7 @@
 } {
   @breadcrumb(Seq(
     (routes.Artisan.home, "Home"),
-    (routes.Artisan.classData(Some(id.times.n)), "クラス一覧")
+    (routes.ArtisanClassData.classData(Some(id.times.n)), "クラス一覧")
   ), "画像のアップロード")
 
   <h3>@id.toString 画像のアップロード</h3>
@@ -17,7 +17,7 @@
       <li>送信に時間がかかるので、一度送信ボタンを押したら画面が変わるまで待ってください。</li>
     </ul>
 
-    @helper.form(routes.Artisan.postUploadImage(id.toInt), 'enctype -> "multipart/form-data") {
+    @helper.form(routes.ArtisanClassData.postUploadImage(id.toInt), 'enctype -> "multipart/form-data") {
 
       <input type="file" name="images" multiple required>
 

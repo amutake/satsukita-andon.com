@@ -7,14 +7,14 @@
 } {
   @breadcrumb(Seq(
     (routes.Artisan.home, "Home"),
-    (routes.Artisan.articles, "記事一覧"),
-    (routes.Artisan.article(id), "記事詳細")
+    (routes.ArtisanArticle.articles, "記事一覧"),
+    (routes.ArtisanArticle.article(id), "記事詳細")
   ), "記事編集")
 
   <h3>記事の編集</h3>
 
   <div class="span9">
-    @helper.form(routes.Artisan.postEditArticle(id), 'style -> "margin-bottom: 80px;") {
+    @helper.form(routes.ArtisanArticle.postEditArticle(id), 'style -> "margin-bottom: 80px;") {
 
       @form.globalError.map { error =>
         <p class="error">
@@ -84,7 +84,7 @@
     }
   </div>
 
-  <form id="preview-form" class="hidden" action="@routes.Artisan.preview" method="POST" target="_blank">
+  <form id="preview-form" class="hidden" action="@routes.ArtisanArticle.preview" method="POST" target="_blank">
     <input id="preview-text" type="hidden" name="text" value="">
   </form>
 

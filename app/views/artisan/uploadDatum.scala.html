@@ -11,7 +11,7 @@
   <h3>資料のアップロード</h3>
   <p>一度に100Mまでアップロード可能です。画像はクラス一覧→画像のアップロードか、記事に埋め込むようにしてください。送信に時間がかかるので、一度送信ボタンを押したら画面が変わるまで待ってください。</p>
 
-  @helper.form(routes.Artisan.postUploadDatum, 'enctype -> "multipart/form-data") {
+  @helper.form(routes.ArtisanData.postUploadDatum, 'enctype -> "multipart/form-data") {
 
     @form.globalError.map { error =>
       <p class="error">

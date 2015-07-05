@@ -43,10 +43,10 @@
   </dl>
 
   @if(acc.level == Admin) {
-    <a class="btn" href="@routes.Artisan.editAccount(acc.id)">ユーザー情報の変更</a>
+    <a class="btn" href="@routes.ArtisanAccount.editAccount(acc.id)">ユーザー情報の変更</a>
   }
 
-  <form class="inline" method="POST" action="@routes.Artisan.deleteMyAccount">
+  <form class="inline" method="POST" action="@routes.ArtisanAccount.deleteMyAccount">
     <button class="btn btn-danger delete-submit">アカウントの削除</button>
   </form>
 } {
