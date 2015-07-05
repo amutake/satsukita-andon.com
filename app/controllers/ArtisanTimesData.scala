@@ -35,9 +35,10 @@ object ArtisanTimesData extends Controller with ControllerUtils with Authenticat
       formWithErrors => BadRequest(views.html.artisan.editTimesData(data.times, formWithErrors)),
       title => {
         TimesData.update(data.times, title)
-        Twitter.tweet(
-          acc.name + "により" + data.times + "の情報が編集されました",
-          "/gallery"
+        Notifier.notify(
+          tweet = false,
+          body = acc.name + "により" + data.times + "の情報が編集されました",
+          url = Some("/gallery")
         )
         request.body.asMultipartFormData.flatMap { fd =>
           fd.file("top").map { file =>
@@ -76,9 +77,10 @@ object ArtisanTimesData extends Controller with ControllerUtils with Authenticat
           ))
         }.getOrElse {
           TimesData.createByTimes(times)
-          Twitter.tweet(
-            acc.name + "により" + times + "が作成されました",
-            "/gallery"
+          Notifier.notify(
+            tweet = true,
+            body = acc.name + "により" + times + "が作成されました",
+            url = Some("/gallery")
           )
           Redirect(routes.ArtisanTimesData.timesData).flashing(
             "success" -> "回を作成しました。"

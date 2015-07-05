@@ -55,6 +55,11 @@ object ArtisanArticle extends Controller with ControllerUtils with Authenticatio
       { article =>
         val id = Articles.create(acc.id, article._1, article._2, ArticleType.fromString(article._3), article._4, article._5, article._6, article._7)
         History.create(id, article._2, acc.id)
+        Notifier.notify(
+          tweet = true,
+          body = Accounts.findNameById(acc.id) + "により新しい記事『" + article._1  + "』が作成されました",
+          url = Some("/article/" + id)
+        )
         Redirect(routes.ArtisanArticle.article(id)).flashing(
           "success" -> "記事を作成しました。"
         )
@@ -73,6 +78,11 @@ object ArtisanArticle extends Controller with ControllerUtils with Authenticatio
       article => {
         Articles.update(id, acc.id, article._1, article._2, article._4, article._5, article._6, article._7)
         History.update(id, article._2, acc.id)
+        Notifier.notify(
+          tweet = true,
+          body = Accounts.findNameById(acc.id) + "により記事『" + art.title + "』が編集されました",
+          url = Some("/article/" + id)
+        )
         Redirect(routes.ArtisanArticle.article(id)).flashing(
           "success" -> "記事を編集しました。"
         )
@@ -104,6 +114,10 @@ object ArtisanArticle extends Controller with ControllerUtils with Authenticatio
     } else {
       Articles.delete(id)
       History.delete(id, acc.id)
+      Notifier.notify(
+        tweet = true,
+        body = "記事『" + art.title + "』が削除されました"
+      )
       Redirect(routes.ArtisanArticle.articles).flashing(
         "success" -> "記事を削除しました"
       )

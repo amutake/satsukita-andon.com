@@ -11,9 +11,9 @@ object Slack {
   private[this] lazy val slackUrl = Play.application.configuration.getString("slack.incoming")
   private[this] val base = "http://satsukita-andon.com"
 
-  def notify(body: String, path: String): Unit = {
+  def notify(body: String, path: Option[String]): Unit = {
     slackUrl.fold(()) { u =>
-      val link = if (path == "") "" else "\n" + base + path
+      val link = path.fold("")(p => "\n" + base + p)
       val json = ("text" -> (body + link))
       val rendered = compact(render(json))
       val slack = url(u).setContentType("application/json", "UTF-8") << rendered

@@ -69,7 +69,10 @@ object ArtisanAccount extends Controller with ControllerUtils with Authenticatio
         val id = Accounts.create(newacc._1, newacc._2, pass, times, AccountLevel.fromString(newacc._4),
           newacc._5.map(mkClassId(1)), newacc._6.map(mkClassId(2)), newacc._7.map(mkClassId(3)))
         Accounts.findById(id).map { acc =>
-          Twitter.tweet(me.name + "により新しいアカウント『" + acc.name + "』が作られました", "")
+          Notifier.notify(
+            tweet = false,
+            body = me.name + "により新しいアカウント『" + acc.name + "』が作られました"
+          )
           Ok(views.html.artisan.confirmAccount(acc, pass))
         }.getOrElse(InternalServerError)
       }
@@ -103,11 +106,14 @@ object ArtisanAccount extends Controller with ControllerUtils with Authenticatio
         }
         Accounts.update(id, name, username, OrdInt(times.toInt), l,
           class1.map(mkClassId(1)), class2.map(mkClassId(2)), class3.map(mkClassId(3)))
-        if (me.id == id) {
-          Twitter.tweet(me.name + "が自分のアカウント情報を編集しました", "")
-        } else {
-          Twitter.tweet(me.name + "によりアカウント『" + name + "』の情報が編集されました", "")
-        }
+        Notifier.notify(
+          tweet = false,
+          body = if (me.id == id) {
+            me.name + "が自分のアカウント情報を編集しました"
+          } else {
+            me.name + "によりアカウント『" + name + "』の情報が編集されました"
+          }
+        )
         Redirect(routes.Artisan.home).flashing(
           "success" -> "アカウントを編集しました。"
         )
@@ -117,7 +123,10 @@ object ArtisanAccount extends Controller with ControllerUtils with Authenticatio
 
   def deleteAccount(id: Int) = GreaterThan(id) { me => acc => _ =>
     Accounts.delete(id)
-    Twitter.tweet(me.name + "によりアカウント『" + acc.name + "』が削除されました", "")
+    Notifier.notify(
+      tweet = false,
+      body = me.name + "によりアカウント『" + acc.name + "』が削除されました"
+    )
     Redirect(routes.ArtisanAccount.accounts()).flashing(
       "success" -> "アカウントを削除しました。"
     )
@@ -125,7 +134,10 @@ object ArtisanAccount extends Controller with ControllerUtils with Authenticatio
 
   def deleteMyAccount = IsValidAccount { me => _ =>
     Accounts.delete(me.id)
-    Twitter.tweet(me.name + "が自分のアカウントを削除しました", "")
+    Notifier.notify(
+      tweet = false,
+      body = me.name + "が自分のアカウントを削除しました"
+    )
     Redirect(routes.Artisan.login()).withNewSession.flashing(
       "success" -> "アカウントを削除しました。"
     )
@@ -150,6 +162,10 @@ object ArtisanAccount extends Controller with ControllerUtils with Authenticatio
       formWithErrors => BadRequest(views.html.artisan.editMyPassword(formWithErrors)),
       pass => if (acc.validPassword(pass._1)) {
         Accounts.updatePassword(acc.id, pass._2)
+        Notifier.notify(
+          tweet = false,
+          body = acc.name + "が自分のパスワードを変更しました"
+        )
         Redirect(routes.Artisan.home).flashing(
           "success" -> "パスワードを変更しました。"
         )
@@ -168,6 +184,10 @@ object ArtisanAccount extends Controller with ControllerUtils with Authenticatio
       formWithErrors => BadRequest(views.html.artisan.editPassword(acc, formWithErrors)),
       pass => if (me.validPassword(pass._1)) {
         Accounts.updatePassword(acc.id, pass._2)
+        Notifier.notify(
+          tweet = false,
+          body = me.name + "が" + acc.name + "のパスワードを変更しました"
+        )
         Redirect(routes.Artisan.home).flashing(
           "success" -> "パスワードを変更しました。"
         )

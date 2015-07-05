@@ -47,9 +47,10 @@ object ArtisanClassData extends Controller with ControllerUtils with Authenticat
           ))
         }.getOrElse {
           ClassData.createByClassId(classId)
-          Twitter.tweet(
-            acc.name + "により" + classId + "が作成されました",
-            "/gallery/" + Seq(classId.times, classId.grade, classId.classn).mkString("/")
+          Notifier.notify(
+            tweet = false,
+            body = acc.name + "により" + classId + "が作成されました",
+            url = Some("/gallery/" + Seq(classId.times, classId.grade, classId.classn).mkString("/"))
           )
           Redirect(routes.ArtisanClassData.classData(Some(classId.times.n))).flashing(
             "success" -> "クラスを作成しました。"
@@ -78,12 +79,11 @@ object ArtisanClassData extends Controller with ControllerUtils with Authenticat
       result => {
         val prize = Prize.fromString(result._2)
         ClassData.update(data.id, result._1, prize, result._3)
-
-        Twitter.tweet(
-          acc.name + "により" + data.id + "の情報が編集されました",
-          "/gallery/" + Seq(data.id.times, data.id.grade, data.id.classn).mkString("/")
+        Notifier.notify(
+          tweet = false,
+          body = acc.name + "により" + data.id + "の情報が編集されました",
+          url = Some("/gallery/" + Seq(data.id.times, data.id.grade, data.id.classn).mkString("/"))
         )
-
         Redirect(routes.ArtisanClassData.classData(Some(new ClassId(id).times.n))).flashing(
           "success" -> "クラス情報を変更しました。"
         )
@@ -118,9 +118,10 @@ object ArtisanClassData extends Controller with ControllerUtils with Authenticat
             Tags.delete(tag._1)
           }
         }
-        Twitter.tweet(
-          acc.name + "により" + data.id + "のタグが編集されました",
-          "/gallery/" + Seq(data.id.times, data.id.grade, data.id.classn).mkString("/")
+        Notifier.notify(
+          tweet = false,
+          body = acc.name + "により" + data.id + "のタグが編集されました",
+          url = Some("/gallery/" + Seq(data.id.times, data.id.grade, data.id.classn).mkString("/"))
         )
         Redirect(routes.ArtisanClassData.classData(Some(new ClassId(id).times.n))).flashing(
           "success" -> "タグを編集しました。"
@@ -152,6 +153,13 @@ object ArtisanClassData extends Controller with ControllerUtils with Authenticat
           "success" -> str
         )
         def bad(err: FormError) = BadRequest(views.html.artisan.editReview(data.id, reviewForm.fill(result).withError(err)))
+        def notify(typ: String) = Notifier.notify(
+          tweet = true,
+          body = data.id.toJapanese + "への" +
+            Accounts.findNameById(acc.id) + "の講評が" +
+            typ + "されました",
+          url = Some("/gallery/" + data.id.times + "/" + data.id.grade + "/" + data.id.classn)
+        )
 
         result._2.map { text =>
           if (result._3) {
@@ -159,9 +167,11 @@ object ArtisanClassData extends Controller with ControllerUtils with Authenticat
           } else {
             result._1.map { n =>
               Reviews.update(n, text)
+              notify("編集")
               redirect("講評を更新しました。")
             }.getOrElse {
               Reviews.create(data.id, acc.id, text)
+              notify("作成")
               redirect("講評を作成しました。")
             }
           }
@@ -169,6 +179,7 @@ object ArtisanClassData extends Controller with ControllerUtils with Authenticat
           if (result._3) {
             result._1.map { n =>
               Reviews.delete(n)
+              notify("削除")
               redirect("講評を削除しました。")
             }.getOrElse(redirect("講評はありません。"))
           } else {
@@ -214,9 +225,10 @@ object ArtisanClassData extends Controller with ControllerUtils with Authenticat
           Process("mogrify -resize 600x -unsharp 2x1.2+0.5+0.5 -quality 75 ." + thumbnail + filename).!
         }
 
-        Twitter.tweet(
-          acc.name + "により" + classId + "の画像が" + files.length + "枚追加されました",
-          "/gallery/" + Seq(c.id.times, c.id.grade, c.id.classn).mkString("/")
+        Notifier.notify(
+          tweet = true,
+          body = acc.name + "により" + classId + "の画像が" + files.length + "枚追加されました",
+          url = Some("/gallery/" + Seq(c.id.times, c.id.grade, c.id.classn).mkString("/"))
         )
 
         Redirect(routes.ArtisanClassData.classData(Some(new ClassId(id).times.n))).flashing(
@@ -237,9 +249,10 @@ object ArtisanClassData extends Controller with ControllerUtils with Authenticat
       formWithErrors => BadRequest(views.html.artisan.selectTop(data.id, formWithErrors)),
       top => {
         ClassData.updateTop(data.id, top)
-        Twitter.tweet(
-          acc.name + "により" + data.id + "のトップ画像が変更されました",
-          "/gallery/" + Seq(data.id.times, data.id.grade, data.id.classn).mkString("/")
+        Notifier.notify(
+          tweet = false,
+          body = acc.name + "により" + data.id + "のトップ画像が変更されました",
+          url = Some("/gallery/" + Seq(data.id.times, data.id.grade, data.id.classn).mkString("/"))
         )
         Redirect(routes.ArtisanClassData.classData(Some(new ClassId(id).times.n))).flashing(
           "success" -> "トップ画像を変更しました。"
@@ -267,9 +280,10 @@ object ArtisanClassData extends Controller with ControllerUtils with Authenticat
           new File(tpath).delete()
         }
 
-        Twitter.tweet(
-          acc.name + "により" + data.id + "の画像が" + filenames.length + "枚削除されました",
-          "/gallery/" + Seq(data.id.times, data.id.grade, data.id.classn).mkString("/")
+        Notifier.notify(
+          tweet = false,
+          body = acc.name + "により" + data.id + "の画像が" + filenames.length + "枚削除されました",
+          url = Some("/gallery/" + Seq(data.id.times, data.id.grade, data.id.classn).mkString("/"))
         )
 
         Redirect(routes.ArtisanClassData.classData(Some(new ClassId(id).times.n))).flashing(

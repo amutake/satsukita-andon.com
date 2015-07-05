@@ -11,10 +11,10 @@ object Twitter {
 
   val twitter = TwitterFactory.getSingleton()
 
-  def tweet(body: String, url: String) = {
+  def tweet(body: String, url: Option[String]) = {
     val now = new Date()
     val header = "[" + DateUtil.detail(now) + "]\n"
-    val link = if (url == "") "" else "\n" + "http://satsukita-andon.com" + url
+    val link = url.fold("")(u => "\n" + "http://satsukita-andon.com" + u)
     try {
       twitter.updateStatus(header + body + link)
     } catch {

@@ -52,9 +52,10 @@ object ArtisanOtherImages extends Controller with ControllerUtils with Authentic
         Process("mogrify -resize 600x -unsharp 2x1.2+0.5+0.5 -quality 75 ." + thumbnail + filename).!
       }
 
-      Twitter.tweet(
-        acc.name + "によりその他の画像が" + files.length + "枚追加されました",
-        "/gallery/others"
+      Notifier.notify(
+        tweet = true,
+        body = acc.name + "によりその他の画像が" + files.length + "枚追加されました",
+        url = Some("/gallery/others")
       )
 
       Redirect(routes.Artisan.home).flashing(
