@@ -13,7 +13,7 @@ object Slack {
   def notify(appname: String, body: String, url: Option[String]): Unit = {
     slackUrl.fold(()) { u =>
       val link = url.fold("")(u => "\n" + u)
-      val color = "#" + appname.getBytes.map("%02x" format _).mkString.take(6).padTo(6, 'f')
+      val color = "#" + appname.getBytes.map("%02x" format _).mkString.take(6).padTo(6, 'f').reverse
       // see: https://api.slack.com/docs/attachments
       val json =
         ("attachments" -> Seq(
