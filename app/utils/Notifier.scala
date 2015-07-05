@@ -16,7 +16,7 @@ object Notifier {
     if (tweet) {
       Twitter.tweet(body, fullurl)
     }
-    val app = appname.fold("")(a => s"[${a}]\n")
-    Slack.notify(app + body, fullurl)
+    val app = appname.getOrElse("")
+    Slack.notify(app, body, fullurl)
   }
 }
