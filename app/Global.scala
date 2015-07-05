@@ -17,6 +17,9 @@ object Global extends GlobalSettings {
     // See issue#62
     // Cleaner.clean
     Twitter.tweet("行灯職人への道が起動しました", "/")
+    // DB.db.withSession { implicit session: Session =>
+    //   Accounts.create("開発者", "developer", "password", OrdInt(60), Admin, None, None, None)
+    // }
   }
 
   override def onStop(app: Application) {
