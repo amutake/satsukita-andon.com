@@ -20,18 +20,18 @@
         <td>
           <ul>
             @if(me.level != Writer) {
-              <li><a href="@routes.Artisan.editClassData(id.toInt)">情報の編集</a></li>
+              <li><a href="@routes.ArtisanClassData.editClassData(id.toInt)">情報の編集</a></li>
             }
-            <li><a href="@routes.Artisan.uploadImage(id.toInt)">画像のアップロード</a></li>
+            <li><a href="@routes.ArtisanClassData.uploadImage(id.toInt)">画像のアップロード</a></li>
             @if(me.level == Writer && me.myClass(id)) {
-              <li><a href="@routes.Artisan.selectTop(id.toInt)">トップ画像の選択</a></li>
+              <li><a href="@routes.ArtisanClassData.selectTop(id.toInt)">トップ画像の選択</a></li>
             }
             @if(me.level != Writer) {
-              <li><a href="@routes.Artisan.selectTop(id.toInt)">トップ画像の選択</a></li>
-              <li><a href="@routes.Artisan.deleteImage(id.toInt)">画像の削除</a></li>
+              <li><a href="@routes.ArtisanClassData.selectTop(id.toInt)">トップ画像の選択</a></li>
+              <li><a href="@routes.ArtisanClassData.deleteImage(id.toInt)">画像の削除</a></li>
             }
-            <li><a href="@routes.Artisan.editTags(id.toInt)">タグの編集</a></li>
-            <li><a href="@routes.Artisan.editReview(id.toInt)">講評の編集</a></li>
+            <li><a href="@routes.ArtisanClassData.editTags(id.toInt)">タグの編集</a></li>
+            <li><a href="@routes.ArtisanClassData.editReview(id.toInt)">講評の編集</a></li>
           </ul>
         <td>
       </tr>

@@ -16,7 +16,7 @@
       <li>ここでは各クラスに関係のない画像(ねぶたなど)のみにしてください。各クラスに関係のある画像は、クラス一覧 -> 画像のアップロードからアップロードしてください。</li>
     </ul>
 
-    @helper.form(routes.Artisan.postUploadOtherImages, 'enctype -> "multipart/form-data") {
+    @helper.form(routes.ArtisanOtherImages.postUploadOtherImages, 'enctype -> "multipart/form-data") {
       <input type="file" name="images" multiple required>
       <button class="btn" type="submit">送信</button>
     }

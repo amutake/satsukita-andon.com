@@ -32,58 +32,58 @@ POST    /artisan/login              controllers.Artisan.authenticate
 GET     /artisan/logout             controllers.Artisan.logout
 GET     /artisan/home               controllers.Artisan.home
 GET     /artisan/my-account         controllers.Artisan.myAccount
-GET     /artisan/articles           controllers.Artisan.articles
-GET     /artisan/article            controllers.Artisan.article(id: Long)
-GET     /artisan/article/create     controllers.Artisan.createArticle
-POST    /artisan/article/create     controllers.Artisan.postCreateArticle
-GET     /artisan/article/edit       controllers.Artisan.editArticle(id: Long)
-POST    /artisan/article/edit       controllers.Artisan.postEditArticle(id: Long)
-POST    /artisan/article/preview    controllers.Artisan.preview
-POST    /artisan/article/delete     controllers.Artisan.deleteArticle(id: Long)
-GET     /artisan/article/history/:id      controllers.Artisan.history(id: Long)
-GET     /artisan/article/:id/content/:cid controllers.Artisan.historyContent(id: Long, cid: String)
-GET     /artisan/article/:id/source/:cid  controllers.Artisan.historySource(id: Long, cid: String)
-GET     /artisan/article/:id/diff/:cid    controllers.Artisan.diff(id: Long, cid: String)
-GET     /artisan/accounts           controllers.Artisan.accounts
-GET     /artisan/account            controllers.Artisan.account(id: Int)
-GET     /artisan/account/create     controllers.Artisan.createAccount
-POST    /artisan/account/create     controllers.Artisan.postCreateAccount
-GET     /artisan/account/edit       controllers.Artisan.editAccount(id: Int)
-POST    /artisan/account/edit       controllers.Artisan.postEditAccount(id: Int)
-GET     /artisan/account/password   controllers.Artisan.editPassword(id: Int)
-POST    /artisan/account/password   controllers.Artisan.postEditPassword(id: Int)
-POST    /artisan/account/delete     controllers.Artisan.deleteAccount(id: Int)
-GET     /artisan/password           controllers.Artisan.editMyPassword
-POST    /artisan/password           controllers.Artisan.postEditMyPassword
-POST    /artisan/delete             controllers.Artisan.deleteMyAccount
-GET     /artisan/data               controllers.Artisan.data
-GET     /artisan/data/upload        controllers.Artisan.uploadDatum
-POST    /artisan/data/upload        controllers.Artisan.postUploadDatum
-GET     /artisan/data/edit          controllers.Artisan.editDatum(id: Int)
-POST    /artisan/data/edit          controllers.Artisan.postEditDatum(id: Int)
-POST    /artisan/data/delete        controllers.Artisan.deleteDatum(id: Int)
-GET     /artisan/classdata          controllers.Artisan.classData(times: Option[Int])
-GET     /artisan/classdata/edit     controllers.Artisan.editClassData(id: Int)
-POST    /artisan/classdata/edit     controllers.Artisan.postEditClassData(id: Int)
-GET     /artisan/classdata/tags     controllers.Artisan.editTags(id: Int)
-POST    /artisan/classdata/tags     controllers.Artisan.postEditTags(id: Int)
-GET     /artisan/classdata/review   controllers.Artisan.editReview(id: Int)
-POST    /artisan/classdata/review   controllers.Artisan.postEditReview(id: Int)
-GET     /artisan/classdata/create   controllers.Artisan.createClass
-POST    /artisan/classdata/create   controllers.Artisan.postCreateClass
-GET     /artisan/gallery/upload     controllers.Artisan.uploadImage(id: Int)
-POST    /artisan/gallery/upload     controllers.Artisan.postUploadImage(id: Int)
-GET     /artisan/gallery/select     controllers.Artisan.selectTop(id: Int)
-POST    /artisan/gallery/select     controllers.Artisan.postSelectTop(id: Int)
-GET     /artisan/gallery/delete     controllers.Artisan.deleteImage(id: Int)
-POST    /artisan/gallery/delete     controllers.Artisan.postDeleteImage(id: Int)
-GET     /artisan/timesdata          controllers.Artisan.timesData
-GET     /artisan/timesdata/edit     controllers.Artisan.editTimesData(id: Int)
-POST    /artisan/timesdata/edit     controllers.Artisan.postEditTimesData(id: Int)
-GET     /artisan/timesdata/create   controllers.Artisan.createTimes
-POST    /artisan/timesdata/create   controllers.Artisan.postCreateTimes
-GET     /artisan/gallery/others/upload controllers.Artisan.uploadOtherImages
-POST    /artisan/gallery/others/upload controllers.Artisan.postUploadOtherImages
+GET     /artisan/articles           controllers.ArtisanArticle.articles
+GET     /artisan/article            controllers.ArtisanArticle.article(id: Long)
+GET     /artisan/article/create     controllers.ArtisanArticle.createArticle
+POST    /artisan/article/create     controllers.ArtisanArticle.postCreateArticle
+GET     /artisan/article/edit       controllers.ArtisanArticle.editArticle(id: Long)
+POST    /artisan/article/edit       controllers.ArtisanArticle.postEditArticle(id: Long)
+POST    /artisan/article/preview    controllers.ArtisanArticle.preview
+POST    /artisan/article/delete     controllers.ArtisanArticle.deleteArticle(id: Long)
+GET     /artisan/article/history/:id      controllers.ArtisanArticle.history(id: Long)
+GET     /artisan/article/:id/content/:cid controllers.ArtisanArticle.historyContent(id: Long, cid: String)
+GET     /artisan/article/:id/source/:cid  controllers.ArtisanArticle.historySource(id: Long, cid: String)
+GET     /artisan/article/:id/diff/:cid    controllers.ArtisanArticle.diff(id: Long, cid: String)
+GET     /artisan/accounts           controllers.ArtisanAccount.accounts
+GET     /artisan/account            controllers.ArtisanAccount.account(id: Int)
+GET     /artisan/account/create     controllers.ArtisanAccount.createAccount
+POST    /artisan/account/create     controllers.ArtisanAccount.postCreateAccount
+GET     /artisan/account/edit       controllers.ArtisanAccount.editAccount(id: Int)
+POST    /artisan/account/edit       controllers.ArtisanAccount.postEditAccount(id: Int)
+GET     /artisan/account/password   controllers.ArtisanAccount.editPassword(id: Int)
+POST    /artisan/account/password   controllers.ArtisanAccount.postEditPassword(id: Int)
+POST    /artisan/account/delete     controllers.ArtisanAccount.deleteAccount(id: Int)
+GET     /artisan/password           controllers.ArtisanAccount.editMyPassword
+POST    /artisan/password           controllers.ArtisanAccount.postEditMyPassword
+POST    /artisan/delete             controllers.ArtisanAccount.deleteMyAccount
+GET     /artisan/data               controllers.ArtisanData.data
+GET     /artisan/data/upload        controllers.ArtisanData.uploadDatum
+POST    /artisan/data/upload        controllers.ArtisanData.postUploadDatum
+GET     /artisan/data/edit          controllers.ArtisanData.editDatum(id: Int)
+POST    /artisan/data/edit          controllers.ArtisanData.postEditDatum(id: Int)
+POST    /artisan/data/delete        controllers.ArtisanData.deleteDatum(id: Int)
+GET     /artisan/classdata          controllers.ArtisanClassData.classData(times: Option[Int])
+GET     /artisan/classdata/edit     controllers.ArtisanClassData.editClassData(id: Int)
+POST    /artisan/classdata/edit     controllers.ArtisanClassData.postEditClassData(id: Int)
+GET     /artisan/classdata/tags     controllers.ArtisanClassData.editTags(id: Int)
+POST    /artisan/classdata/tags     controllers.ArtisanClassData.postEditTags(id: Int)
+GET     /artisan/classdata/review   controllers.ArtisanClassData.editReview(id: Int)
+POST    /artisan/classdata/review   controllers.ArtisanClassData.postEditReview(id: Int)
+GET     /artisan/classdata/create   controllers.ArtisanClassData.createClass
+POST    /artisan/classdata/create   controllers.ArtisanClassData.postCreateClass
+GET     /artisan/gallery/upload     controllers.ArtisanClassData.uploadImage(id: Int)
+POST    /artisan/gallery/upload     controllers.ArtisanClassData.postUploadImage(id: Int)
+GET     /artisan/gallery/select     controllers.ArtisanClassData.selectTop(id: Int)
+POST    /artisan/gallery/select     controllers.ArtisanClassData.postSelectTop(id: Int)
+GET     /artisan/gallery/delete     controllers.ArtisanClassData.deleteImage(id: Int)
+POST    /artisan/gallery/delete     controllers.ArtisanClassData.postDeleteImage(id: Int)
+GET     /artisan/timesdata          controllers.ArtisanTimesData.timesData
+GET     /artisan/timesdata/edit     controllers.ArtisanTimesData.editTimesData(id: Int)
+POST    /artisan/timesdata/edit     controllers.ArtisanTimesData.postEditTimesData(id: Int)
+GET     /artisan/timesdata/create   controllers.ArtisanTimesData.createTimes
+POST    /artisan/timesdata/create   controllers.ArtisanTimesData.postCreateTimes
+GET     /artisan/gallery/others/upload controllers.ArtisanOtherImages.uploadOtherImages
+POST    /artisan/gallery/others/upload controllers.ArtisanOtherImages.postUploadOtherImages
 
 # API
 # TODO

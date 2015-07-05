@@ -6,13 +6,13 @@
 } {
   @breadcrumb(Seq(
     (routes.Artisan.home, "Home"),
-    (routes.Artisan.accounts, "アカウント一覧"),
-    (routes.Artisan.account(acc.id),"アカウント詳細")
+    (routes.ArtisanAccount.accounts, "アカウント一覧"),
+    (routes.ArtisanAccount.account(acc.id),"アカウント詳細")
   ), "アカウント編集")
 
   <h3>アカウントの編集</h3>
 
-  @helper.form(routes.Artisan.postEditAccount(acc.id)) {
+  @helper.form(routes.ArtisanAccount.postEditAccount(acc.id)) {
 
     @form.globalError.map { error =>
       <p class="error">

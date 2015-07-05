@@ -8,7 +8,7 @@
 } {
   @breadcrumb(Seq(
     (routes.Artisan.home, "Home"),
-    (routes.Artisan.articles, "記事一覧")
+    (routes.ArtisanArticle.articles, "記事一覧")
   ), "記事詳細")
 
   @flash.get("success").map { message =>
@@ -17,8 +17,8 @@
     </p>
   }
 
-  <a class="btn" href="@routes.Artisan.editArticle(article.id)">編集する</a>
-  <a class="btn" href="@routes.Artisan.history(article.id)">編集履歴</a>
+  <a class="btn" href="@routes.ArtisanArticle.editArticle(article.id)">編集する</a>
+  <a class="btn" href="@routes.ArtisanArticle.history(article.id)">編集履歴</a>
 
   <div class="article">
     @Conv.both(article.text)
@@ -37,12 +37,12 @@
     }
   </p>
 
-  <a class="btn" href="@routes.Artisan.editArticle(article.id)">編集する</a>
-  <a class="btn" href="@routes.Artisan.history(article.id)">編集履歴</a>
+  <a class="btn" href="@routes.ArtisanArticle.editArticle(article.id)">編集する</a>
+  <a class="btn" href="@routes.ArtisanArticle.history(article.id)">編集履歴</a>
 
   @if(article.articleType == Info || article.articleType == Howto) {
 
-    <form method="post" action="@routes.Artisan.deleteArticle(article.id)">
+    <form method="post" action="@routes.ArtisanArticle.deleteArticle(article.id)">
       <button class="btn btn-danger delete-submit">削除する</button>
     </form>
   }

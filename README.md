@@ -14,17 +14,20 @@ Requirements
 - play-2.1.5
 - java-1.7
 - ImageMagick (`mogrify` command)
-- Twitter app (`cp twitter4j.properties.example twitter4j.properties` and edit it)
-  - consumer key
-  - consumer secret
-  - access token
-  - access token secret
+- Twitter app
+  - `cp twitter4j.properties.example twitter4j.properties` and edit it
+    - consumer key
+    - consumer secret
+    - access token
+    - access token secret
 - h2.jar (http://www.h2database.com/html/download.html)
   - checked with h2-1.3.*.jar
   - put this binary to /db directory with the name `h2.jar`
 - Elasticsearch-1.5
   - with kuromoji plugin
   - see [tools/es-load](tools/el-load)
+- Notifier Setting Up
+  - `cp conf/notifier.conf.example conf/notifier.conf` and edit it
 
 Usage of `andon` command
 ------------------------

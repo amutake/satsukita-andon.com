@@ -29,4 +29,5 @@ memo/
 nohup.out
 
 twitter4j.properties
+conf/notifier.conf
 /data

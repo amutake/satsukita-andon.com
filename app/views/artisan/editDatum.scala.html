@@ -6,12 +6,12 @@
 } {
   @breadcrumb(Seq(
     (routes.Artisan.home, "Home"),
-    (routes.Artisan.data, "資料一覧")
+    (routes.ArtisanData.data, "資料一覧")
   ), "資料情報の編集")
 
   <h3>資料情報の編集</h3>
 
-  @helper.form(routes.Artisan.postEditDatum(id), 'enctype -> "multipart/form-data") {
+  @helper.form(routes.ArtisanData.postEditDatum(id), 'enctype -> "multipart/form-data") {
 
     @form.globalError.map { error =>
       <p class="error">

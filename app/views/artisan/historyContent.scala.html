@@ -7,9 +7,9 @@
 } {
   @breadcrumb(Seq(
     (routes.Artisan.home, "Home"),
-    (routes.Artisan.articles, "記事一覧"),
-    (routes.Artisan.article(history.articleId), "記事詳細"),
-    (routes.Artisan.history(history.articleId), "編集履歴")
+    (routes.ArtisanArticle.articles, "記事一覧"),
+    (routes.ArtisanArticle.article(history.articleId), "記事詳細"),
+    (routes.ArtisanArticle.history(history.articleId), "編集履歴")
   ), "表示")
 
   <div class="article-wrapper">

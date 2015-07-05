@@ -7,7 +7,7 @@
 } {
   @breadcrumb(Seq(
     (routes.Artisan.home, "Home"),
-    (routes.Artisan.classData(Some(data.id.times.n)), "クラス一覧")
+    (routes.ArtisanClassData.classData(Some(data.id.times.n)), "クラス一覧")
   ), "タグの編集")
 
   <h3>タグの編集</h3>
@@ -26,7 +26,7 @@
     }
   </ul>
 
-  @helper.form(routes.Artisan.postEditTags(data.id.toInt), 'id -> "tags-form") {
+  @helper.form(routes.ArtisanClassData.postEditTags(data.id.toInt), 'id -> "tags-form") {
     <button class="btn">確定</button>
   }
 

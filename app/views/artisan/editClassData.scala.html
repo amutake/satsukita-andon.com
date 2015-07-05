@@ -6,12 +6,12 @@
 } {
   @breadcrumb(Seq(
     (routes.Artisan.home, "Home"),
-    (routes.Artisan.classData(Some(id.times.n)), "クラス一覧")
+    (routes.ArtisanClassData.classData(Some(id.times.n)), "クラス一覧")
   ), "クラスデータの編集")
 
   <h3>@id.toString クラスデータの編集</h3>
 
-  @helper.form(routes.Artisan.postEditClassData(id.toInt)) {
+  @helper.form(routes.ArtisanClassData.postEditClassData(id.toInt)) {
 
     @form.globalError.map { error =>
       <p class="error">

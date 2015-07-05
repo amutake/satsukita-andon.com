@@ -28,7 +28,7 @@
       </tr>
       @accounts.filter(_.level == l).map { acc =>
         <tr>
-          <td><a href="@routes.Artisan.account(acc.id)">@acc.name</a></td>
+          <td><a href="@routes.ArtisanAccount.account(acc.id)">@acc.name</a></td>
           <td>@acc.username</td>
           <td>@acc.times</td>
         </tr>

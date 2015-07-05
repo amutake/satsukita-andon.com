@@ -149,9 +149,16 @@ object Application extends Controller with Authentication {
   def postComment(id: Long) = Action { implicit request =>
     Articles.findById(id).map { article =>
 
-      def success = Redirect(routes.Application.article(id)).flashing(
-        "success" -> "コメントを投稿しました。"
-      )
+      def success(commendId: Long, name: String, articleId: Long, title: String) = {
+        Notifier.notify(
+          tweet = true,
+          body = "記事『" + title + "』に" + name + "さんのコメントが投稿されました",
+          url = Some("/article/" + articleId + "#comment-" + commendId)
+        )
+        Redirect(routes.Application.article(id)).flashing(
+          "success" -> "コメントを投稿しました。"
+        )
+      }
 
       def error(form: Form[(Option[Int], String, String, Option[String])]) = {
         val formWithError = form.withGlobalError("エラー。もう一度投稿してください。")
@@ -164,8 +171,8 @@ object Application extends Controller with Authentication {
           case (account, name, text, password) => {
             myAccount.map { acc =>
               if (account == Some(acc.id)) {
-                Comments.create(article.id, account, acc.name, text, None)
-                success
+                val id = Comments.create(article.id, account, acc.name, text, None)
+                success(id, acc.name, article.id, article.title)
               } else {
                 error(commentForm.fill(result).withGlobalError("送信されたアカウント情報が間違っています"))
               }
@@ -174,8 +181,8 @@ object Application extends Controller with Authentication {
                 error(commentForm.fill(result).withGlobalError("ログインしてください"))
               }.getOrElse {
                 if ("""https?://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?""".r.findFirstIn(text).isEmpty) {
-                  Comments.create(article.id, None, name, text, password)
-                  success
+                  val id = Comments.create(article.id, None, name, text, password)
+                  success(id, name, article.id, article.title)
                 } else {
                   error(commentForm.fill(result).withGlobalError("URLは投稿できません"))
                 }
@@ -203,6 +210,10 @@ object Application extends Controller with Authentication {
       val redirect = Redirect(routes.Application.article(comment.articleId))
       def del = {
         Comments.delete(id)
+        Notifier.notify(
+          tweet = false,
+          body = "記事『" + Articles.findTitleById(comment.articleId) + "』への" + comment.name + "さんのコメントが削除されました"
+        )
         redirect.flashing(
           "success" -> "コメントを削除しました。"
         )
@@ -246,6 +257,11 @@ object Application extends Controller with Authentication {
       val redirect = Redirect(routes.Application.article(comment.articleId))
       def edit(text: String) = {
         Comments.update(id, text)
+        Notifier.notify(
+          tweet = false,
+          body = "記事『" + Articles.findTitleById(comment.articleId) + "』への" + comment.name + "さんのコメントが編集されました",
+          url = Some("/article/" + comment.articleId + "#comment-" + id)
+        )
         redirect.flashing(
           "success" -> "コメントを編集しました。"
         )

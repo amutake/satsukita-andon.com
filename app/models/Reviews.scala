@@ -34,30 +34,18 @@ object Reviews extends Table[Review]("REVIEWS") {
   }
 
   def create(c: ClassId, a: Int, t: String) = db.withSession { implicit session: Session =>
-    val id = Reviews.ins.insert(c, a, t)
-    Twitter.tweet(
-      c.toJapanese + "への" + Accounts.findNameById(a) + "の講評が作成されました",
-      "/gallery/" + c.times + "/" + c.grade + "/" + c.classn
-    )
+    Reviews.ins.insert(c, a, t)
   }
 
   def update(id: Long, text: String) = db.withSession { implicit session: Session =>
     findById(id).map { review =>
       query.where(_.id === id).map(_.text).update(text)
-      Twitter.tweet(
-        review.classId.toJapanese + "への" + Accounts.findNameById(review.accountId) + "の講評が編集されました",
-        "/gallery/" + review.classId.times + "/" + review.classId.grade + "/" + review.classId.classn
-      )
     }
   }
 
   def delete(id: Long) = db.withSession { implicit session: Session =>
     findById(id).map { review =>
       query.where(_.id === id).delete
-      Twitter.tweet(
-        review.classId.toJapanese + "への" + Accounts.findNameById(review.accountId) + "の講評が削除されました",
-        ""
-      )
     }
   }
 }

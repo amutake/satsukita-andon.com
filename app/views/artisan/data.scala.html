@@ -27,8 +27,8 @@
           <td>@datum.optAuthor.getOrElse(Accounts.findNameById(datum.accountId))</td>
           <td>@datum.optDate.getOrElse(DateUtil.dateFormat(datum.date))</td>
           <td>
-            <a class="btn" href="@routes.Artisan.editDatum(datum.id)">編集</a>
-            <form action="@routes.Artisan.deleteDatum(datum.id)" method="POST" class="inline">
+            <a class="btn" href="@routes.ArtisanData.editDatum(datum.id)">編集</a>
+            <form action="@routes.ArtisanData.deleteDatum(datum.id)" method="POST" class="inline">
               <button class="btn btn-danger delete-submit">削除</button>
             </form>
           </td>

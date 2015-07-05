@@ -16,11 +16,20 @@ object Global extends GlobalSettings {
     History.init
     // See issue#62
     // Cleaner.clean
-    Twitter.tweet("行灯職人への道が起動しました", "/")
+    Notifier.notify(
+      tweet = false,
+      body = "行灯職人への道が起動しました"
+    )
+    // DB.db.withSession { implicit session: Session =>
+    //   Accounts.create("開発者", "developer", "password", OrdInt(60), Admin, None, None, None)
+    // }
   }
 
   override def onStop(app: Application) {
-    Twitter.tweet("行灯職人への道が停止しました", "")
+    Notifier.notify(
+      tweet = false,
+      body = "行灯職人への道が停止しました"
+    )
   }
 
   override def onBadRequest(request: RequestHeader, error: String) = {

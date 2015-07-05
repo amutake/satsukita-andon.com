@@ -122,10 +122,6 @@ object Articles extends Table[Article]("ARTICLES") {
   ) = db.withSession { implicit session: Session =>
     val date = new Date()
     val id = Articles.ins.insert(accountId, accountId, title, text, date, date, articleType, genre, optAuthor, optDate, editable)
-    Twitter.tweet(
-      Accounts.findNameById(accountId) + "により新しい記事『" + title  + "』が作成されました",
-      "/article/" + id
-    )
     id
   }
 
@@ -134,20 +130,12 @@ object Articles extends Table[Article]("ARTICLES") {
       val date = new Date()
       val after = before.copy(updateAccountId = accountId, title = title, text = text, updateDate = date, genre = genre, optAuthor = optAuthor, optDate = optDate, editable = editable)
       query.where(_.id === id).update(after)
-      Twitter.tweet(
-        Accounts.findNameById(accountId) + "により記事『" + before.title + "』が編集されました",
-        "/article/" + id
-      )
     }
   }
 
   def delete(id: Long) = db.withSession { implicit session: Session =>
     findById(id).map { article =>
       query.where(_.id === id).delete
-      Twitter.tweet(
-        "記事『" + article.title + "』が削除されました",
-        ""
-      )
     }
   }
 }
