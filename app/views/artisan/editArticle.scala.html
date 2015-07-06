@@ -1,5 +1,5 @@
 @(acc: Account, id: Long, aId: Int,
-  form: Form[(String, String, String, String, Option[String], Option[String], Boolean)])
+  form: Form[(String, String, String, String, Option[String], Option[String], Boolean, Boolean)])
 
 @import andon.utils._
 
@@ -78,6 +78,13 @@
       } else {
         <input type="hidden" name="editable" value="@form("editable").value">
       }
+
+      @helper.checkbox(
+        form("tweet"),
+        '_label -> "Twitterに投稿する",
+        '_help -> "",
+        'checked -> true
+      )
 
       <a id="preview" class="btn" href="#">プレビュー</a>
       <input type="submit" class="btn" value="送信">

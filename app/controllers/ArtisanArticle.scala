@@ -36,7 +36,8 @@ object ArtisanArticle extends Controller with ControllerUtils with Authenticatio
       "genre" -> text,
       "optAuthor" -> optional(text),
       "optDate" -> optional(text),
-      "editable" -> boolean
+      "editable" -> boolean,
+      "tweet" -> boolean
     )
   )
 
@@ -56,7 +57,7 @@ object ArtisanArticle extends Controller with ControllerUtils with Authenticatio
         val id = Articles.create(acc.id, article._1, article._2, ArticleType.fromString(article._3), article._4, article._5, article._6, article._7)
         History.create(id, article._2, acc.id)
         Notifier.notify(
-          tweet = true,
+          tweet = article._8,
           body = Accounts.findNameById(acc.id) + "により新しい記事『" + article._1  + "』が作成されました",
           url = Some("/article/" + id)
         )
@@ -68,7 +69,7 @@ object ArtisanArticle extends Controller with ControllerUtils with Authenticatio
   }
 
   def editArticle(id: Long) = IsEditableArticle(id) { acc => art => _ =>
-    val data = (art.title, art.text, art.articleType.toString, art.genre, art.optAuthor, art.optDate, art.editable)
+    val data = (art.title, art.text, art.articleType.toString, art.genre, art.optAuthor, art.optDate, art.editable, true)
     Ok(views.html.artisan.editArticle(acc, id, art.createAccountId, articleForm.fill(data)))
   }
 
@@ -79,7 +80,7 @@ object ArtisanArticle extends Controller with ControllerUtils with Authenticatio
         Articles.update(id, acc.id, article._1, article._2, article._4, article._5, article._6, article._7)
         History.update(id, article._2, acc.id)
         Notifier.notify(
-          tweet = true,
+          tweet = article._8,
           body = Accounts.findNameById(acc.id) + "により記事『" + art.title + "』が編集されました",
           url = Some("/article/" + id)
         )
