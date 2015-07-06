@@ -1,5 +1,5 @@
 @(level: andon.utils.AccountLevel, types: List[andon.utils.ArticleType],
-  form: Form[(String, String, String, String, Option[String], Option[String], Boolean)])
+  form: Form[(String, String, String, String, Option[String], Option[String], Boolean, Boolean)])
 
 @import andon.utils._
 
@@ -76,6 +76,13 @@
         form("editable"),
         '_label -> "誰でも編集可能にする",
         '_help -> ""
+      )
+
+      @helper.checkbox(
+        form("tweet"),
+        '_label -> "Twitterに投稿する",
+        '_help -> "",
+        'checked -> true
       )
 
       <a id="preview" class="btn" href="#">プレビュー</a>
