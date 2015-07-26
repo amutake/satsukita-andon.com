@@ -1,5 +1,5 @@
 $(function() {
-	var imgNum = 17;
+	var imgNum = 16;
 	var mkImg = function($img, index, speed, opacity) {
 		return {
 			img: $img,
