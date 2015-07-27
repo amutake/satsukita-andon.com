@@ -5,7 +5,7 @@ NAME="quiz"
 
 cd ${0%/*}
 
-zip -r ${NAME}.zip * -x generate.sh *.zip
+zip -r ${NAME}.zip * -x generate.sh *.zip *.md
 curl -o generated.zip -F "file=@./${NAME}.zip" http://quizgenerator.net/quizgen${VERSION}/index.php?action=generate
 rm ${NAME}.zip
 rm -r ../../public/quiz/*
