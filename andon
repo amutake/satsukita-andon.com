@@ -62,7 +62,7 @@ function andon_restore() {
         echo "${1}.tar.gz and ${1}.sql found"
         printf "[caution!] "
         printf "This command will delete current contents and restore to specified version. "
-        printf "OK? [Y/n]: "
+        printf "OK? [y/N]: "
         read ok
         if [ "$ok" == "Y" ] || [ "$ok" == "y" ]; then
 

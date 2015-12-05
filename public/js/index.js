@@ -1,8 +1,9 @@
 $(function() {
-	var $logo = $("#index-logo").hide();
+    var $logo = $("#index-logo").hide();
+    var margin = $("#browser").height() / 2 - 160;
 	$logo.css({
-		marginTop: $("#browser").height() / 2 - 160
+	    marginTop: margin,
+        marginBottom: margin
 	});
-
 	$logo.fadeIn(5000);
 });
