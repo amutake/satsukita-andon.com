@@ -13,6 +13,7 @@ Requirements
 
 - play-2.1.5
 - java-1.7
+  - if you want to change java's version, use `update-java-alternatives`
 - ImageMagick (`mogrify` command)
 - Twitter app
   - `cp twitter4j.properties.example twitter4j.properties` and edit it
