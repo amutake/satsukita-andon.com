@@ -7,6 +7,8 @@ object ApplicationBuild extends Build {
   val appName         = "andon"
   val appVersion      = "1.0-SNAPSHOT"
 
+  val scalaVersion    = "2.11.12"
+
   val appDependencies = Seq(
     // Add your project dependencies here,
     jdbc,
