@@ -57,7 +57,7 @@
 }
 
 @gradeImgs(grade: Int, data: Seq[(ClassData, String)]) = {
-  <h3>@grade年</h3>
+  <h3>@(grade)年</h3>
   <ul class="thumbnails">
     @Prize.allPrizes.map { p =>
       @data.filter(d => d._1.prize == Some(p)).map(d => prizes(p, d._1, d._2))

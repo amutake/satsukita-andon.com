@@ -5,13 +5,15 @@ import play.api.mvc.Results._
 
 import scala.slick.driver.H2Driver.simple._
 import scala.slick.jdbc.meta.MTable
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import models._
 import andon.utils._
 
 object Global extends GlobalSettings {
 
-  override def onStart(app: Application) {
+  override def onStart(app: Application) = {
     InitialData.createTable
     History.init
     // See issue#62
@@ -25,7 +27,7 @@ object Global extends GlobalSettings {
     // }
   }
 
-  override def onStop(app: Application) {
+  override def onStop(app: Application) = {
     Notifier.notify(
       tweet = false,
       body = "行灯職人への道が停止しました"
@@ -33,15 +35,15 @@ object Global extends GlobalSettings {
   }
 
   override def onBadRequest(request: RequestHeader, error: String) = {
-    BadRequest(views.html.errors.badRequest(error))
+    Future(BadRequest(views.html.errors.badRequest(error)))
   }
 
-  override def onHandlerNotFound(request: RequestHeader): Result = {
-    NotFound(views.html.errors.notFound(request.path))
+  override def onHandlerNotFound(request: RequestHeader) = {
+    Future(NotFound(views.html.errors.notFound(request.path)))
   }
 
   override def onError(request: RequestHeader, throwable: Throwable) = {
-    InternalServerError(views.html.errors.error(throwable))
+    Future(InternalServerError(views.html.errors.error(throwable)))
   }
 }
 
@@ -49,8 +51,8 @@ object InitialData {
 
   def makeTableMap(implicit session: Session): Map[String, MTable] = {
     val tableList = MTable.getTables.list()
-    tableList.map {
-      t => (t.name.name, t)
+    tableList.map { t =>
+      (t.name.name, t)
     }.toMap
   }
 

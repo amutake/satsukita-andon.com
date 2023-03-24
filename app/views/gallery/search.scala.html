@@ -25,7 +25,7 @@
   <select id="search-grade" name="grade">
     <option value="all">すべて</option>
     @Seq(3, 2, 1).map{ g =>
-      <option value="@g">@g年</option>
+      <option value="@g">@(g)年</option>
     }
   </select>
 }
